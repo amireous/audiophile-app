@@ -1,0 +1,90 @@
+.about-us {
+  display: flex;
+  justify-content: center;
+  //   padding: 155px;
+  padding: 3rem 9.5rem 9.5rem 9.5rem;
+
+  .about-us-description {
+    max-width: 445px;
+    margin-right: 6rem;
+    align-self: center;
+
+    .title {
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 35px;
+      letter-spacing: 4px;
+      line-height: 1.2;
+
+      span {
+        color: #d87d4a
+      }
+    }
+  }
+
+  p.description {
+    color: #898989;
+    margin-top: 1rem;
+    font-weight: 100;
+  }
+}
+
+footer {
+  p {
+    color: #898989;
+  }
+
+  padding: 5rem 9rem;
+  background-color: #101010;
+
+  .container>div:first-child {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-nav {
+    ul {
+      display: flex;
+      justify-content: space-between;
+      text-transform: uppercase;
+
+      li {
+        margin: 1.2rem;
+        list-style: none;
+      }
+
+    }
+  }
+
+  .details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &>p:first-child {
+      flex: 0 0 50%;
+      width: 50%;
+
+      font-size: 15px;
+      line-height: 25px;
+      letter-spacing: 0;
+      font-weight: 500;
+    }
+  }
+
+  a {
+    text-decoration: none;
+    font-size: 13px;
+    line-height: 25px;
+    letter-spacing: 2px;
+    font-weight: 700;
+    color: #fafafa;
+  }
+
+  .social-icons {
+    img {
+      margin: 8px;
+    }
+  }
+}

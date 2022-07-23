@@ -1,0 +1,38 @@
+<div class="">
+  <div class="">
+    <div class="wrapper">
+      <header class="header container">
+        <div class="logo">
+          <img src="assets/shared/desktop/logo.svg">
+        </div>
+        <nav>
+          <ul>
+            <li><a class="nav-link-hover" [routerLink]="['/','home']" (click)="onRouterLink('home')">home</a></li>
+            <li><a class="nav-link-hover" [routerLink]="['/','headphones']"
+                (click)="onRouterLink('headphones')">headphones</a></li>
+            <li><a class="nav-link-hover" [routerLink]="['/','speakers']"
+                (click)="onRouterLink('speakers')">speakers</a></li>
+            <li><a class="nav-link-hover" [routerLink]="['/','earphones']"
+                (click)="onRouterLink('earphones')">earphones</a></li>
+          </ul>
+        </nav>
+        <div class="card-basket">
+          <img src="assets/shared/desktop/icon-cart.svg">
+        </div>
+      </header>
+    </div>
+    <div class="header-banner wrapper" *ngIf="isHomeRoute">
+      <!-- <p>Earphone</p> -->
+      <div class="banner-description container">
+        <p class="title">new product</p>
+        <h1>xx99 mark || <br>headphones</h1>
+        <p class="details">Experience natural, lifelike audio and exceptional build quality made for the passionate
+          music enthusiast.</p>
+        <button class="see-product-button">see product</button>
+      </div>
+    </div>
+    <div class="header-title">
+      <p>{{title}}</p>
+    </div>
+  </div>
+</div>

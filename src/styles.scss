@@ -1,1 +1,96 @@
 /* You can add global styles to this file, and also import other style files */
+
+.wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  max-width: 1110px;
+  width: 100%;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: 'Manrope', sans-serif;
+}
+
+.see-product-button {
+  background-color: #d87d4a;
+  border: none;
+  color: #fafafa;
+  padding: 15px 30px;
+  text-transform: uppercase;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.nav-link-hover {
+  &:hover {
+    color: #d87d4a !important;
+  }
+}
+
+// .button-hover {
+// transform: 0.3s;
+// &:hover {
+//     opacity: 0.7;
+// }
+// }
+
+@font-face {
+  font-family: 'Manrope';
+  src: url('assets/fonts/webfonts/Manrope-Bold.woff2') format('woff2');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Manrope';
+  src: url('assets/fonts/webfonts/Manrope-ExtraBold.woff2') format('woff2');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Manrope';
+  src: url('assets/fonts/webfonts/Manrope-ExtraLight.woff2') format('woff2');
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Manrope';
+  src: url('assets/fonts/webfonts/Manrope-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Manrope';
+  src: url('assets/fonts/webfonts/Manrope-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Manrope';
+  src: url('assets/fonts/webfonts/Manrope-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Manrope';
+  src: url('assets/fonts/webfonts/Manrope-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
