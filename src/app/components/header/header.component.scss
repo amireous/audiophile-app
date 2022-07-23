@@ -32,6 +32,20 @@ nav {
   }
 }
 
+.header-title {
+  padding: 6rem 0;
+  background-color: #101010;
+
+  p {
+    color: white;
+    text-align: center;
+    font-size: 40px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+  }
+}
+
 .header-banner {
   // padding: 60px 0;
   width: 100%;

@@ -12,28 +12,35 @@ export class HomeComponent implements OnInit {
     private dataService: DataService,
     private router: Router,
     private route: ActivatedRoute
-  ) {}
-  homeData: any;
+  ) { }
+  productList: any;
   title: any;
+  currentPath!: string;
 
   zx9SpeakerData: any;
   zx7SpeakerData: any;
   ngOnInit(): void {
-    this.getHomeData();
-    this.setHomeTitle();
-    this.route.params.subscribe((data) => {
-      console.log(data);
-    });
+    this.setCurrentRoute();
   }
 
   getHomeData() {
     this.dataService.getHomeData().subscribe((data) => {
-      console.log(data);
-      this.homeData = data;
+      this.productList = data;
+      this.getCurrentPathData(this.currentPath)
     });
   }
 
-  setHomeTitle() {
-    console.log(this.router.url);
+  setCurrentRoute() {
+    this.route.params.subscribe((params) => {
+      console.log(params);
+      this.currentPath = params.id;
+      console.log(this.currentPath)
+      this.getHomeData();
+    });
+  }
+
+  getCurrentPathData(path: string = 'home') {
+    if (path.includes('home')) return;
+    this.productList = this.productList.filter((product: any) => product.slug.includes(path));
   }
 }
