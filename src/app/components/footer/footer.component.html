@@ -1,3 +1,38 @@
+<div class="wrapper">
+  <div class="categories container">
+    <div class="category-item"
+      [class.category-margin]="!currentPath.includes('home') || currentPath.includes('product-detail')">
+      <div class="category-image">
+        <img src="assets/shared/desktop/image-headphones.png" alt="">
+      </div>
+      <div>
+        <p class="category-title">Headphones</p>
+        <p class="shop" [routerLink]="['/', 'headphones']">shop <span>></span></p>
+      </div>
+    </div>
+    <div class="category-item"
+      [class.category-margin]="!currentPath.includes('home') || currentPath.includes('product-detail')">
+      <div class="category-image">
+        <img src="assets/shared/desktop/image-speakers.png" alt="">
+      </div>
+      <div>
+        <p class="category-title">speakers</p>
+        <p class="shop" [routerLink]="['/', 'speakers']">shop <span>></span></p>
+      </div>
+    </div>
+    <div class="category-item earphone-category"
+      [class.category-margin]="!currentPath.includes('home') || currentPath.includes('product-detail')">
+      <div class="category-image">
+        <img src="assets/shared/desktop/image-earphones.png" alt="">
+      </div>
+      <div>
+        <p class="category-title">earphones</p>
+        <p class="shop" [routerLink]="['/', 'earphones']">shop <span>></span></p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="about-us">
   <div class="about-us-description">
     <p class="title">bringing you the <span>best</span> audio gear</p>

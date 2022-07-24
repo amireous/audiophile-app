@@ -9,36 +9,7 @@
           <p class="product-status new-product-title" *ngIf="product.new">New product</p>
           <h2 class="h2 product-title">{{product.name}}</h2>
           <p class="p product-description">{{product.description}}</p>
-          <button class="see-product-button">see product</button>
-        </div>
-      </div>
-    </div>
-    <div class="categories">
-      <div class="category-item" [ngClass]="{'category-margin': !currentPath.includes('home')}">
-        <div class="category-image">
-          <img src="assets/shared/desktop/image-headphones.png" alt="">
-        </div>
-        <div>
-          <p class="category-title">Headphones</p>
-          <p class="shop">shop <span>></span></p>
-        </div>
-      </div>
-      <div class="category-item" [ngClass]="{'category-margin': !currentPath.includes('home')}">
-        <div class="category-image">
-          <img src="assets/shared/desktop/image-speakers.png" alt="">
-        </div>
-        <div>
-          <p class="category-title">speakers</p>
-          <p class="shop">shop <span>></span></p>
-        </div>
-      </div>
-      <div class="category-item earphone-category" [ngClass]="{'category-margin': !currentPath.includes('home')}">
-        <div class="category-image">
-          <img src="assets/shared/desktop/image-earphones.png" alt="">
-        </div>
-        <div>
-          <p class="category-title">earphones</p>
-          <p class="shop">shop <span>></span></p>
+          <button class="see-product-button" (click)="onSeeProduct(product)">see product</button>
         </div>
       </div>
     </div>

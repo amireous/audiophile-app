@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Route, Router } from '@angular/router';
 
 @Component({
   selector: 'app-footer',
@@ -8,8 +8,10 @@ import { Router } from '@angular/router';
 })
 export class FooterComponent implements OnInit {
   constructor(private router: Router) {}
-
-  ngOnInit(): void {}
+  currentPath: string = 'home';
+  ngOnInit(): void {
+    this.getCurrentPath();
+  }
 
   onRouterLink() {
     let scrollToTop = window.setInterval(() => {
@@ -20,5 +22,13 @@ export class FooterComponent implements OnInit {
         window.clearInterval(scrollToTop);
       }
     }, 16);
+  }
+
+  getCurrentPath() {
+    this.router.events.subscribe((val) => {
+      if (val instanceof NavigationEnd) {
+        this.currentPath = val.url || val.urlAfterRedirects;
+      }
+    });
   }
 }

@@ -70,6 +70,55 @@ a {
 // }
 // }
 
+.add-to-cart {
+  position: relative;
+
+  button {
+    border: none;
+    background-color: transparent;
+  }
+
+  .product-count-input {
+    font-size: 13px;
+    font-weight: 600;
+    width: 110px;
+    background: #f1f1f1;
+    border: none;
+    margin-right: 10px;
+    padding: 15px 30px;
+    text-align: center;
+
+
+    &:focus {
+      outline: 2px solid #d87d4a;
+      border-radius: 1px;
+    }
+  }
+
+  .increase,
+  .decrease {
+    font-size: 20px;
+    color: #898989;
+    position: absolute;
+    top: 12px;
+    font-weight: 600;
+    cursor: pointer;
+
+    &:hover {
+      color: #d87d4a;
+    }
+  }
+
+  .increase {
+    right: 15px;
+
+  }
+
+  .decrease {
+    left: 8px;
+  }
+}
+
 @font-face {
   font-family: 'Manrope';
   src: url('assets/fonts/webfonts/Manrope-Bold.woff2') format('woff2');

@@ -47,4 +47,8 @@ export class HomeComponent implements OnInit {
       .filter((product: any) => product.slug.includes(path))
       .reverse();
   }
+
+  onSeeProduct(product: Product) {
+    this.router.navigate(['/', 'product-detail', product.id, product.slug]);
+  }
 }
