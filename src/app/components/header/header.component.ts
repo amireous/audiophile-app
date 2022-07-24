@@ -9,17 +9,18 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 export class HeaderComponent implements OnInit {
   title: any = '';
   isHomeRoute: boolean = true;
-  constructor(private router: Router, private route: ActivatedRoute) { }
+  constructor(private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.router.events.subscribe((val) => {
       if (val instanceof NavigationEnd) {
-        if (val.url.includes('home') || val.urlAfterRedirects.includes('home')) {
-          console.log('checkccc');
+        if (
+          val.url.includes('home') ||
+          val.urlAfterRedirects.includes('home')
+        ) {
           this.isHomeRoute = true;
         } else {
-          this.isHomeRoute = false
-          console.log(val, 'falseeee')
+          this.isHomeRoute = false;
         }
 
         if (val.url.includes('headphones')) this.title = 'headphones';

@@ -20,10 +20,11 @@
         </div>
         <nav class="footer-nav">
           <ul>
-            <li><a class="nav-link-hover" href="">home</a></li>
-            <li><a class="nav-link-hover" href="">headphones</a></li>
-            <li><a class="nav-link-hover" href="">speakers</a></li>
-            <li><a class="nav-link-hover" href="">earphones</a></li>
+            <li><a class="nav-link-hover" [routerLink]="['/', 'home']" (click)="onRouterLink()">home</a></li>
+            <li><a class="nav-link-hover" [routerLink]="['/', 'headphones']" (click)="onRouterLink()">headphones</a>
+            </li>
+            <li><a class="nav-link-hover" [routerLink]="['/', 'speakers']" (click)="onRouterLink()">speakers</a></li>
+            <li><a class="nav-link-hover" [routerLink]="['/', 'earphones']" (click)="onRouterLink()">earphones</a></li>
           </ul>
         </nav>
       </div>
@@ -39,7 +40,7 @@
         </div>
       </div>
       <br><br>
-      <p>Copyright 2021. All Rights Reserved</p>
+      <p>Copyright 2022. All Rights Reserved</p>
     </div>
   </div>
 </footer>

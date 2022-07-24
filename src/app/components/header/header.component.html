@@ -24,14 +24,14 @@
     <div class="header-banner wrapper" *ngIf="isHomeRoute">
       <!-- <p>Earphone</p> -->
       <div class="banner-description container">
-        <p class="title">new product</p>
+        <p class="title new-product-title">new product</p>
         <h1>xx99 mark || <br>headphones</h1>
         <p class="details">Experience natural, lifelike audio and exceptional build quality made for the passionate
           music enthusiast.</p>
         <button class="see-product-button">see product</button>
       </div>
     </div>
-    <div class="header-title">
+    <div class="header-title" *ngIf="!isHomeRoute">
       <p>{{title}}</p>
     </div>
   </div>
