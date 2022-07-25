@@ -1,0 +1,243 @@
+.wrapper {
+  padding: 8rem 0;
+  background-color: #F0F0F0;
+
+  .container {
+    display: flex;
+    justify-content: space-between;
+    // background-color: #fff;
+
+  }
+}
+
+.checkout {
+  padding: 3rem;
+  background-color: #fff;
+  max-width: 730px;
+  width: 100%;
+  border-radius: 10px;
+
+  h1 {
+    text-transform: uppercase;
+    font-size: 32px;
+    font-weight: 500;
+    margin-bottom: 2rem;
+  }
+
+  .billing-details {
+    form {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+
+      div {
+        width: 49%;
+
+        input {
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  .shipping-info {
+    form {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+
+      div {
+        width: 49%;
+
+        input {
+          width: 100%;
+        }
+      }
+
+      .shipping-adress {
+        width: 100%;
+
+        input {
+          width: 100%;
+        }
+      }
+
+    }
+  }
+
+  .payment-details {
+    .payment-form {
+      display: flex;
+      flex-direction: column;
+      align-items: end;
+
+      .payment-method {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+
+        &>p {
+          font-size: 12px;
+          font-weight: 500;
+          text-transform: capitalize;
+          line-height: 12px;
+        }
+
+        .radio-button {
+          display: flex;
+          align-items: center;
+
+          label {
+            text-transform: capitalize;
+            font-weight: 700;
+            cursor: pointer;
+            color: #101010;
+          }
+        }
+
+
+        &>div {
+          width: 49%;
+        }
+      }
+    }
+
+    .cash-delivery {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+
+      div {
+        width: 49%;
+
+        input {
+          width: 100%;
+        }
+      }
+    }
+
+  }
+
+  form {
+    margin-bottom: 2rem;
+  }
+
+}
+
+.form-title {
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  color: #d87d4a;
+  letter-spacing: .093rem;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.side-summery {
+  background-color: #fff;
+  padding: 2rem;
+  width: 31%;
+  border-radius: 8px;
+
+  h2 {
+    text-transform: uppercase;
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 2rem;
+
+  }
+}
+
+input:not(input[type='radio']),
+.radio-button {
+  padding: 12px;
+  border-radius: 8px;
+  outline: none;
+  color: #101010;
+  font-size: 14px;
+  height: 56px;
+  font-weight: 400;
+  letter-spacing: -.25px;
+  border: 1px solid #cfcfcf;
+  cursor: pointer;
+  margin-bottom: 1.5rem;
+  transition: 0.3s border-color;
+}
+
+input {
+  &:focus {
+    border-color: #d87d4a !important;
+    // outline: 1px solid #d87d4a !important;
+  }
+}
+
+input[type="radio"] {
+  &:checked {
+    border-color: #d87d4a !important;
+  }
+}
+
+.custom-label {
+  display: block;
+  font-size: 12px;
+  line-height: 12px;
+  letter-spacing: -.21px;
+  font-weight: 500;
+  margin-bottom: 5px;
+  text-transform: capitalize;
+}
+
+[type="radio"]:checked,
+[type="radio"]:not(:checked) {
+  position: absolute;
+  left: -9999px;
+}
+
+[type="radio"]:checked+label,
+[type="radio"]:not(:checked)+label {
+  position: relative;
+  padding-left: 28px;
+  cursor: pointer;
+  line-height: 20px;
+  display: inline-block;
+  color: #666;
+}
+
+[type="radio"]:checked+label:before,
+[type="radio"]:not(:checked)+label:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 18px;
+  height: 18px;
+  border: 1px solid #ddd;
+  border-radius: 100%;
+  background: #fff;
+}
+
+[type="radio"]:checked+label:after,
+[type="radio"]:not(:checked)+label:after {
+  content: '';
+  width: 12px;
+  height: 12px;
+  background: #d87d4a;
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  border-radius: 100%;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+
+[type="radio"]:not(:checked)+label:after {
+  opacity: 0;
+  -webkit-transform: scale(0);
+  transform: scale(0);
+}
+
+[type="radio"]:checked+label:after {
+  opacity: 1;
+  -webkit-transform: scale(1);
+  transform: scale(1);
+}

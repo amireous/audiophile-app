@@ -19,15 +19,15 @@ export class HomeComponent implements OnInit {
   currentPath!: string;
   arr = [1, 4, 5, 6, 7, 8];
 
-  zx9SpeakerData: any;
-  zx7SpeakerData: any;
+  earphonesData: any;
+  speakersData: any;
   ngOnInit(): void {
     this.setCurrentRoute();
   }
 
   getHomeData() {
     this.dataService.getHomeData().subscribe((data) => {
-      this.productList = data;
+      this.productList = data.reverse();
       this.getCurrentPathData(this.currentPath);
     });
   }
@@ -40,15 +40,20 @@ export class HomeComponent implements OnInit {
   }
 
   getCurrentPathData(path: string = 'home') {
+    console.log(path);
     if (path === 'speakers') path = 'speaker';
-    if (path.includes('home')) return;
-    this.productList = this.productList
-      .slice()
-      .filter((product: any) => product.slug.includes(path))
-      .reverse();
+    this.speakersData = this.productList.filter((product) =>
+      product.category.includes('speakers')
+    );
+    this.earphonesData = this.productList.filter((product) =>
+      product.category.includes('earphones')
+    );
+    this.productList = this.productList.filter((product: any) =>
+      product.slug.includes(path)
+    );
   }
 
   onSeeProduct(product: Product) {
-    this.router.navigate(['/', 'product-detail', product.id, product.slug]);
+    this.router.navigate(['/', 'product-detail', product.slug]);
   }
 }

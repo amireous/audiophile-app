@@ -1,4 +1,4 @@
-<div class="wrapper">
+<div class="wrapper" *ngIf="!currentPath.includes('checkout')">
   <div class="categories container">
     <div class="category-item"
       [class.category-margin]="!currentPath.includes('home') || currentPath.includes('product-detail')">
@@ -33,7 +33,7 @@
   </div>
 </div>
 
-<div class="about-us">
+<div class="about-us" *ngIf="!currentPath.includes('checkout')">
   <div class="about-us-description">
     <p class="title">bringing you the <span>best</span> audio gear</p>
     <p class="description">Located at the heart of New York City, Audiophile is the premier store for high end

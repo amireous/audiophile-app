@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { Product } from 'src/app/models/data.model';
 import { DataService } from 'src/app/services/data/data.service';
 
 @Component({
@@ -16,9 +17,12 @@ import { DataService } from 'src/app/services/data/data.service';
 })
 export class HeaderComponent implements OnInit {
   title: any = '';
+  mainProduct!: Product;
+
   isHomeRoute: boolean = true;
   isProductDetail: boolean = false;
   isCartClicked: boolean = false;
+  isCheckout: boolean = false;
   addedProducts: any[] = [];
   totalAddedProductsPrice: number = 0;
   addedProductCountValidators = [
@@ -50,6 +54,12 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.router.events.subscribe((val) => {
       if (val instanceof NavigationEnd) {
+        if (
+          val.url.includes('checkout') ||
+          val.urlAfterRedirects.includes('checkout')
+        ) {
+          this.isCheckout = true;
+        } else this.isCheckout = false;
         if (
           val.url.includes('product-detail') ||
           val.urlAfterRedirects.includes('product-detail')
@@ -103,7 +113,7 @@ export class HeaderComponent implements OnInit {
           this.addedProductCountValidators
         );
 
-        this.productCountListener(el)
+        this.productCountListener(el);
       });
       this.calculateTotalPrice();
     });
@@ -131,7 +141,7 @@ export class HeaderComponent implements OnInit {
       count = 0;
     }
     product.countControl.patchValue(count);
-    product.count = count
+    product.count = count;
     this.calculateTotalPrice();
   }
 
@@ -143,15 +153,15 @@ export class HeaderComponent implements OnInit {
       count = 1;
     }
     product.countControl.patchValue(count);
-    product.count = count
-    this.calculateTotalPrice()
+    product.count = count;
+    this.calculateTotalPrice();
   }
 
   productCountListener(product: any) {
     product.countControl.valueChanges.subscribe((va: any) => {
       // product.countControl.patchValue(count);
-       product.count = product.countControl.value
-      this.calculateTotalPrice()
-    })
+      product.count = product.countControl.value;
+      this.calculateTotalPrice();
+    });
   }
 }

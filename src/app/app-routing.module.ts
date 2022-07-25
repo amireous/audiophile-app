@@ -1,12 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { CheckoutComponent } from './components/checkout/checkout.component';
 import { HomeComponent } from './components/home/home.component';
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
 
 const routes: Routes = [
+  { path: 'checkout', component: CheckoutComponent },
   { path: ':id', component: HomeComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: 'product-detail/:id/:name', component: ProductDetailComponent },
+  { path: 'product-detail/:slug', component: ProductDetailComponent },
 ];
 
 @NgModule({

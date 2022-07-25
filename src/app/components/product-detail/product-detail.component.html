@@ -1,23 +1,54 @@
 <div class="wrapper">
   <div class="container">
     <div class="product">
-      <div class="product-image">
-        <img [src]="productDetail?.image?.desktop" alt="">
-      </div>
-      <div class="product-info">
-        <p class="product-status new-product-title" *ngIf="productDetail?.new">New product</p>
-        <h2 class="h2 product-title">{{productDetail?.name}}</h2>
-        <p class="p product-description">{{productDetail?.description}}</p>
-        <p class=" product-price">${{productDetail?.price}}</p>
-        <div class="action-buttons">
-          <div class="add-to-cart ">
-            <button class="decrease" (click)="onDecrease()">-</button>
-            <input class="product-count-input" type="text" [formControl]="productCountControl" numbersOnly>
-            <button class="increase" (click)="onIncrease()">+</button>
+      <div>
+        <div class="product-image">
+          <img [src]="productDetail?.image?.desktop" alt="">
+        </div>
+        <div class="product-info">
+          <p class="product-status new-product-title" *ngIf="productDetail?.new">New product</p>
+          <h2 class="h2 product-title">{{productDetail?.name}}</h2>
+          <p class="p product-description">{{productDetail?.description}}</p>
+          <p class=" product-price">${{productDetail?.price}}</p>
+          <div class="action-buttons">
+            <div class="add-to-cart ">
+              <button class="decrease" (click)="onDecrease()">-</button>
+              <input class="product-count-input" type="text" [formControl]="productCountControl" numbersOnly>
+              <button class="increase" (click)="onIncrease()">+</button>
+            </div>
+            <button class="see-product-button" [disabled]="productCountControl.invalid"
+              [class.disabled-button]="productCountControl.invalid" (click)="onAddToCart()">add to
+              cart</button>
           </div>
-          <button class="see-product-button" [disabled]="productCountControl.invalid"
-            [class.disabled-button]="productCountControl.invalid" (click)="onAddToCart()">add to
-            cart</button>
+        </div>
+      </div>
+      <div class="product-details">
+        <div class="product-features">
+          <h3 class="h3">Features</h3>
+          <p class="p product-description">{{productDetail.features}}</p>
+        </div>
+        <div class="product-box">
+          <h3 class="product-box-title">in the box</h3>
+          <div class="product-box-details">
+            <p *ngFor="let box of productDetail.includes" class="p"><span>{{box.quantity}}x</span>{{box.item}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="product-images">
+        <img class="first-image" [src]="productDetail.gallery.first.desktop" alt="">
+        <img class="second-image" [src]="productDetail.gallery.second.desktop" alt="">
+        <img class="third-image" [src]="productDetail.gallery.third.desktop" alt="">
+      </div>
+      <div class="related-products">
+        <p>you may also like</p>
+        <div class="products-list">
+          <div class="related-product" *ngFor="let product of productDetail.others">
+            <div class="related-product-image">
+              <img [src]="product.image.desktop" alt="">
+            </div>
+            <p class="related-product-title">{{product.name}}</p>
+            <button class="see-product-button" [routerLink]="['/', 'product-detail', product.slug]">see product</button>
+          </div>
         </div>
       </div>
     </div>

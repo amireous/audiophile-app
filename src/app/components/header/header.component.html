@@ -23,37 +23,37 @@
           <div class="dialog-overlay hidden" #cartDialogOverlay></div>
           <div class="cart-dialog hidden" #cartDialogELement>
             <p class="empty-cart" *ngIf="!addedProducts.length">Your cart is empty!</p>
-     <div *ngIf="addedProducts.length">
-      <div class="cart-header">
-        <p class="cart-count">cart ({{addedProducts.length}})</p>
-        <p class="p remove-all" (click)="onRemoveAll()">Remove all</p>
-      </div>
-      <div class="cart-products-list">
-        <div class="cart-product" *ngFor="let product of addedProducts">
-          <div class="left-info">
-            <div class="product-image">
-              <img [src]="product.product.image.desktop" alt="">
+            <div *ngIf="addedProducts.length">
+              <div class="cart-header">
+                <p class="cart-count">cart ({{addedProducts.length}})</p>
+                <p class="p remove-all" (click)="onRemoveAll()">Remove all</p>
+              </div>
+              <div class="cart-products-list">
+                <div class="cart-product" *ngFor="let product of addedProducts">
+                  <div class="left-info">
+                    <div class="product-image">
+                      <img [src]="product.product.image.desktop" alt="">
+                    </div>
+                    <div class="details">
+                      <p class="product-name">{{product.title}}</p>
+                      <p class="product-price">$ {{product.product.price}}</p>
+                    </div>
+                  </div>
+                  <div class="right-info">
+                    <div class="add-to-cart ">
+                      <button class="decrease" (click)="onDecrease(product)">-</button>
+                      <input class="product-count-input" type="text" [formControl]="product.countControl" numbersOnly>
+                      <button class="increase" (click)="onIncrease(product)">+</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="cart-total-price">
+                <p class="p">total</p>
+                <p class="price">${{totalAddedProductsPrice | number}}</p>
+              </div>
+              <button class="checkout-button see-product-button">checkout</button>
             </div>
-            <div class="details">
-              <p class="product-name">{{product.title}}</p>
-              <p class="product-price">$ {{product.product.price}}</p>
-            </div>
-          </div>
-          <div class="right-info">
-            <div class="add-to-cart ">
-              <button class="decrease" (click)="onDecrease(product)">-</button>
-              <input class="product-count-input" type="text" [formControl]="product.countControl" numbersOnly>
-              <button class="increase" (click)="onIncrease(product)">+</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="cart-total-price">
-        <p class="p">total</p>
-        <p class="price">${{totalAddedProductsPrice | number}}</p>
-      </div>
-      <button class="checkout-button see-product-button">checkout</button>
-     </div>
           </div>
         </div>
       </header>
@@ -65,10 +65,11 @@
         <h1>xx99 mark || <br>headphones</h1>
         <p class="details">Experience natural, lifelike audio and exceptional build quality made for the passionate
           music enthusiast.</p>
-        <button class="see-product-button">see product</button>
+        <button class="see-product-button" [routerLink]="['/', 'product-detail', 'xx99-mark-two-headphones']">see
+          product</button>
       </div>
     </div>
-    <div class="header-title" *ngIf="!isHomeRoute && !isProductDetail">
+    <div class="header-title" *ngIf="!isHomeRoute && !isProductDetail && !isCheckout">
       <p>{{title}}</p>
     </div>
   </div>

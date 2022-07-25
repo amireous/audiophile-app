@@ -98,18 +98,18 @@ nav {
   height: auto;
   background-color: #fafafa;
   position: absolute;
-  top: 71px;
-  right: 64px;
+  top: 135px;
+  right: 245px;
   padding: 25px;
   border-radius: 8px;
   z-index: 21;
+
   .cart-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
 
     .cart-count {
-
       text-transform: uppercase;
       font-weight: 600;
     }
@@ -119,6 +119,7 @@ nav {
       font-size: 14px;
       font-weight: 400;
       cursor: pointer;
+
       &:hover {
         text-decoration: underline;
       }
@@ -142,19 +143,6 @@ nav {
       letter-spacing: 1.29px;
       font-weight: 700;
     }
-  }
-
-
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: -9px;
-    left: 105px;
-    border-left: 90px solid transparent;
-    border-right: 90px solid transparent;
-    border-bottom: 60px solid #fafafa;
-    z-index: -1;
   }
 
   .cart-product {
@@ -238,5 +226,5 @@ nav {
 .empty-cart {
   text-align: center;
   font-weight: 400;
-  color: #898989;
+  color: #101010;
 }

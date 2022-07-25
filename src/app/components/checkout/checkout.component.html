@@ -1,0 +1,79 @@
+<div class="wrapper">
+  <div class="container">
+    <section class="checkout">
+      <h1>checkout</h1>
+      <div class="billing-details">
+        <p class="form-title">billing details</p>
+        <form class="billing-form" [formGroup]="billingForm">
+          <div>
+            <label class="custom-label" for="name">name</label>
+            <input type="text" placeholder="John Doe" id="name" formControlName="name">
+          </div>
+          <div>
+            <label class="custom-label" for="emailAdress">email address</label>
+            <input type="text" placeholder="email address" id="emailAdress" formControlName="email">
+          </div>
+          <div>
+            <label class="custom-label" for="phoneNumber">phone number</label>
+            <input type="text" placeholder="phone number" id="phoneNumber" formControlName="phoneNumber">
+          </div>
+        </form>
+      </div>
+      <div class="shipping-info">
+        <p class="form-title">shipping info</p>
+        <form class="shipping-form" [formGroup]="shippingForm">
+          <div class="shipping-adress">
+            <label class="custom-label" for="adress">your address</label>
+            <input type="text" placeholder="1137 Williams avenue" id="adress" formControlName="address">
+          </div>
+          <div>
+            <label class="custom-label" for="zipCode">ZIP code</label>
+            <input type="text" placeholder="32118" id="zipCode" formControlName="zipCode">
+          </div>
+          <div>
+            <label class="custom-label" for="city">city</label>
+            <input type="text" placeholder="los angeles" id="city" formControlName="city">
+          </div>
+          <div>
+            <label class="custom-label" for="country">country</label>
+            <input type="text" placeholder="united states" id="country" formControlName="country">
+          </div>
+        </form>
+      </div>
+      <div class="payment-details">
+        <p class="form-title">payment details</p>
+        <form class="payment-form" [formGroup]="paymentForm">
+          <div class="payment-method">
+            <p>payment method</p>
+            <div>
+              <p class="radio-button">
+                <input type="radio" id="test1" name="radio-group" formControlName="paymentMethod" value="1">
+                <label for="test1">e-money</label>
+              </p>
+              <p class="radio-button">
+                <input type="radio" id="test2" name="radio-group" formArrayName="paymentMethod" value="2">
+                <label for="test2">Cash On Delivery</label>
+              </p>
+            </div>
+          </div>
+          <div class="cash-delivery">
+            <div>
+              <label class="custom-label" for="e-money-pin">e-money pin</label>
+              <input type="text" placeholder="5631" id="e-money-pin" formControlName="pin">
+            </div>
+            <div>
+              <label class="custom-label" for="e-money-number">e-money number</label>
+              <input type="text" placeholder="3121345212136" id="e-money-number" formControlName="number">
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+    <section class="side-summery">
+      <h2>summery</h2>
+      <div class="products">
+        <div class="product"></div>
+      </div>
+    </section>
+  </div>
+</div>

@@ -12,6 +12,7 @@ import { HomeComponent } from './components/home/home.component';
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
 import { OnlyNumberDirective } from './directives/only-number.directive';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CheckoutComponent } from './components/checkout/checkout.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -20,6 +21,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     HomeComponent,
     ProductDetailComponent,
     OnlyNumberDirective,
+    CheckoutComponent,
   ],
   imports: [
     BrowserModule,

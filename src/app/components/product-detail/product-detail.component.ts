@@ -26,13 +26,16 @@ export class ProductDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.params.subscribe((data) => {
-      this.getProduct(data.id);
+      this.getProduct(data.slug);
     });
   }
 
-  getProduct(productId: string) {
+  getProduct(productSlug: string) {
     this.dataService.getHomeData().subscribe((data) => {
-      this.productDetail = data.find((product: any) => product.id == productId);
+      this.productDetail = data.find(
+        (product: any) => product.slug == productSlug
+      );
+      console.log(this.productDetail);
     });
   }
 
@@ -63,5 +66,7 @@ export class ProductDetailComponent implements OnInit {
       title: this.productDetail.name.split(' ')[0],
       product: this.productDetail,
     });
+
+    this.productCountControl.reset();
   }
 }
