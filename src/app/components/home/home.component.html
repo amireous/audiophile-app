@@ -23,7 +23,7 @@
             <img src="assets/home/desktop/image-speaker-zx9.png" alt="">
           </div>
           <div class="product-description">
-            <h2>{{speakersData[0]?.name}}</h2>
+            <h2 *ngIf="speakersData.length">{{speakersData[0]?.name}}</h2>
             <p class="product-details">Upgrade to premium speakers that are phenomenally built to deliver truly
               remarkable
               sound</p>

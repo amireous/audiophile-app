@@ -38,9 +38,19 @@ export class CheckoutComponent implements OnInit {
     });
 
     this.paymentForm = new FormGroup({
-      paymentMethod: new FormControl('', Validators.required),
+      method: new FormControl(1),
       pin: new FormControl(''),
       number: new FormControl(''),
     });
+  }
+
+  onContinueAndPay() {
+    if (
+      this.billingForm.invalid ||
+      this.paymentForm.invalid ||
+      this.billingForm.invalid
+    ) {
+      return;
+    }
   }
 }

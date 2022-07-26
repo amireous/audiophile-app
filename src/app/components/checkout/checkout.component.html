@@ -7,15 +7,21 @@
         <form class="billing-form" [formGroup]="billingForm">
           <div>
             <label class="custom-label" for="name">name</label>
-            <input type="text" placeholder="John Doe" id="name" formControlName="name">
+            <input type="text"
+              [class.input-error]="billingForm.controls['name']?.errors?.required && billingForm.controls['name']?.touched"
+              placeholder="John Doe" id="name" formControlName="name">
           </div>
           <div>
             <label class="custom-label" for="emailAdress">email address</label>
-            <input type="text" placeholder="email address" id="emailAdress" formControlName="email">
+            <input type="text"
+              [class.input-error]="billingForm.controls['email']?.errors?.required && billingForm.controls['email']?.touched || billingForm.get('email')?.errors?.email"
+              placeholder="email address" id="emailAdress" formControlName="email">
           </div>
           <div>
             <label class="custom-label" for="phoneNumber">phone number</label>
-            <input type="text" placeholder="phone number" id="phoneNumber" formControlName="phoneNumber">
+            <input type="text"
+              [class.input-error]="billingForm.controls['phoneNumber']?.errors?.required && billingForm.controls['phoneNumber']?.touched"
+              placeholder="phone number" id="phoneNumber" formControlName="phoneNumber">
           </div>
         </form>
       </div>
@@ -24,19 +30,32 @@
         <form class="shipping-form" [formGroup]="shippingForm">
           <div class="shipping-adress">
             <label class="custom-label" for="adress">your address</label>
-            <input type="text" placeholder="1137 Williams avenue" id="adress" formControlName="address">
+            <input type="text"
+              [class.input-error]="shippingForm.controls['address']?.errors?.required  && shippingForm.controls['address']?.touched "
+              placeholder="1137 Williams avenue" id="adress" formControlName="address">
           </div>
           <div>
             <label class="custom-label" for="zipCode">ZIP code</label>
-            <input type="text" placeholder="32118" id="zipCode" formControlName="zipCode">
+            <input type="text" [class.input-error]="shippingForm.controls['zipCode']?.errors?.required && shippingForm.controls['zipCode']?.touched || shippingForm.controls['zipCode']?.errors?.['maxlength']?.[
+              'actualLength'
+            ] > 5" placeholder="32118" id="zipCode" formControlName="zipCode">
+            <span class="control-error" [class.error-control]="shippingForm.controls['zipCode']?.errors?.['maxlength']?.[
+              'actualLength'
+            ] > 5">ZIP code must
+              be
+              only 5 number</span>
           </div>
           <div>
             <label class="custom-label" for="city">city</label>
-            <input type="text" placeholder="los angeles" id="city" formControlName="city">
+            <input type="text"
+              [class.input-error]="shippingForm.controls['city']?.errors?.required && shippingForm.controls['city']?.touched"
+              placeholder="los angeles" id="city" formControlName="city">
           </div>
           <div>
             <label class="custom-label" for="country">country</label>
-            <input type="text" placeholder="united states" id="country" formControlName="country">
+            <input type="text"
+              [class.input-error]="shippingForm.controls['country']?.errors?.required && shippingForm.controls['country']?.touched"
+              placeholder="united states" id="country" formControlName="country">
           </div>
         </form>
       </div>
@@ -46,24 +65,32 @@
           <div class="payment-method">
             <p>payment method</p>
             <div>
-              <p class="radio-button">
-                <input type="radio" id="test1" name="radio-group" formControlName="paymentMethod" value="1">
-                <label for="test1">e-money</label>
-              </p>
-              <p class="radio-button">
-                <input type="radio" id="test2" name="radio-group" formArrayName="paymentMethod" value="2">
-                <label for="test2">Cash On Delivery</label>
-              </p>
+              <div class="radio-button">
+                <label>
+                  <input type="radio" name="method" [value]="1" formControlName="method">
+                  <span>e-money</span>
+                </label>
+              </div>
+              <div class="radio-button">
+                <label>
+                  <input type="radio" name="method" [value]="2" formControlName="method">
+                  <span>Cash On Delivery</span>
+                </label>
+              </div>
             </div>
           </div>
           <div class="cash-delivery">
             <div>
               <label class="custom-label" for="e-money-pin">e-money pin</label>
-              <input type="text" placeholder="5631" id="e-money-pin" formControlName="pin">
+              <input type="text"
+                [class.input-error]="paymentForm.controls['pin']?.errors?.required && paymentForm.controls['pin']?.touched"
+                placeholder="5631" id="e-money-pin" formControlName="pin">
             </div>
             <div>
               <label class="custom-label" for="e-money-number">e-money number</label>
-              <input type="text" placeholder="3121345212136" id="e-money-number" formControlName="number">
+              <input type="text"
+                [class.input-error]="paymentForm.controls['number']?.errors?.required && paymentForm.controls['number']?.touched"
+                placeholder="3121345212136" id="e-money-number" formControlName="number">
             </div>
           </div>
         </form>
@@ -74,6 +101,10 @@
       <div class="products">
         <div class="product"></div>
       </div>
+      <button class="pay-button see-product-button"
+        [class.disabled-button]="shippingForm.invalid || paymentForm.invalid || billingForm.invalid"
+        [disabled]="shippingForm.invalid || paymentForm.invalid || billingForm.invalid"
+        (click)="onContinueAndPay()">continue and pay</button>
     </section>
   </div>
 </div>

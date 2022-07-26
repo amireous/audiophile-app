@@ -119,6 +119,10 @@ a {
   }
 }
 
+.disabled-button {
+  filter: opacity(0.5);
+}
+
 @font-face {
   font-family: 'Manrope';
   src: url('assets/fonts/webfonts/Manrope-Bold.woff2') format('woff2');

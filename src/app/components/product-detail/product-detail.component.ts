@@ -62,7 +62,7 @@ export class ProductDetailComponent implements OnInit {
 
   onAddToCart() {
     this.dataService.addProductToBasket({
-      count: this.productCountControl.value,
+      count: Number(this.productCountControl.value),
       title: this.productDetail.name.split(' ')[0],
       product: this.productDetail,
     });

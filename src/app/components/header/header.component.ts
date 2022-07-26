@@ -164,4 +164,12 @@ export class HeaderComponent implements OnInit {
       this.calculateTotalPrice();
     });
   }
+
+  onCheckout() {
+    this.router.navigate(['/', 'checkout']);
+    this.renderer.addClass(this.cartDialogOverlay.nativeElement, 'hidden');
+    this.renderer.addClass(this.cartDialogELement.nativeElement, 'hidden');
+    document.body.style.overflow = 'unset';
+    this.isCartClicked = false;
+  }
 }
