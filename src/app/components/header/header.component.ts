@@ -1,12 +1,14 @@
 import {
   Component,
   ElementRef,
+  OnDestroy,
   OnInit,
   Renderer2,
   ViewChild,
 } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { Product } from 'src/app/models/data.model';
 import { DataService } from 'src/app/services/data/data.service';
 
@@ -15,7 +17,7 @@ import { DataService } from 'src/app/services/data/data.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   title: any = '';
   mainProduct!: Product;
 
@@ -25,6 +27,9 @@ export class HeaderComponent implements OnInit {
   isCheckout: boolean = false;
   addedProducts: any[] = [];
   totalAddedProductsPrice: number = 0;
+  currentPath: string = '';
+  subscriptions: Subscription[] = [];
+
   addedProductCountValidators = [
     Validators.required,
     Validators.pattern('^[0-9]*$'),
@@ -54,6 +59,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.router.events.subscribe((val) => {
       if (val instanceof NavigationEnd) {
+        this.currentPath = val.url || val.urlAfterRedirects;
         if (
           val.url.includes('checkout') ||
           val.urlAfterRedirects.includes('checkout')
@@ -94,29 +100,31 @@ export class HeaderComponent implements OnInit {
     if (this.isCartClicked) {
       this.renderer.addClass(this.cartDialogELement.nativeElement, 'hidden');
       this.renderer.addClass(this.cartDialogOverlay.nativeElement, 'hidden');
-      document.body.style.overflow = 'unset';
       this.isCartClicked = false;
     } else {
       this.renderer.removeClass(this.cartDialogELement.nativeElement, 'hidden');
       this.renderer.removeClass(this.cartDialogOverlay.nativeElement, 'hidden');
-      document.body.style.overflow = 'hidden';
       this.isCartClicked = true;
     }
   }
 
   setCartProducts() {
-    this.dataService.getAddedProducts().subscribe((data: any) => {
-      this.addedProducts = data;
-      this.addedProducts.forEach((el) => {
-        el.countControl = new FormControl(
-          +el.count,
-          this.addedProductCountValidators
-        );
+    const subscription = this.dataService
+      .getAddedProducts()
+      .subscribe((data: any) => {
+        this.addedProducts = data;
+        this.addedProducts.forEach((el) => {
+          el.countControl = new FormControl(
+            +el.count,
+            this.addedProductCountValidators
+          );
 
-        this.productCountListener(el);
+          this.productCountListener(el);
+        });
+        this.calculateTotalPrice();
       });
-      this.calculateTotalPrice();
-    });
+
+    this.subscriptions.push(subscription);
   }
 
   onRemoveAll() {
@@ -158,18 +166,25 @@ export class HeaderComponent implements OnInit {
   }
 
   productCountListener(product: any) {
-    product.countControl.valueChanges.subscribe((va: any) => {
-      // product.countControl.patchValue(count);
-      product.count = product.countControl.value;
-      this.calculateTotalPrice();
-    });
+    const subscription = product.countControl.valueChanges.subscribe(
+      (va: any) => {
+        // product.countControl.patchValue(count);
+        product.count = product.countControl.value;
+        this.calculateTotalPrice();
+      }
+    );
+
+    this.subscriptions.push(subscription);
   }
 
   onCheckout() {
     this.router.navigate(['/', 'checkout']);
     this.renderer.addClass(this.cartDialogOverlay.nativeElement, 'hidden');
     this.renderer.addClass(this.cartDialogELement.nativeElement, 'hidden');
-    document.body.style.overflow = 'unset';
     this.isCartClicked = false;
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 }

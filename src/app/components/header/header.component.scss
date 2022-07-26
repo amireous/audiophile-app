@@ -228,3 +228,19 @@ nav {
   font-weight: 400;
   color: #101010;
 }
+
+.no-scroll {
+  position: fixed !important;
+  overflow-y: scroll !important;
+  width: 100% !important;
+}
+
+.logo {
+  cursor: pointer;
+
+  img {
+    &:hover {
+      filter: invert(56%) sepia(72%) saturate(456%) hue-rotate(334deg) brightness(89%) contrast(89%);
+    }
+  }
+}

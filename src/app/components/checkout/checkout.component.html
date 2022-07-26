@@ -79,27 +79,61 @@
               </div>
             </div>
           </div>
-          <div class="cash-delivery">
+          <div class="cash-delivery" *ngIf="isCashOnDeliverySelected">
             <div>
               <label class="custom-label" for="e-money-pin">e-money pin</label>
-              <input type="text"
-                [class.input-error]="paymentForm.controls['pin']?.errors?.required && paymentForm.controls['pin']?.touched"
-                placeholder="5631" id="e-money-pin" formControlName="pin">
+              <input type="text" placeholder="5631" id="e-money-pin" formControlName="pin">
             </div>
             <div>
               <label class="custom-label" for="e-money-number">e-money number</label>
-              <input type="text"
-                [class.input-error]="paymentForm.controls['number']?.errors?.required && paymentForm.controls['number']?.touched"
-                placeholder="3121345212136" id="e-money-number" formControlName="number">
+              <input type="text" placeholder="3121345212136" id="e-money-number" formControlName="number">
             </div>
           </div>
         </form>
+        <div class="cash-description" *ngIf="!isCashOnDeliverySelected">
+          <img src="/assets/cash-only.svg" alt="">
+          <p class="description">The ‘Cash on Delivery’ option enables you to pay in cash when our delivery courier
+            arrives at your residence. Just make sure your address is correct so that your order will not be cancelled.
+          </p>
+        </div>
       </div>
     </section>
     <section class="side-summery">
       <h2>summery</h2>
       <div class="products">
-        <div class="product"></div>
+        <div class="cart-product" *ngFor="let product of basketProducts">
+          <div class="left-info">
+            <div class="product-image">
+              <img [src]="product.product.image.desktop" alt=""
+                [routerLink]="['/', 'product-detail', product.product.slug]">
+            </div>
+            <div class="details">
+              <p class="product-name" [routerLink]="['/', 'product-detail', product.product.slug]">{{product.title}}</p>
+              <p class="product-price">$ {{product.product.price | number}}</p>
+            </div>
+          </div>
+          <div class="right-info">
+            <p class="product-count">x{{product.count}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="bill-info">
+        <div class="total">
+          <p>total</p>
+          <p>${{totalPrice | number}}</p>
+        </div>
+        <div class="shipping">
+          <p>shipping</p>
+          <p>${{shippingAmount}}</p>
+        </div>
+        <div class="vat">
+          <p>vat(included)</p>
+          <p>${{vatAmount | number}}</p>
+        </div>
+        <div class="grand-total">
+          <p>grand total</p>
+          <p class="grand-total-amount">${{grandTotalAmount | number}}</p>
+        </div>
       </div>
       <button class="pay-button see-product-button"
         [class.disabled-button]="shippingForm.invalid || paymentForm.invalid || billingForm.invalid"

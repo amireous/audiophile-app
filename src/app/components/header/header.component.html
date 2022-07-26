@@ -2,7 +2,7 @@
   <div class="">
     <div class="wrapper">
       <header class="header container">
-        <div class="logo">
+        <div class="logo" [routerLink]="['/', 'home']">
           <img src="assets/shared/desktop/logo.svg">
         </div>
         <nav>
@@ -36,7 +36,7 @@
                     </div>
                     <div class="details">
                       <p class="product-name">{{product.title}}</p>
-                      <p class="product-price">$ {{product.product.price}}</p>
+                      <p class="product-price">${{product.product.price | number}}</p>
                     </div>
                   </div>
                   <div class="right-info">
@@ -58,7 +58,7 @@
         </div>
       </header>
     </div>
-    <div class="header-banner wrapper" *ngIf="isHomeRoute">
+    <div class="header-banner wrapper" *ngIf="currentPath === '/home'">
       <!-- <p>Earphone</p> -->
       <div class="banner-description container">
         <p class="title new-product-title">new product</p>
