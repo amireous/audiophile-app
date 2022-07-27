@@ -84,13 +84,6 @@ nav {
   position: relative;
   transform: 0.3s filter;
   cursor: pointer;
-
-  &:hover {
-    img {
-      filter: invert(56%) sepia(72%) saturate(456%) hue-rotate(334deg) brightness(89%) contrast(89%);
-
-    }
-  }
 }
 
 .cart-dialog {
@@ -242,5 +235,19 @@ nav {
     &:hover {
       filter: invert(56%) sepia(72%) saturate(456%) hue-rotate(334deg) brightness(89%) contrast(89%);
     }
+  }
+}
+
+.remove-single {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: end;
+  text-transform: capitalize;
+  color: #898989;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
   }
 }

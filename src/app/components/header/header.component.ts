@@ -27,6 +27,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isCheckout: boolean = false;
   addedProducts: any[] = [];
   totalAddedProductsPrice: number = 0;
+  addedProductsCount: number = 0;
   currentPath: string = '';
   subscriptions: Subscription[] = [];
 
@@ -112,12 +113,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
     const subscription = this.dataService
       .getAddedProducts()
       .subscribe((data: any) => {
+        this.addedProductsCount = 0;
         this.addedProducts = data;
         this.addedProducts.forEach((el) => {
           el.countControl = new FormControl(
             +el.count,
             this.addedProductCountValidators
           );
+
+          this.addedProductsCount += Number(el.count);
 
           this.productCountListener(el);
         });
@@ -134,16 +138,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
   calculateTotalPrice() {
     let count = 0;
     this.totalAddedProductsPrice = 0;
-    this.addedProducts.forEach(
-      (product) =>
-        (this.totalAddedProductsPrice += Number(
-          product.count * product.product.price
-        ))
-    );
+    this.addedProductsCount = 0;
+    this.addedProducts.forEach((product) => {
+      this.totalAddedProductsPrice += Number(
+        product.count * product.product.price
+      );
+
+      this.addedProductsCount += Number(product.count);
+    });
   }
   onIncrease(product: any) {
     let count = product.countControl.value;
     count++;
+
+    this.addedProductsCount++;
 
     if (count > 99) {
       count = 0;
@@ -182,6 +190,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.renderer.addClass(this.cartDialogOverlay.nativeElement, 'hidden');
     this.renderer.addClass(this.cartDialogELement.nativeElement, 'hidden');
     this.isCartClicked = false;
+  }
+
+  onRemoveSingleProduct(product: any) {
+    console.log(product);
+    this.dataService.removeProductFromBasket(product);
   }
 
   ngOnDestroy(): void {

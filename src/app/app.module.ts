@@ -13,6 +13,10 @@ import { ProductDetailComponent } from './components/product-detail/product-deta
 import { OnlyNumberDirective } from './directives/only-number.directive';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CheckoutComponent } from './components/checkout/checkout.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatBadgeModule } from '@angular/material/badge';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,6 +33,9 @@ import { CheckoutComponent } from './components/checkout/checkout.component';
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
+    BrowserAnimationsModule,
+    MatSnackBarModule,
+    MatBadgeModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

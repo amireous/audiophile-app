@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Product } from 'src/app/models/data.model';
 import { DataService } from 'src/app/services/data/data.service';
@@ -21,7 +22,8 @@ export class ProductDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private dataService: DataService
+    private dataService: DataService,
+    private _snackbar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -65,6 +67,13 @@ export class ProductDetailComponent implements OnInit {
       count: Number(this.productCountControl.value),
       title: this.productDetail.name.split(' ')[0],
       product: this.productDetail,
+    });
+
+    this._snackbar.open(`item ${this.productDetail.name} added to cart`, '', {
+      duration: 1000,
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      panelClass: ['snackbar'],
     });
 
     this.productCountControl.reset();

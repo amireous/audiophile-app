@@ -85,6 +85,8 @@ footer {
   .social-icons {
     img {
       margin: 8px;
+
+      &:hover {}
     }
   }
 }
@@ -106,6 +108,10 @@ footer {
     flex-direction: column;
     align-items: center;
     transition: 0.3s all;
+
+    &:hover {
+      transform: scale(1.03);
+    }
 
     // &:hover {
     //   .shop span {

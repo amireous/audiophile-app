@@ -24,7 +24,16 @@ export class DataService {
   }
 
   removeProductFromBasket(product: any) {
-    this.addedProducts.pipe(filter((el: any) => el.id !== product.id));
+    let list: any = [];
+    this.getAddedProducts()
+      .pipe(take(1))
+      .subscribe((data) => {
+        list = data;
+      });
+
+    list = list.filter((el: any) => el.product.id !== product.product.id);
+
+    this.addedProducts.next(list);
   }
 
   getAddedProducts() {

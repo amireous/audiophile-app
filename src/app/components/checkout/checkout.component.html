@@ -1,144 +1,218 @@
 <div class="wrapper">
   <div class="container">
-    <section class="checkout">
-      <h1>checkout</h1>
-      <div class="billing-details">
-        <p class="form-title">billing details</p>
-        <form class="billing-form" [formGroup]="billingForm">
-          <div>
-            <label class="custom-label" for="name">name</label>
-            <input type="text"
-              [class.input-error]="billingForm.controls['name']?.errors?.required && billingForm.controls['name']?.touched"
-              placeholder="John Doe" id="name" formControlName="name">
-          </div>
-          <div>
-            <label class="custom-label" for="emailAdress">email address</label>
-            <input type="text"
-              [class.input-error]="billingForm.controls['email']?.errors?.required && billingForm.controls['email']?.touched || billingForm.get('email')?.errors?.email"
-              placeholder="email address" id="emailAdress" formControlName="email">
-          </div>
-          <div>
-            <label class="custom-label" for="phoneNumber">phone number</label>
-            <input type="text"
-              [class.input-error]="billingForm.controls['phoneNumber']?.errors?.required && billingForm.controls['phoneNumber']?.touched"
-              placeholder="phone number" id="phoneNumber" formControlName="phoneNumber">
-          </div>
-        </form>
-      </div>
-      <div class="shipping-info">
-        <p class="form-title">shipping info</p>
-        <form class="shipping-form" [formGroup]="shippingForm">
-          <div class="shipping-adress">
-            <label class="custom-label" for="adress">your address</label>
-            <input type="text"
-              [class.input-error]="shippingForm.controls['address']?.errors?.required  && shippingForm.controls['address']?.touched "
-              placeholder="1137 Williams avenue" id="adress" formControlName="address">
-          </div>
-          <div>
-            <label class="custom-label" for="zipCode">ZIP code</label>
-            <input type="text" [class.input-error]="shippingForm.controls['zipCode']?.errors?.required && shippingForm.controls['zipCode']?.touched || shippingForm.controls['zipCode']?.errors?.['maxlength']?.[
-              'actualLength'
-            ] > 5" placeholder="32118" id="zipCode" formControlName="zipCode">
-            <span class="control-error" [class.error-control]="shippingForm.controls['zipCode']?.errors?.['maxlength']?.[
-              'actualLength'
-            ] > 5">ZIP code must
-              be
-              only 5 number</span>
-          </div>
-          <div>
-            <label class="custom-label" for="city">city</label>
-            <input type="text"
-              [class.input-error]="shippingForm.controls['city']?.errors?.required && shippingForm.controls['city']?.touched"
-              placeholder="los angeles" id="city" formControlName="city">
-          </div>
-          <div>
-            <label class="custom-label" for="country">country</label>
-            <input type="text"
-              [class.input-error]="shippingForm.controls['country']?.errors?.required && shippingForm.controls['country']?.touched"
-              placeholder="united states" id="country" formControlName="country">
-          </div>
-        </form>
-      </div>
-      <div class="payment-details">
-        <p class="form-title">payment details</p>
-        <form class="payment-form" [formGroup]="paymentForm">
-          <div class="payment-method">
-            <p>payment method</p>
-            <div>
-              <div class="radio-button">
-                <label>
-                  <input type="radio" name="method" [value]="1" formControlName="method">
-                  <span>e-money</span>
-                </label>
-              </div>
-              <div class="radio-button">
-                <label>
-                  <input type="radio" name="method" [value]="2" formControlName="method">
-                  <span>Cash On Delivery</span>
-                </label>
+    <div *ngIf="basketProducts.length">
+      <section class="checkout">
+        <h1>checkout</h1>
+        <div class="billing-details">
+          <p class="form-title">billing details</p>
+          <form class="billing-form" [formGroup]="billingForm">
+            <div
+              [class.error-form]="billingForm.controls['name']?.errors?.required && billingForm.controls['name']?.touched">
+              <label class="custom-label" for="name">Name</label>
+              <input type="text" placeholder="John Doe" id="name" formControlName="name">
+            </div>
+            <div
+              [class.error-form]="billingForm.controls['email']?.errors?.required && billingForm.controls['email']?.touched || billingForm.get('email')?.errors?.email">
+              <label class="custom-label" for="emailAdress">Email Address</label>
+              <input type="text" placeholder="Email address" id="emailAdress" formControlName="email">
+            </div>
+            <div
+              [class.error-form]="billingForm.controls['phoneNumber']?.errors?.required && billingForm.controls['phoneNumber']?.touched">
+              <label class="custom-label" for="phoneNumber">Phone Number</label>
+              <input type="text" placeholder="Phone Number" id="phoneNumber" formControlName="phoneNumber">
+            </div>
+          </form>
+        </div>
+        <div class="shipping-info">
+          <p class="form-title">shipping info</p>
+          <form class="shipping-form" [formGroup]="shippingForm">
+            <div class="shipping-adress"
+              [class.error-form]="shippingForm.controls['address']?.errors?.required  && shippingForm.controls['address']?.touched ">
+              <label class="custom-label" for="adress">Your Address</label>
+              <input type="text" placeholder="1137 Williams avenue" id="adress" formControlName="address">
+            </div>
+            <div class="zip-form" [class.error-form]="shippingForm.controls['zipCode']?.errors?.required && shippingForm.controls['zipCode']?.touched || shippingForm.controls['zipCode']?.errors?.['maxlength']?.[
+            'actualLength'
+          ] > 5">
+              <label class="custom-label" for="zipCode">ZIP code</label>
+              <input type="text" placeholder="32118" id="zipCode" formControlName="zipCode">
+              <span class="control-error" [class.error-control]="shippingForm.controls['zipCode']?.errors?.['maxlength']?.[
+                'actualLength'
+              ] > 5">ZIP code must
+                be
+                only 5 number</span>
+            </div>
+            <div
+              [class.error-form]="shippingForm.controls['city']?.errors?.required && shippingForm.controls['city']?.touched">
+              <label class="custom-label" for="city">City</label>
+              <input type="text" placeholder="Los Angeles" id="city" formControlName="city">
+            </div>
+            <div
+              [class.error-form]="shippingForm.controls['country']?.errors?.required && shippingForm.controls['country']?.touched">
+              <label class="custom-label" for="country">Country</label>
+              <input type="text" placeholder="United States" id="country" formControlName="country">
+            </div>
+          </form>
+        </div>
+        <div class="payment-details">
+          <p class="form-title">payment details</p>
+          <form class="payment-form" [formGroup]="paymentForm">
+            <div class="payment-method">
+              <p>payment method</p>
+              <div>
+                <div class="radio-button">
+                  <label>
+                    <input type="radio" name="method" [value]="1" formControlName="method">
+                    <span>e-money</span>
+                  </label>
+                </div>
+                <div class="radio-button">
+                  <label>
+                    <input type="radio" name="method" [value]="2" formControlName="method">
+                    <span>Cash On Delivery</span>
+                  </label>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="cash-delivery" *ngIf="isCashOnDeliverySelected">
-            <div>
-              <label class="custom-label" for="e-money-pin">e-money pin</label>
-              <input type="text" placeholder="5631" id="e-money-pin" formControlName="pin">
+            <div class="cash-delivery" *ngIf="!isCashOnDeliverySelected">
+              <div
+                [class.error-form]="this.paymentForm.get('pin')?.errors?.required && this.paymentForm.get('pin')?.touched">
+                <label class="custom-label" for="e-money-pin">e-money pin</label>
+                <input type="text" placeholder="5631" id="e-money-pin" formControlName="pin">
+              </div>
+              <div
+                [class.error-form]="this.paymentForm.get('number')?.errors?.required && this.paymentForm.get('number')?.touched">
+                <label class="custom-label" for="e-money-number">e-money number</label>
+                <input type="text" placeholder="3121345212136" id="e-money-number" formControlName="number">
+              </div>
             </div>
-            <div>
-              <label class="custom-label" for="e-money-number">e-money number</label>
-              <input type="text" placeholder="3121345212136" id="e-money-number" formControlName="number">
-            </div>
-          </div>
-        </form>
-        <div class="cash-description" *ngIf="!isCashOnDeliverySelected">
-          <img src="/assets/cash-only.svg" alt="">
-          <p class="description">The ‘Cash on Delivery’ option enables you to pay in cash when our delivery courier
-            arrives at your residence. Just make sure your address is correct so that your order will not be cancelled.
-          </p>
-        </div>
-      </div>
-    </section>
-    <section class="side-summery">
-      <h2>summery</h2>
-      <div class="products">
-        <div class="cart-product" *ngFor="let product of basketProducts">
-          <div class="left-info">
-            <div class="product-image">
-              <img [src]="product.product.image.desktop" alt=""
-                [routerLink]="['/', 'product-detail', product.product.slug]">
-            </div>
-            <div class="details">
-              <p class="product-name" [routerLink]="['/', 'product-detail', product.product.slug]">{{product.title}}</p>
-              <p class="product-price">$ {{product.product.price | number}}</p>
-            </div>
-          </div>
-          <div class="right-info">
-            <p class="product-count">x{{product.count}}</p>
+          </form>
+          <div class="cash-description" *ngIf="isCashOnDeliverySelected">
+            <img src="/assets/cash-only.svg" alt="">
+            <p class="description">The ‘Cash on Delivery’ option enables you to pay in cash when our delivery courier
+              arrives at your residence. Just make sure your address is correct so that your order will not be
+              cancelled.
+            </p>
           </div>
         </div>
-      </div>
-      <div class="bill-info">
-        <div class="total">
-          <p>total</p>
-          <p>${{totalPrice | number}}</p>
+      </section>
+      <section class="side-summery">
+        <h2>summery</h2>
+        <div class="products">
+          <div class="cart-product" *ngFor="let product of basketProducts">
+            <div class="left-info">
+              <div class="product-image">
+                <img [src]="product.product.image.desktop" alt=""
+                  [routerLink]="['/', 'product-detail', product.product.slug]">
+              </div>
+              <div class="details">
+                <p class="product-name" [routerLink]="['/', 'product-detail', product.product.slug]">{{product.title}}
+                </p>
+                <p class="product-price">$ {{product.product.price | number}}</p>
+              </div>
+            </div>
+            <div class="right-info">
+              <p class="product-count">x{{product.count}}</p>
+            </div>
+          </div>
         </div>
-        <div class="shipping">
-          <p>shipping</p>
-          <p>${{shippingAmount}}</p>
+        <div class="bill-info">
+          <div class="total">
+            <p>total</p>
+            <p>${{totalPrice | number}}</p>
+          </div>
+          <div class="shipping">
+            <p>shipping</p>
+            <p>${{shippingAmount}}</p>
+          </div>
+          <div class="vat">
+            <p>vat(included)</p>
+            <p>${{vatAmount | number}}</p>
+          </div>
+          <div class="grand-total">
+            <p>grand total</p>
+            <p class="grand-total-amount">${{grandTotalAmount | number}}</p>
+          </div>
         </div>
-        <div class="vat">
-          <p>vat(included)</p>
-          <p>${{vatAmount | number}}</p>
-        </div>
-        <div class="grand-total">
-          <p>grand total</p>
-          <p class="grand-total-amount">${{grandTotalAmount | number}}</p>
-        </div>
-      </div>
-      <button class="pay-button see-product-button"
-        [class.disabled-button]="shippingForm.invalid || paymentForm.invalid || billingForm.invalid"
-        [disabled]="shippingForm.invalid || paymentForm.invalid || billingForm.invalid"
-        (click)="onContinueAndPay()">continue and pay</button>
-    </section>
+        <button class="pay-button see-product-button button-hover"
+          [class.disabled-button]="shippingForm.invalid || paymentForm.invalid || billingForm.invalid"
+          [disabled]="shippingForm.invalid || paymentForm.invalid || billingForm.invalid"
+          (click)="onContinueAndPay()">continue and pay</button>
+      </section>
+    </div>
+    <p class="empty-basket" *ngIf="!basketProducts.length">Your cart is empty! </p>
   </div>
+</div>
+
+
+<div class="order-receipt-container">
+  <div class="order-receipt">
+    <div>
+      <div class="success-receipt">
+        <img src="/assets/thank-you.svg" alt="">
+      </div>
+      <p class="receipt-text">
+        thank you
+        <br>
+        for your order</p>
+
+      <p class="receipt-description">You will receive an email confirmation shortly</p>
+
+      <div class="order-details">
+        <div>
+          <div class="order" *ngIf="basketProducts.length">
+            <div class="cart-product">
+              <div class="left-info">
+                <div class="product-image">
+                  <img [src]="basketProducts[0].product.image.desktop" alt=""
+                    [routerLink]="['/', 'product-detail', basketProducts[0].product.slug]">
+                </div>
+                <div class="details">
+                  <p class="product-name" [routerLink]="['/', 'product-detail', basketProducts[0].product.slug]">
+                    {{basketProducts[0].title}}
+                  </p>
+                  <p class="product-price">$ {{basketProducts[0].product.price | number}}</p>
+                </div>
+              </div>
+              <div class="right-info">
+                <p class="product-count">x{{basketProducts[0].count}}</p>
+              </div>
+            </div>
+            <ng-container *ngIf="isShowOther">
+              <ng-container *ngFor="let product of basketProducts; let i = index">
+                <div class="cart-product" *ngIf="i !== 0">
+                  <div class="left-info">
+                    <div class="product-image">
+                      <img [src]="product.product.image.desktop" alt=""
+                        [routerLink]="['/', 'product-detail', product.product.slug]">
+                    </div>
+                    <div class="details">
+                      <p class="product-name" [routerLink]="['/', 'product-detail', product.product.slug]">
+                        {{product.title}}
+                      </p>
+                      <p class="product-price">$ {{product.product.price | number}}</p>
+                    </div>
+                  </div>
+                  <div class="right-info">
+                    <p class="product-count">x{{product.count}}</p>
+                  </div>
+                </div>
+              </ng-container>
+            </ng-container>
+
+
+          </div>
+          <p class="other-item" (click)="onShowOther()">{{showOtherText}}</p>
+        </div>
+
+
+        <div class="order-total">
+          <p>grand total</p>
+          <p class="order-total-price">${{grandTotalAmount | number}}</p>
+        </div>
+      </div>
+      <button class="see-product-button button-hover" [routerLink]="['/', 'home']">back to home</button>
+    </div>
+  </div>
+  <div class="receipt-overlay"></div>
 </div>

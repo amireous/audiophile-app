@@ -28,7 +28,10 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterViewInit {
   vatAmount: number = 50;
   grandTotalAmount: number = 0;
 
-  isCashOnDeliverySelected: boolean = true;
+  showOtherText!: string;
+
+  isCashOnDeliverySelected: boolean = false;
+  isShowOther: boolean = false;
 
   basketProducts: any[] = [];
   subscriptions: Subscription[] = [];
@@ -37,7 +40,11 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('emoneyPin', { static: true }) emoneyPin!: ElementRef;
   @ViewChild('pin') pin: any;
 
-  constructor(private dataService: DataService, private renderer: Renderer2) {}
+  constructor(
+    private dataService: DataService,
+    private renderer: Renderer2,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -70,33 +77,24 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.paymentForm = new FormGroup({
       method: new FormControl(1),
-      pin: new FormControl(''),
-      number: new FormControl(''),
+      pin: new FormControl('', Validators.required),
+      number: new FormControl('', Validators.required),
     });
 
-    this.paymentForm.controls['method'].valueChanges.subscribe((val) => {
-      if (val == 1) {
+    this.paymentForm.get('method')?.valueChanges.subscribe((value) => {
+      console.log(value);
+      if (value == 1) {
+        this.isCashOnDeliverySelected = false;
+        this.paymentForm.get('pin')?.setValidators(Validators.required);
+        this.paymentForm.get('number')?.setValidators(Validators.required);
+        this.cdr.detectChanges();
+      } else {
         this.isCashOnDeliverySelected = true;
+        this.paymentForm.get('pin')?.clearValidators();
+        this.paymentForm.get('number')?.clearValidators();
         this.paymentForm.get('pin')?.reset();
         this.paymentForm.get('number')?.reset();
-      } else {
-        this.isCashOnDeliverySelected = false;
-        // this.paymentForm.controls['pin'].clearValidators();
-        // this.paymentForm.controls['number'].clearValidators();
-        // this.paymentForm.controls['number'].clearValidators();
-        // this.paymentForm.controls['number'].updateValueAndValidity({
-        //   onlySelf: true,
-        // });
-        // this.paymentForm.controls['pin'].updateValueAndValidity({
-        //   onlySelf: true,
-        // });
-        // this.cdr.detectChanges();
       }
-
-      console.log(
-        this.paymentForm.controls['pin'].errors,
-        this.paymentForm.controls['number'].errors
-      );
     });
   }
 
@@ -125,9 +123,17 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterViewInit {
         this.vatAmount = 0.2 * this.totalPrice;
         this.grandTotalAmount =
           this.totalPrice + this.vatAmount + this.shippingAmount;
+        this.showOtherText = `and ${this.basketProducts.length - 1} other item`;
       });
 
     this.subscriptions.push(subscription);
+  }
+
+  onShowOther() {
+    this.isShowOther = !this.isShowOther;
+    this.showOtherText = this.isShowOther
+      ? 'View less'
+      : `And ${this.basketProducts.length - 1} other item`;
   }
 
   ngOnDestroy(): void {

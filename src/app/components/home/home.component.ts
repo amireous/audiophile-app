@@ -21,6 +21,7 @@ export class HomeComponent implements OnInit {
 
   earphonesData: any;
   speakersData: any;
+
   ngOnInit(): void {
     this.setCurrentRoute();
   }
@@ -39,21 +40,21 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  getCurrentPathData(path: string = 'home') {
+  getCurrentPathData(path: string = 'speaker') {
     console.log(path);
     if (path === 'speakers') path = 'speaker';
-    this.speakersData = this.productList.filter((product) =>
-      product.category.includes('speakers')
+    this.speakersData = this.productList.filter((product: any) =>
+      product?.category?.includes('speakers')
     );
-    this.earphonesData = this.productList.filter((product) =>
-      product.category.includes('earphones')
+    this.earphonesData = this.productList.filter((product: any) =>
+      product?.category?.includes('earphones')
     );
     this.productList = this.productList.filter((product: any) =>
-      product.slug.includes(path)
+      product?.slug?.includes(path)
     );
   }
 
   onSeeProduct(product: Product) {
-    this.router.navigate(['/', 'product-detail', product.slug]);
+    this.router.navigate(['/', 'product-detail', product?.slug]);
   }
 }

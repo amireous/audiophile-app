@@ -1,3 +1,67 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '~@angular/material'as mat;
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+@import '~@angular/material/theming';
+
+$md-orange-pallette: (50 : #faefe9,
+  100 : #f3d8c9,
+  200 : #ecbea5,
+  300 : #e4a480,
+  400 : #de9165,
+  500 : #d87d4a,
+  600 : #d47543,
+  700 : #ce6a3a,
+  800 : #c86032,
+  900 : #bf4d22,
+  A100 : #fffbf9,
+  A200 : #ffd4c6,
+  A400 : #ffae93,
+  A700 : #ff9b7a,
+  contrast: (50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #000000,
+    500 : #000000,
+    600 : #000000,
+    700 : #000000,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  ));
+
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$audiophile-app-primary: mat-palette($md-orange-pallette, 500);
+$audiophile-app-accent: mat-palette($md-orange-pallette, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$audiophile-app-warn: mat-palette($mat-red);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$audiophile-app-theme: mat.define-light-theme((color: (primary: $audiophile-app-primary,
+      accent: $audiophile-app-accent,
+      warn: $audiophile-app-warn,
+    )));
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($audiophile-app-theme);
+
 /* You can add global styles to this file, and also import other style files */
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap');
 
@@ -124,6 +188,41 @@ a {
   filter: opacity(0.5);
 }
 
+.button-hover:not(.disabled-button) {
+  transition: 0.3s filter;
+
+  &:hover {
+    filter: opacity(0.7);
+  }
+}
+
+.icon-hover {
+  transform: 0.3s filter;
+
+  &:hover {
+    filter: invert(56%) sepia(72%) saturate(456%) hue-rotate(334deg) brightness(89%) contrast(89%);
+  }
+}
+
+.snackbar {
+  display: flex !important;
+  justify-content: center !important;
+  border-radius: 40px !important;
+  color: #fff;
+  background: #1dd1a1;
+  font-weight: 600;
+}
+
+.mat-badge-medium.mat-badge-after .mat-badge-content {
+  right: -40px;
+  top: -16px;
+}
+
+.mat-badge-content {
+  color: #fff;
+}
+
+
 // @font-face {
 //   font-family: 'Manrope';
 //   src: url('assets/fonts/webfonts/Manrope-Bold.woff2') format('woff2');
@@ -178,3 +277,13 @@ a {
 //   font-style: normal;
 //   font-display: swap;
 // }
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}

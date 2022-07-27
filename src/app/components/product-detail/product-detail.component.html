@@ -25,29 +25,30 @@
       <div class="product-details">
         <div class="product-features">
           <h3 class="h3">Features</h3>
-          <p class="p product-description">{{productDetail.features}}</p>
+          <p class="p product-description">{{productDetail?.features}}</p>
         </div>
         <div class="product-box">
           <h3 class="product-box-title">in the box</h3>
           <div class="product-box-details">
-            <p *ngFor="let box of productDetail.includes" class="p"><span>{{box.quantity}}x</span>{{box.item}}</p>
+            <p *ngFor="let box of productDetail?.includes" class="p"><span>{{box?.quantity}}x</span>{{box?.item}}</p>
           </div>
         </div>
       </div>
       <div class="product-images">
-        <img class="first-image" [src]="productDetail.gallery.first.desktop" alt="">
-        <img class="second-image" [src]="productDetail.gallery.second.desktop" alt="">
-        <img class="third-image" [src]="productDetail.gallery.third.desktop" alt="">
+        <img class="first-image" [src]="productDetail?.gallery?.first?.desktop" alt="">
+        <img class="second-image" [src]="productDetail?.gallery?.second?.desktop" alt="">
+        <img class="third-image" [src]="productDetail?.gallery?.third?.desktop" alt="">
       </div>
       <div class="related-products">
         <p>you may also like</p>
         <div class="products-list">
-          <div class="related-product" *ngFor="let product of productDetail.others">
+          <div class="related-product" *ngFor="let product of productDetail?.others">
             <div class="related-product-image">
-              <img [src]="product.image.desktop" alt="">
+              <img [src]="product?.image?.desktop" alt="">
             </div>
-            <p class="related-product-title">{{product.name}}</p>
-            <button class="see-product-button" [routerLink]="['/', 'product-detail', product.slug]">see product</button>
+            <p class="related-product-title">{{product?.name}}</p>
+            <button class="see-product-button button-hover" [routerLink]="['/', 'product-detail', product.slug]">see
+              product</button>
           </div>
         </div>
       </div>

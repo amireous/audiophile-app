@@ -2,7 +2,7 @@
   <div class="">
     <div class="wrapper">
       <header class="header container">
-        <div class="logo" [routerLink]="['/', 'home']">
+        <div class="logo icon-hover" [routerLink]="['/', 'home']">
           <img src="assets/shared/desktop/logo.svg">
         </div>
         <nav>
@@ -18,7 +18,12 @@
         </nav>
         <div>
           <div class="cart-basket" (click)="onBasketClick()">
-            <img src="assets/shared/desktop/icon-cart.svg">
+            <p>
+              <span [matBadge]="addedProductsCount" matBadgeOverlap="false" matBadgeSize="medium"
+                *ngIf="addedProductsCount"> </span>
+              <img class="icon-hover" src="assets/shared/desktop/icon-cart.svg">
+            </p>
+
           </div>
           <div class="dialog-overlay hidden" #cartDialogOverlay></div>
           <div class="cart-dialog hidden" #cartDialogELement>
@@ -45,6 +50,7 @@
                       <input class="product-count-input" type="text" [formControl]="product.countControl" numbersOnly>
                       <button class="increase" (click)="onIncrease(product)">+</button>
                     </div>
+                    <a class="remove-single" (click)="onRemoveSingleProduct(product)">remove</a>
                   </div>
                 </div>
               </div>

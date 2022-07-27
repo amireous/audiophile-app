@@ -3,13 +3,13 @@
     <div class="category-product-list" *ngIf="currentPath !== 'home'">
       <div class="category-product" *ngFor="let product of productList; let i = index">
         <div class="product-image" [class.opposite]=" (i+1) % 2 === 0">
-          <img [src]="product.image.desktop" alt="">
+          <img [src]="product?.image?.desktop" alt="">
         </div>
         <div class="product-info">
-          <p class="product-status new-product-title" *ngIf="product.new">New product</p>
-          <h2 class="h2 product-title">{{product.name}}</h2>
-          <p class="p product-description">{{product.description}}</p>
-          <button class="see-product-button" (click)="onSeeProduct(product)">see product</button>
+          <p class="product-status new-product-title" *ngIf="product?.new">New product</p>
+          <h2 class="h2 product-title">{{product?.name}}</h2>
+          <p class="p product-description">{{product?.description}}</p>
+          <button class="see-product-button button-hover" (click)="onSeeProduct(product)">see product</button>
         </div>
       </div>
     </div>
@@ -23,20 +23,18 @@
             <img src="assets/home/desktop/image-speaker-zx9.png" alt="">
           </div>
           <div class="product-description">
-            <h2 *ngIf="speakersData.length">{{speakersData[0]?.name}}</h2>
+            <h2 *ngIf="speakersData?.length">{{speakersData[0]?.name}}</h2>
             <p class="product-details">Upgrade to premium speakers that are phenomenally built to deliver truly
               remarkable
               sound</p>
-            <button class="see-product-button button-hover"
-              [routerLink]="['/', 'product-detail', speakersData[0]?.slug]">see product</button>
+            <button class="see-product-button button-hover" (click)="onSeeProduct(speakersData[0])">see product</button>
           </div>
         </div>
       </div>
       <div class="simple-product">
         <div class="simple-product-information">
-          <h2 class="simple-product-title">{{speakersData[1]?.name}} </h2>
-          <button class="see-product-button black-white-button"
-            [routerLink]="['/', 'product-detail', speakersData[1]?.slug]">See
+          <h2 class="simple-product-title" *ngIf="speakersData?.length">{{speakersData[1]?.name}} </h2>
+          <button class="see-product-button black-white-button" (click)="onSeeProduct(speakersData[1])">See
             product</button>
         </div>
       </div>
@@ -46,8 +44,8 @@
         </div>
         <div class="product-details">
           <h2>YX1 EARPHONES</h2>
-          <button class="see-product-button black-white-button"
-            [routerLink]="['/', 'product-detail', earphonesData[0]?.slug]">see product</button>
+          <button class="see-product-button black-white-button" (click)="onSeeProduct(earphonesData[0])">see
+            product</button>
         </div>
       </div>
     </div>
