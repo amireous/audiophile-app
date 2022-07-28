@@ -18,11 +18,13 @@
 }
 
 .checkout {
+  position: relative;
   padding: 3rem;
   background-color: #fff;
   max-width: 730px;
   width: 100%;
   border-radius: 10px;
+  z-index: 0;
 
   h1 {
     text-transform: uppercase;
@@ -393,15 +395,19 @@ p.empty-basket {
 }
 
 .order-receipt-container {
+  display: flex;
+  opacity: 0;
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
   box-sizing: border-box;
-  display: flex;
   justify-content: center;
   align-items: center;
+  z-index: -1;
+  transition: 0.5s all;
+
 
   .receipt-overlay {
     position: fixed;
@@ -476,8 +482,6 @@ p.empty-basket {
   }
 
   .order {
-    border-bottom: 1px solid #dedede;
-
     .cart-product {
       &:not(&:last-child) {
         margin: 0 0 10px 0;
@@ -533,9 +537,17 @@ p.empty-basket {
     font-size: 13px;
     font-weight: 700;
     text-align: center;
+    border-top: 1px solid #dedede;
+    padding-top: 15px;
 
     &:hover {
       color: #d87d4a;
     }
   }
+}
+
+.show-receipt {
+  opacity: 1;
+  transition: 0.5s all;
+  z-index: 0;
 }

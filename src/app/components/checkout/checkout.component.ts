@@ -39,12 +39,13 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('emoneyNumber', { static: true }) emoneyNumber!: ElementRef;
   @ViewChild('emoneyPin', { static: true }) emoneyPin!: ElementRef;
   @ViewChild('pin') pin: any;
+  @ViewChild('orderReceipt') orderReceipt !: ElementRef;
 
   constructor(
     private dataService: DataService,
     private renderer: Renderer2,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.initForm();
@@ -106,6 +107,8 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterViewInit {
     ) {
       return;
     }
+
+    this.renderer.addClass(this.orderReceipt.nativeElement, 'show-receipt')
   }
 
   getBasketProducts() {

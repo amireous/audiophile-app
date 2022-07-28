@@ -55,12 +55,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private renderer: Renderer2,
     private dataService: DataService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.router.events.subscribe((val) => {
       if (val instanceof NavigationEnd) {
-        this.currentPath = val.url || val.urlAfterRedirects;
+        console.log(val)
+        this.currentPath = val.url === '/' ? val.urlAfterRedirects : val.url;
         if (
           val.url.includes('checkout') ||
           val.urlAfterRedirects.includes('checkout')
@@ -85,6 +86,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
         if (val.url.includes('headphones')) this.title = 'headphones';
         if (val.url.includes('speakers')) this.title = 'speakers';
         if (val.url.includes('earphones')) this.title = 'earphones';
+
+        console.log(this.currentPath.includes('home'), this.currentPath)
       }
     });
 
@@ -99,12 +102,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   onBasketClick() {
     if (this.isCartClicked) {
-      this.renderer.addClass(this.cartDialogELement.nativeElement, 'hidden');
-      this.renderer.addClass(this.cartDialogOverlay.nativeElement, 'hidden');
+      this.renderer.removeClass(this.cartDialogELement.nativeElement, 'show-dialog-cart');
+      this.renderer.removeClass(this.cartDialogOverlay.nativeElement, 'show-dialog-overlay');
       this.isCartClicked = false;
     } else {
-      this.renderer.removeClass(this.cartDialogELement.nativeElement, 'hidden');
-      this.renderer.removeClass(this.cartDialogOverlay.nativeElement, 'hidden');
+      this.renderer.addClass(this.cartDialogELement.nativeElement, 'show-dialog-cart');
+      this.renderer.addClass(this.cartDialogOverlay.nativeElement, 'show-dialog-overlay');
       this.isCartClicked = true;
     }
   }
@@ -187,8 +190,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   onCheckout() {
     this.router.navigate(['/', 'checkout']);
-    this.renderer.addClass(this.cartDialogOverlay.nativeElement, 'hidden');
-    this.renderer.addClass(this.cartDialogELement.nativeElement, 'hidden');
+    this.renderer.removeClass(this.cartDialogOverlay.nativeElement, 'show-dialog-overlay');
+    this.renderer.removeClass(this.cartDialogELement.nativeElement, 'show-dialog-cart');
     this.isCartClicked = false;
   }
 

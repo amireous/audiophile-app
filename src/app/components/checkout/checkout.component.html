@@ -145,7 +145,7 @@
 </div>
 
 
-<div class="order-receipt-container">
+<div class="order-receipt-container" #orderReceipt>
   <div class="order-receipt">
     <div>
       <div class="success-receipt">
@@ -202,7 +202,7 @@
 
 
           </div>
-          <p class="other-item" (click)="onShowOther()">{{showOtherText}}</p>
+          <p class="other-item" (click)="onShowOther()" *ngIf="basketProducts.length > 1">{{showOtherText}}</p>
         </div>
 
 

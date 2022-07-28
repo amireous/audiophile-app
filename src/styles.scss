@@ -68,6 +68,7 @@ $audiophile-app-theme: mat.define-light-theme((color: (primary: $audiophile-app-
 .wrapper {
   display: flex;
   justify-content: center;
+  padding: 0 3rem;
 }
 
 .container {
@@ -80,6 +81,22 @@ $audiophile-app-theme: mat.define-light-theme((color: (primary: $audiophile-app-
   margin: 0;
   box-sizing: border-box;
   font-family: 'Manrope', sans-serif;
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+router-outlet+* {
+  display: block;
+  /* Change display inline to block */
+  animation: fade 1s;
 }
 
 .see-product-button {

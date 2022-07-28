@@ -2,9 +2,17 @@
   <div class="">
     <div class="wrapper">
       <header class="header container">
-        <div class="logo icon-hover" [routerLink]="['/', 'home']">
-          <img src="assets/shared/desktop/logo.svg">
+        <div class="menu-bar icon-hover">
+          <p class="bar"></p>
+          <p class="bar"></p>
+          <p class="bar"></p>
         </div>
+        <div>
+          <div class="logo icon-hover" [routerLink]="['/', 'home']">
+            <img src="assets/shared/desktop/logo.svg">
+          </div>
+        </div>
+
         <nav>
           <ul>
             <li><a class="nav-link-hover" [routerLink]="['/','home']" (click)="onRouterLink('home')">home</a></li>
@@ -25,8 +33,8 @@
             </p>
 
           </div>
-          <div class="dialog-overlay hidden" #cartDialogOverlay></div>
-          <div class="cart-dialog hidden" #cartDialogELement>
+          <div class="dialog-overlay " #cartDialogOverlay></div>
+          <div class="cart-dialog " #cartDialogELement>
             <p class="empty-cart" *ngIf="!addedProducts.length">Your cart is empty!</p>
             <div *ngIf="addedProducts.length">
               <div class="cart-header">
@@ -64,7 +72,7 @@
         </div>
       </header>
     </div>
-    <div class="header-banner wrapper" *ngIf="currentPath === '/home'">
+    <div class="header-banner wrapper" *ngIf="currentPath.includes('home')">
       <!-- <p>Earphone</p> -->
       <div class="banner-description container">
         <p class="title new-product-title">new product</p>

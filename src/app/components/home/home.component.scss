@@ -1,5 +1,5 @@
 .wrapper {
-  padding: 7rem 0;
+  padding: 7rem 3rem;
 }
 
 .premium-product {
@@ -73,6 +73,8 @@
   justify-content: space-between;
 
   .product-image {
+    margin-right: 20px;
+
     img {
       width: 100%;
       height: 100%;
@@ -140,4 +142,58 @@
 
 .opposite {
   order: 1;
+}
+
+
+@media screen and (max-width: 1130px) {
+  nav {
+    display: none;
+  }
+
+  .menu-bar {
+    display: block;
+  }
+
+  .premium-product {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .product-image {
+      position: unset;
+      width: 155px;
+      height: 200px;
+    }
+
+    .details {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      align-items: center;
+      position: relative;
+      justify-content: center;
+    }
+
+    .product-description {
+      position: unset;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      h2 {
+        text-align: center;
+        margin-top: 20px;
+      }
+
+      &>p {
+        text-align: center;
+      }
+
+      button {
+        align-self: center;
+      }
+    }
+  }
+
 }
