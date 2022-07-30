@@ -190,7 +190,7 @@ footer {
 @media screen and (max-width: 1129px) {
   .about-us {
     flex-direction: column-reverse;
-    padding: 0 2rem;
+    padding: 0 1rem;
 
     &-description {
       display: flex;
@@ -224,7 +224,7 @@ footer {
   }
 
   footer {
-    padding: 3rem;
+    padding: 2rem 1rem;
 
     .wrapper {
       padding: 0;

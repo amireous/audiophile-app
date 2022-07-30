@@ -543,7 +543,7 @@ p.empty-basket {
 
 @media screen and (max-width: 1120px) {
   .wrapper {
-    padding: 0 3rem;
+    padding: 0 1rem;
   }
 
   .container {
@@ -562,5 +562,36 @@ p.empty-basket {
   .side-summery {
     margin: 2rem 0;
     width: 100%;
+  }
+}
+
+@media screen and (max-width: 564px) {
+  form {
+    flex-direction: column;
+
+    &>div {
+      width: 100% !important;
+    }
+
+    .payment-method {
+      flex-direction: column;
+
+      &>p {
+        margin-bottom: 20px;
+      }
+
+      &>div {
+        width: 100% !important;
+      }
+    }
+
+    .cash-delivery {
+      flex-direction: column;
+
+      &>div {
+        width: 100% !important;
+        margin-bottom: 20px;
+      }
+    }
   }
 }
