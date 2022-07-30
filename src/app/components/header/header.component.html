@@ -2,7 +2,7 @@
   <div class="">
     <div class="wrapper">
       <header class="header container">
-        <div class="menu-bar icon-hover">
+        <div class="menu-bar icon-hover" (click)="onMenuBar()">
           <p class="bar"></p>
           <p class="bar"></p>
           <p class="bar"></p>
@@ -85,6 +85,44 @@
     </div>
     <div class="header-title" *ngIf="!isHomeRoute && !isProductDetail && !isCheckout">
       <p>{{title}}</p>
+    </div>
+  </div>
+</div>
+
+<div class="menu-bar-section">
+  <div class="overlay" *ngIf="isMenuBarClicked"></div>
+  <div class="menu-bar navigation" #menuBar [class.activated-menu-bar]="isMenuBarClicked">
+    <div class="categories container">
+      <div class="category-item"
+        [class.category-margin]="!currentPath.includes('home') || currentPath.includes('product-detail')">
+        <div class="category-image">
+          <img src="assets/shared/desktop/image-headphones.png" alt="">
+        </div>
+        <div>
+          <p class="category-title">Headphones</p>
+          <p class="shop" [routerLink]="['/', 'headphones']">shop <span>></span></p>
+        </div>
+      </div>
+      <div class="category-item"
+        [class.category-margin]="!currentPath.includes('home') || currentPath.includes('product-detail')">
+        <div class="category-image">
+          <img src="assets/shared/desktop/image-speakers.png" alt="">
+        </div>
+        <div>
+          <p class="category-title">speakers</p>
+          <p class="shop" [routerLink]="['/', 'speakers']">shop <span>></span></p>
+        </div>
+      </div>
+      <div class="category-item earphone-category"
+        [class.category-margin]="!currentPath.includes('home') || currentPath.includes('product-detail')">
+        <div class="category-image">
+          <img src="assets/shared/desktop/image-earphones.png" alt="">
+        </div>
+        <div>
+          <p class="category-title">earphones</p>
+          <p class="shop" [routerLink]="['/', 'earphones']">shop <span>></span></p>
+        </div>
+      </div>
     </div>
   </div>
 </div>

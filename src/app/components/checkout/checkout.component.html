@@ -36,9 +36,7 @@
           ] > 5">
               <label class="custom-label" for="zipCode">ZIP code</label>
               <input type="text" placeholder="32118" id="zipCode" formControlName="zipCode">
-              <span class="control-error" [class.error-control]="shippingForm.controls['zipCode']?.errors?.['maxlength']?.[
-                'actualLength'
-              ] > 5">ZIP code must
+              <span>ZIP code must
                 be
                 only 5 number</span>
             </div>

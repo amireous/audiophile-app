@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Product } from 'src/app/models/data.model';
 import { DataService } from 'src/app/services/data/data.service';
@@ -17,13 +17,22 @@ export class HomeComponent implements OnInit {
   productList: Product[] = [];
   title: any;
   currentPath!: string;
+
+  innerWidth!: number;
   arr = [1, 4, 5, 6, 7, 8];
 
   earphonesData: any;
   speakersData: any;
 
   ngOnInit(): void {
+    this.innerWidth = window.innerWidth;
+    console.log(this.innerWidth);
     this.setCurrentRoute();
+  }
+
+  @HostListener('window:resize', ['$event']) onResize(event: any) {
+    this.innerWidth = event.target.innerWidth;
+    console.log(this.innerWidth);
   }
 
   getHomeData() {

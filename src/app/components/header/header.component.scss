@@ -2,6 +2,11 @@
   background-color: #101010;
 }
 
+.wrapper:first-child {
+  position: relative;
+  z-index: 1;
+}
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -49,7 +54,7 @@ nav {
 .header-banner {
   // padding: 60px 0;
   width: 100%;
-  height: 729px;
+  height: 800px;
   background: url(../../../assets/home/desktop/image-hero.jpg);
 
   // p {
@@ -91,8 +96,8 @@ nav {
   height: auto;
   background-color: #fafafa;
   position: absolute;
-  top: 135px;
-  right: 245px;
+  top: 100px;
+  right: 0;
   padding: 25px;
   border-radius: 8px;
   z-index: -1;
@@ -204,7 +209,7 @@ nav {
   top: 100px;
   left: 0;
   width: 100vw;
-  height: 100vw;
+  // height: 100vw;
   position: fixed;
   background-color: rgba(16, 16, 16, .5);
   z-index: -1;
@@ -260,6 +265,7 @@ nav {
 .show-dialog-overlay {
   opacity: 1;
   z-index: 20;
+  height: 100vh;
 }
 
 .show-dialog-cart {
@@ -268,6 +274,7 @@ nav {
 }
 
 .menu-bar {
+  position: relative;
   display: none;
   margin-right: 25px;
 
@@ -280,7 +287,116 @@ nav {
   }
 }
 
+.menu-bar.navigation {
+  position: absolute;
+  top: 105px;
+  left: 0;
+  background-color: #fff;
+  width: 100%;
+  transform: translateY(-102%);
+  transition: 0.5s all cubic-bezier(0.39, 0.58, 0.57, 1);
+  border-radius: 0 0 10px 10px;
+  z-index: 0;
+
+  .categories {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+
+    .category-item {
+      position: relative;
+      width: 32%;
+      max-width: 350px;
+      height: 263px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: 0.3s all;
+
+      &:hover {
+        transform: scale(1.03);
+      }
+
+      // &:hover {
+      //   .shop span {
+      //     color: #d87d4a;
+      //   }
+      // }
+
+
+      .category-image {
+        display: flex;
+        align-items: flex-end;
+        position: absolute;
+        width: 165px;
+        height: 250px;
+        bottom: 95px;
+
+        img {
+          width: 100%;
+        }
+      }
+
+      &>div:last-child {
+        width: 100%;
+        height: 65%;
+        display: flex;
+        flex-direction: column;
+        justify-content: end;
+        text-align: center;
+        padding-bottom: 15px;
+
+        background-color: #f1f1f1;
+
+        p.category-title {
+          text-transform: uppercase;
+          color: #000;
+          font-weight: 600;
+          letter-spacing: 1px;
+        }
+
+        p.shop {
+          position: relative;
+          z-index: 1;
+          color: #898989;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+
+          &:hover {
+            color: #d87d4a;
+          }
+
+          span {
+            color: #d87d4a;
+            font-weight: 700;
+            font-size: 20px;
+          }
+        }
+      }
+    }
+
+    .earphone-category .category-image {
+      bottom: 90px;
+    }
+  }
+}
+
+.activated-menu-bar {
+  transform: translateY(0%) !important;
+  // z-index: 0 !important;
+}
+
+.overlay {}
+
 @media screen and (max-width: 1130px) {
+  .header {
+    border: none;
+  }
+
   nav {
     display: none;
   }
@@ -322,4 +438,93 @@ nav {
     }
   }
 
+  .header-banner {
+    background: url(../../../assets/home/tablet/image-header.jpg);
+    background-position-y: -140px;
+    background-size: cover;
+    height: 785px;
+
+    &>div:first-child {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  .banner-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .description {
+      text-align: center;
+    }
+  }
+
+  .banner-description {
+    text-align: center;
+
+    p {
+      width: 100%;
+    }
+  }
+
+  .product-with-two-section {
+    .product-details {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      padding-left: 30px;
+    }
+  }
+
 }
+
+@media screen and (max-width: 712px) {
+  .menu-bar {
+    .categories {
+      flex-direction: column;
+    }
+
+
+  }
+
+  .categories {
+    &>div {
+
+      width: 100% !important;
+      max-width: unset !important;
+      height: 170px;
+      bottom: 70px;
+      justify-content: flex-end !important;
+
+      .category-image {
+        bottom: 30px !important;
+      }
+
+      .category-image+div {
+        border-radius: 10px;
+
+      }
+    }
+  }
+
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(16, 16, 16, .5);
+  z-index: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+.header nav+div {
+  position: relative;
+}
+
+@media screen and (max-width: 712px) {}

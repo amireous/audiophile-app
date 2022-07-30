@@ -3,7 +3,8 @@
     <div class="product">
       <div>
         <div class="product-image">
-          <img [src]="productDetail?.image?.desktop" alt="">
+          <img [src]="productDetail?.image?.desktop" alt="" *ngIf="innerWidth >= 1120">
+          <img [src]="productDetail?.image?.tablet" alt="" *ngIf="innerWidth < 1120">
         </div>
         <div class="product-info">
           <p class="product-status new-product-title" *ngIf="productDetail?.new">New product</p>
@@ -35,9 +36,12 @@
         </div>
       </div>
       <div class="product-images">
-        <img class="first-image" [src]="productDetail?.gallery?.first?.desktop" alt="">
-        <img class="second-image" [src]="productDetail?.gallery?.second?.desktop" alt="">
-        <img class="third-image" [src]="productDetail?.gallery?.third?.desktop" alt="">
+        <img class="first-image" [src]="productDetail?.gallery?.first?.desktop" alt="" *ngIf="innerWidth >= 1120">
+        <img class="first-image" [src]="productDetail?.gallery?.first?.tablet" alt="" *ngIf=" innerWidth < 1120">
+        <img class="second-image" [src]="productDetail?.gallery?.second?.desktop" alt="" *ngIf="innerWidth >= 1120">
+        <img class="second-image" [src]="productDetail?.gallery?.second?.tablet" alt="" *ngIf=" innerWidth < 1120">
+        <img class="third-image" [src]="productDetail?.gallery?.third?.desktop" alt="" *ngIf="innerWidth >= 1120">
+        <img class="third-image" [src]="productDetail?.gallery?.third?.tablet" alt="" *ngIf=" innerWidth < 1120">
       </div>
       <div class="related-products">
         <p>you may also like</p>

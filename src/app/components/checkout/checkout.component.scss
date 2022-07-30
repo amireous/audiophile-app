@@ -18,13 +18,13 @@
 }
 
 .checkout {
-  position: relative;
+  // position: relative;
   padding: 3rem;
   background-color: #fff;
   max-width: 730px;
   width: 100%;
   border-radius: 10px;
-  z-index: 0;
+  // z-index: 0;
 
   h1 {
     text-transform: uppercase;
@@ -264,22 +264,11 @@ form {
     position: relative;
 
     &>span {
-      position: absolute;
-      left: 1px;
-      bottom: 2px;
       font-size: 11px;
       font-weight: 400;
-      transition: 0.3s bottom;
-      color: red;
     }
   }
 
-  .zip-form {
-    input {
-      position: relative;
-      z-index: 1;
-    }
-  }
 }
 
 .error-control {
@@ -550,4 +539,28 @@ p.empty-basket {
   opacity: 1;
   transition: 0.5s all;
   z-index: 0;
+}
+
+@media screen and (max-width: 1120px) {
+  .wrapper {
+    padding: 0 3rem;
+  }
+
+  .container {
+    &>div:first-child {
+      flex-direction: column;
+    }
+  }
+
+  .checkout {
+    width: 100%;
+    max-width: unset;
+    margin-top: 2rem;
+    // z-index: 1;
+  }
+
+  .side-summery {
+    margin: 2rem 0;
+    width: 100%;
+  }
 }

@@ -27,7 +27,11 @@ export class FooterComponent implements OnInit {
   getCurrentPath() {
     this.router.events.subscribe((val) => {
       if (val instanceof NavigationEnd) {
-        this.currentPath = val.url || val.urlAfterRedirects;
+        this.currentPath = val.url;
+
+        if (this.currentPath === '/') {
+          this.currentPath = val.urlAfterRedirects;
+        }
       }
     });
   }

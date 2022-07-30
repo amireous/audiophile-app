@@ -4,6 +4,7 @@
       <div class="category-product" *ngFor="let product of productList; let i = index">
         <div class="product-image" [class.opposite]=" (i+1) % 2 === 0">
           <img [src]="product?.image?.desktop" alt="">
+          <!-- <img [src]="product?.image?.mobile" *ngIf="innerWidth < 1120" alt=""> -->
         </div>
         <div class="product-info">
           <p class="product-status new-product-title" *ngIf="product?.new">New product</p>

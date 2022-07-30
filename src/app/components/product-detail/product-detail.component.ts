@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -20,6 +20,8 @@ export class ProductDetailComponent implements OnInit {
     Validators.min(1),
   ]);
 
+  innerWidth!: number;
+
   constructor(
     private route: ActivatedRoute,
     private dataService: DataService,
@@ -27,9 +29,15 @@ export class ProductDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.innerWidth = window.innerWidth;
     this.route.params.subscribe((data) => {
       this.getProduct(data.slug);
     });
+  }
+
+  @HostListener('window:resize', ['$event']) onResize(event: any) {
+    this.innerWidth = event.target.innerWidth;
+    console.log(this.innerWidth);
   }
 
   getProduct(productSlug: string) {

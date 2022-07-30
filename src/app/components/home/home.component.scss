@@ -8,6 +8,7 @@
   height: 560px;
   background-color: #d87d4a;
   overflow: hidden;
+  z-index: -1;
 
   .circle-pattern {
     position: absolute;
@@ -37,6 +38,7 @@
     top: 170px;
     width: 400px;
     color: #fff;
+    width: 100%;
 
     h2 {
       font-weight: 700;
@@ -57,6 +59,7 @@
   background: url("../../../assets/home/desktop/image-speaker-zx7.jpg");
   height: 320px;
   margin: 6rem 0;
+  border-radius: 10px;
 
   h2 {
     font-size: 30px;
@@ -82,9 +85,13 @@
   }
 
   .product-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
     width: 48%;
     background-color: #f1f1f1;
-    padding: 6rem 0 0 6rem;
+    padding: 2rem;
   }
 }
 
@@ -158,6 +165,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 10px;
 
     .product-image {
       position: unset;
@@ -196,4 +204,76 @@
     }
   }
 
+}
+
+@media screen and (max-width: 1120px) {
+  .category-product {
+    flex-direction: column;
+    align-items: center;
+
+    &:nth-child(2) {
+      flex-direction: column-reverse;
+    }
+
+    .product-image {
+      max-width: unset;
+      background-color: #f1f1f1;
+      text-align: center;
+      margin-bottom: 3rem;
+
+      img {
+        width: 490px;
+      }
+    }
+
+    .product-info {
+      width: 100%;
+      text-align: center;
+
+      .product-title {
+        width: 100%;
+      }
+    }
+  }
+
+}
+
+@media screen and (max-width: 712px) {
+  .product-with-two-section {
+    flex-direction: column;
+
+    .product-image {
+      margin: 0 0 20px 0;
+      height: 200px;
+      border-radius: 10px;
+
+      img {
+        width: 100%;
+        object-fit: cover;
+        border-radius: 10px;
+      }
+    }
+
+    .product-details {
+      width: 100%;
+      border-radius: 10px;
+    }
+  }
+
+  .simple-product {
+    background: url("../../../assets/home/tablet/image-speaker-zx7.jpg");
+    background-position: center;
+    border-radius: 10px;
+  }
+
+  .category-product {
+    .product-image {
+      border-radius: 10px;
+    }
+
+    img {
+      width: 100% !important;
+      border-radius: 10px;
+    }
+  }
 }
