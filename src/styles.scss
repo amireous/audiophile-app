@@ -65,41 +65,6 @@ $audiophile-app-theme: mat.define-light-theme((color: (primary: $audiophile-app-
 @include mat.all-component-themes($audiophile-app-theme);
 
 /* You can add global styles to this file, and also import other style files */
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap');
-
-.wrapper {
-  display: flex;
-  justify-content: center;
-  padding: 0 1rem;
-}
-
-.container {
-  max-width: 1110px;
-  width: 100%;
-}
-
-* {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-  font-family: 'Manrope', sans-serif;
-}
-
-@keyframes fade {
-  0% {
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 1;
-  }
-}
-
-router-outlet+* {
-  display: block;
-  /* Change display inline to block */
-  animation: fade 1s;
-}
 
 .see-product-button {
   background-color: #d87d4a;
@@ -124,35 +89,6 @@ router-outlet+* {
   font-size: 13px;
   font-weight: 100;
 }
-
-ul,
-li,
-a {
-  text-decoration: none;
-  list-style: none;
-
-}
-
-.h2 {
-  font-size: 40px;
-  line-height: 44px;
-  letter-spacing: 1.43px;
-  font-weight: 700;
-}
-
-.p {
-  font-size: 15px;
-  line-height: 25px;
-  letter-spacing: 0;
-  font-weight: 500;
-}
-
-// .button-hover {
-// transform: 0.3s;
-// &:hover {
-//     opacity: 0.7;
-// }
-// }
 
 .add-to-cart {
   position: relative;
@@ -240,70 +176,4 @@ a {
 
 .mat-badge-content {
   color: #fff;
-}
-
-
-// @font-face {
-//   font-family: 'Manrope';
-//   src: url('assets/fonts/webfonts/Manrope-Bold.woff2') format('woff2');
-//   font-weight: bold;
-//   font-style: normal;
-//   font-display: swap;
-// }
-
-// @font-face {
-//   font-family: 'Manrope';
-//   src: url('assets/fonts/webfonts/Manrope-ExtraBold.woff2') format('woff2');
-//   font-weight: bold;
-//   font-style: normal;
-//   font-display: swap;
-// }
-
-// @font-face {
-//   font-family: 'Manrope';
-//   src: url('assets/fonts/webfonts/Manrope-ExtraLight.woff2') format('woff2');
-//   font-style: normal;
-//   font-display: swap;
-// }
-
-// @font-face {
-//   font-family: 'Manrope';
-//   src: url('assets/fonts/webfonts/Manrope-Light.woff2') format('woff2');
-//   font-weight: 300;
-//   font-style: normal;
-//   font-display: swap;
-// }
-
-// @font-face {
-//   font-family: 'Manrope';
-//   src: url('assets/fonts/webfonts/Manrope-Medium.woff2') format('woff2');
-//   font-weight: 500;
-//   font-style: normal;
-//   font-display: swap;
-// }
-
-// @font-face {
-//   font-family: 'Manrope';
-//   src: url('assets/fonts/webfonts/Manrope-Regular.woff2') format('woff2');
-//   font-weight: normal;
-//   font-style: normal;
-//   font-display: swap;
-// }
-
-// @font-face {
-//   font-family: 'Manrope';
-//   src: url('assets/fonts/webfonts/Manrope-SemiBold.woff2') format('woff2');
-//   font-weight: 600;
-//   font-style: normal;
-//   font-display: swap;
-// }
-
-html,
-body {
-  height: 100%;
-}
-
-body {
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
