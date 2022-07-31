@@ -45,6 +45,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   cartDialogELement!: ElementRef;
   @ViewChild('cartDialogOverlay', { static: true })
   cartDialogOverlay!: ElementRef;
+  @ViewChild('overlay', { static: true }) overlay!: ElementRef;
 
   @ViewChild('menuBar', { static: true }) menuBar!: ElementRef;
 
@@ -89,6 +90,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
         } else {
           this.isHomeRoute = false;
           this.isMenuBarClicked = false;
+          this.renderer.removeClass(
+            this.overlay.nativeElement,
+            'activated-overlay'
+          );
         }
 
         if (val.url.includes('headphones')) this.title = 'headphones';
@@ -233,6 +238,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   onMenuBar() {
     this.isMenuBarClicked = !this.isMenuBarClicked;
+    if (this.isMenuBarClicked) {
+      this.renderer.addClass(this.overlay.nativeElement, 'activated-overlay');
+    } else {
+      this.renderer.removeClass(
+        this.overlay.nativeElement,
+        'activated-overlay'
+      );
+    }
   }
 
   ngOnDestroy(): void {

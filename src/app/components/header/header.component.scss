@@ -1,10 +1,12 @@
+@import 'src/assets/scss/variables';
+
 .wrapper {
-  background-color: #101010;
+  background-color: $secondary-black;
 }
 
 .wrapper:first-child {
   position: relative;
-  z-index: 1;
+  z-index: 3;
 }
 
 .header {
@@ -12,7 +14,7 @@
   justify-content: space-between;
   align-items: center;
   height: 100px;
-  border-bottom: 1px solid #2e2e2e;
+  border-bottom: 1px solid $secondary-grey;
 }
 
 nav {
@@ -32,19 +34,19 @@ nav {
       line-height: 25px;
       letter-spacing: 2px;
       font-weight: 400;
-      color: #fafafa;
+      color: $secondary-white-2;
     }
   }
 }
 
 .header-title {
   padding: 6rem 0;
-  background-color: #101010;
+  background-color: $secondary-black;
 
   p {
-    color: white;
+    color: $primary-white;
     text-align: center;
-    font-size: 40px;
+    font-size: 30px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 5px;
@@ -52,33 +54,23 @@ nav {
 }
 
 .header-banner {
-  // padding: 60px 0;
   width: 100%;
   height: 800px;
   background: url(../../../assets/home/desktop/image-hero.jpg);
-
-  // p {
-  //     color: white;
-  //     text-align: center;
-  //     font-size: 40px;
-  //     font-weight: 700;
-  //     text-transform: uppercase;
-  //     letter-spacing: 5px;
-  // }
 
   .banner-description {
     align-self: center;
 
     h1 {
       text-transform: uppercase;
-      color: #fff;
+      color: $secondary-white;
       margin-top: 16px;
       margin-bottom: 24px;
       font-size: 60px;
     }
 
     .details {
-      color: #898989;
+      color: $primary-grey;
       width: 349px;
       margin-bottom: 40px;
     }
@@ -89,15 +81,17 @@ nav {
   position: relative;
   transform: 0.3s filter;
   cursor: pointer;
+  margin-right: 5px;
 }
 
 .cart-dialog {
+  visibility: hidden;
   width: 377px;
   height: auto;
-  background-color: #fafafa;
+  background-color: $secondary-white-2;
   position: absolute;
-  top: 100px;
-  right: 0;
+  top: 120px;
+  right: 115px;
   padding: 25px;
   border-radius: 8px;
   z-index: -1;
@@ -116,7 +110,7 @@ nav {
     }
 
     .remove-all {
-      color: #898989;
+      color: $primary-grey;
       font-size: 14px;
       font-weight: 400;
       cursor: pointer;
@@ -135,7 +129,7 @@ nav {
     text-transform: uppercase;
 
     &>p:first-child {
-      color: #898989;
+      color: $primary-grey;
     }
 
     &>p:last-child {
@@ -176,7 +170,7 @@ nav {
         .product-price {
           font-size: 13px;
           font-weight: 500;
-          color: #898989;
+          color: $primary-grey;
         }
       }
     }
@@ -209,9 +203,9 @@ nav {
   top: 100px;
   left: 0;
   width: 100vw;
-  // height: 100vw;
+  visibility: hidden;
   position: fixed;
-  background-color: rgba(16, 16, 16, .5);
+  background-color: #10101080;
   z-index: -1;
   opacity: 0;
   transition: 0.4s all;
@@ -229,7 +223,7 @@ nav {
 .empty-cart {
   text-align: center;
   font-weight: 400;
-  color: #101010;
+  color: $secondary-black;
 }
 
 .no-scroll {
@@ -254,7 +248,7 @@ nav {
   font-weight: 600;
   text-align: end;
   text-transform: capitalize;
-  color: #898989;
+  color: $secondary-grey;
   cursor: pointer;
 
   &:hover {
@@ -266,20 +260,21 @@ nav {
   opacity: 1;
   z-index: 20;
   height: 100vh;
+  visibility: unset;
 }
 
 .show-dialog-cart {
   opacity: 1;
   z-index: 21;
+  visibility: unset;
 }
 
 .menu-bar {
   position: relative;
   display: none;
-  margin-right: 25px;
 
   .bar {
-    background: #fff;
+    background: $primary-white;
     margin-bottom: 3px;
     width: 20px;
     height: 3px;
@@ -289,14 +284,15 @@ nav {
 
 .menu-bar.navigation {
   position: absolute;
-  top: 105px;
+  top: 100px;
   left: 0;
-  background-color: #fff;
+  background-color: $primary-white;
   width: 100%;
   transform: translateY(-102%);
   transition: 0.5s all cubic-bezier(0.39, 0.58, 0.57, 1);
   border-radius: 0 0 10px 10px;
-  z-index: 0;
+  z-index: 2;
+  visibility: hidden;
 
   .categories {
     display: flex;
@@ -319,13 +315,6 @@ nav {
         transform: scale(1.03);
       }
 
-      // &:hover {
-      //   .shop span {
-      //     color: #d87d4a;
-      //   }
-      // }
-
-
       .category-image {
         display: flex;
         align-items: flex-end;
@@ -347,12 +336,13 @@ nav {
         justify-content: end;
         text-align: center;
         padding-bottom: 15px;
+        border-radius: 10px;
 
-        background-color: #f1f1f1;
+        background-color: $secondary-white;
 
         p.category-title {
           text-transform: uppercase;
-          color: #000;
+          color: $primary-black;
           font-weight: 600;
           letter-spacing: 1px;
         }
@@ -360,18 +350,18 @@ nav {
         p.shop {
           position: relative;
           z-index: 1;
-          color: #898989;
+          color: $secondary-grey;
           display: flex;
           justify-content: center;
           align-items: center;
           cursor: pointer;
 
           &:hover {
-            color: #d87d4a;
+            color: $primary;
           }
 
           span {
-            color: #d87d4a;
+            color: $primary;
             font-weight: 700;
             font-size: 20px;
           }
@@ -387,7 +377,7 @@ nav {
 
 .activated-menu-bar {
   transform: translateY(0%) !important;
-  // z-index: 0 !important;
+  visibility: visible !important;
 }
 
 .overlay {}
@@ -483,12 +473,16 @@ nav {
 }
 
 @media screen and (max-width: 712px) {
+  .header-banner {
+    background: url(../../../assets/home/tablet/image-header.jpg);
+    background-size: contain;
+    background-repeat-y: no-repeat;
+  }
+
   .menu-bar {
     .categories {
       flex-direction: column;
     }
-
-
   }
 
   .categories {
@@ -506,25 +500,45 @@ nav {
 
       .category-image+div {
         border-radius: 10px;
-
       }
     }
   }
 
+  .cart-dialog {
+    width: 94%;
+    right: 17px;
+  }
+
+  .banner-description {
+    h1 {
+      font-size: 35px !important;
+    }
+  }
 }
 
 .overlay {
   position: fixed;
   top: 0;
   left: 0;
-  background-color: rgba(16, 16, 16, .5);
-  z-index: 0;
+  background-color: #10101080;
+  z-index: 2;
   width: 100vw;
   height: 100vh;
+  visibility: hidden;
+}
+
+.activated-overlay {
+  visibility: unset;
 }
 
 .header nav+div {
   position: relative;
 }
 
-@media screen and (max-width: 712px) {}
+@media screen and (max-width: 496px) {
+  .header-banner {
+    background: url(../../../assets/home/mobile/image-header.jpg);
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+}

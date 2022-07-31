@@ -10,6 +10,8 @@
 
 @import '~@angular/material/theming';
 
+@import 'assets/scss/main.scss';
+
 $md-orange-pallette: (50 : #faefe9,
   100 : #f3d8c9,
   200 : #ecbea5,
@@ -215,6 +217,7 @@ a {
 
 .icon-hover {
   transform: 0.3s filter;
+  cursor: pointer;
 
   &:hover {
     filter: invert(56%) sepia(72%) saturate(456%) hue-rotate(334deg) brightness(89%) contrast(89%);

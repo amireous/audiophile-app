@@ -1,3 +1,5 @@
+@import 'src/assets/scss/variables';
+
 .product {
   &>div:first-child {
     display: flex;
@@ -10,6 +12,7 @@
 
       img {
         width: 100%;
+        border-radius: 10px;
       }
     }
 
@@ -24,17 +27,17 @@
       }
 
       .product-description {
-        color: #898989;
+        color: $primary-grey;
         margin-bottom: 2.5rem;
       }
     }
 
     .new-product-title {
-      color: #d87d4a;
+      color: $primary;
     }
 
     .product-price {
-      color: #101010;
+      color: $secondary-black;
       font-weight: 600;
       font-size: 18px;
       letter-spacing: 1.29px;
@@ -86,7 +89,7 @@
       }
 
       span {
-        color: #d87d4a;
+        color: $primary;
         margin-right: 24px;
       }
     }
@@ -95,7 +98,7 @@
 
 
   p {
-    color: #898989;
+    color: $primary-grey;
   }
 }
 
@@ -117,6 +120,7 @@
   img {
     width: 100%;
     height: 100%;
+    border-radius: 10px;
   }
 }
 
@@ -144,10 +148,12 @@
     .related-product-image {
       width: 350px;
       height: 318px;
+      border-radius: 10px;
 
       img {
         width: 100%;
         height: 100%;
+        border-radius: 10px;
       }
     }
 
@@ -163,6 +169,10 @@
 
 @media screen and (max-width: 1120px) {
   .product {
+    &>div:first-child {
+      margin-top: 60px;
+    }
+
     .product-info {
       display: flex;
       flex-direction: column;
@@ -229,12 +239,8 @@
     }
 
     .product-image {
-      max-width: unset;
+      max-width: unset !important;
       margin: 0 0 20px 0;
-
-      img {
-        border-radius: 10px;
-      }
     }
 
     .product-title {
@@ -254,10 +260,6 @@
     display: flex;
     flex-direction: column;
     row-gap: 25px;
-
-    img {
-      border-radius: 10px;
-    }
   }
 
   .related-products {
@@ -270,8 +272,9 @@
     margin-bottom: 2rem;
 
     .related-product-image {
-      background-color: #f1f1f1;
-      border-radius: 10px;
+      background-color: $secondary-white;
+      position: relative;
+      z-index: -1;
 
       img {
         transform: scale(0.8);

@@ -1,13 +1,15 @@
-.wrapper:not(footer .wrapper) {
-  position: relative;
-  z-index: -1;
-}
+@import 'src/assets/scss/variables';
 
 .about-us {
   display: flex;
   justify-content: center;
-  //   padding: 155px;
   padding: 3rem 9.5rem 9.5rem 9.5rem;
+
+  .about-us-logo {
+    img {
+      border-radius: 10px;
+    }
+  }
 
   .about-us-description {
     max-width: 445px;
@@ -22,13 +24,13 @@
       line-height: 1.2;
 
       span {
-        color: #d87d4a
+        color: $primary
       }
     }
   }
 
   p.description {
-    color: #898989;
+    color: $primary-grey;
     margin-top: 1rem;
     font-weight: 100;
   }
@@ -36,11 +38,11 @@
 
 footer {
   p {
-    color: #898989;
+    color: $primary-grey;
   }
 
   padding: 5rem 9rem;
-  background-color: #101010;
+  background-color: $secondary-black;
 
   .container>div:first-child {
     display: flex;
@@ -84,14 +86,12 @@ footer {
     line-height: 25px;
     letter-spacing: 2px;
     font-weight: 700;
-    color: #fafafa;
+    color: $secondary-white-2;
   }
 
   .social-icons {
     img {
       margin: 8px;
-
-      &:hover {}
     }
   }
 }
@@ -118,13 +118,6 @@ footer {
       transform: scale(1.03);
     }
 
-    // &:hover {
-    //   .shop span {
-    //     color: #d87d4a;
-    //   }
-    // }
-
-
     .category-image {
       display: flex;
       align-items: flex-end;
@@ -132,6 +125,10 @@ footer {
       width: 250px;
       height: 250px;
       bottom: 105px;
+
+      &+div {
+        border-radius: 10px;
+      }
 
       img {
         width: 100%;
@@ -147,11 +144,11 @@ footer {
       text-align: center;
       padding-bottom: 15px;
 
-      background-color: #f1f1f1;
+      background-color: $secondary-white;
 
       p.category-title {
         text-transform: uppercase;
-        color: #000;
+        color: $primary;
         font-weight: 600;
         letter-spacing: 1px;
       }
@@ -159,18 +156,18 @@ footer {
       p.shop {
         position: relative;
         z-index: 1;
-        color: #898989;
+        color: $primary-grey;
         display: flex;
         justify-content: center;
         align-items: center;
         cursor: pointer;
 
         &:hover {
-          color: #d87d4a;
+          color: $primary;
         }
 
         span {
-          color: #d87d4a;
+          color: $primary;
           font-weight: 700;
           font-size: 20px;
         }
@@ -271,21 +268,12 @@ footer {
     .category-item {
       max-width: unset;
       width: 100%;
+      margin-top: 0;
 
       .category-image {
         width: 160px;
         bottom: 140px;
-
-        &+div {
-          border-radius: 10px;
-        }
       }
-    }
-  }
-
-  .about-us-logo {
-    img {
-      border-radius: 10px;
     }
   }
 

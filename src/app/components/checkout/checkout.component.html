@@ -31,9 +31,10 @@
               <label class="custom-label" for="adress">Your Address</label>
               <input type="text" placeholder="1137 Williams avenue" id="adress" formControlName="address">
             </div>
-            <div class="zip-form" [class.error-form]="shippingForm.controls['zipCode']?.errors?.required && shippingForm.controls['zipCode']?.touched || shippingForm.controls['zipCode']?.errors?.['maxlength']?.[
+            <div class="zip-form"
+              [class.error-form]="shippingForm.controls['zipCode']?.errors?.required && shippingForm.controls['zipCode']?.touched || shippingForm.controls['zipCode']?.errors?.['maxlength']?.[
             'actualLength'
-          ] > 5">
+          ] > 5 || shippingForm.controls['zipCode']?.errors?.minlength || shippingForm.controls['zipCode']?.errors?.pattern ">
               <label class="custom-label" for="zipCode">ZIP code</label>
               <input type="text" placeholder="32118" id="zipCode" formControlName="zipCode">
               <span>ZIP code must

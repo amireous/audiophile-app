@@ -33,41 +33,41 @@
             </p>
 
           </div>
-          <div class="dialog-overlay " #cartDialogOverlay></div>
-          <div class="cart-dialog " #cartDialogELement>
-            <p class="empty-cart" *ngIf="!addedProducts.length">Your cart is empty!</p>
-            <div *ngIf="addedProducts.length">
-              <div class="cart-header">
-                <p class="cart-count">cart ({{addedProducts.length}})</p>
-                <p class="p remove-all" (click)="onRemoveAll()">Remove all</p>
-              </div>
-              <div class="cart-products-list">
-                <div class="cart-product" *ngFor="let product of addedProducts">
-                  <div class="left-info">
-                    <div class="product-image">
-                      <img [src]="product.product.image.desktop" alt="">
-                    </div>
-                    <div class="details">
-                      <p class="product-name">{{product.title}}</p>
-                      <p class="product-price">${{product.product.price | number}}</p>
-                    </div>
+        </div>
+        <div class="dialog-overlay " #cartDialogOverlay></div>
+        <div class="cart-dialog " #cartDialogELement>
+          <p class="empty-cart" *ngIf="!addedProducts.length">Your cart is empty!</p>
+          <div *ngIf="addedProducts.length">
+            <div class="cart-header">
+              <p class="cart-count">cart ({{addedProducts.length}})</p>
+              <p class="p remove-all" (click)="onRemoveAll()">Remove all</p>
+            </div>
+            <div class="cart-products-list">
+              <div class="cart-product" *ngFor="let product of addedProducts">
+                <div class="left-info">
+                  <div class="product-image">
+                    <img [src]="product.product.image.desktop" alt="">
                   </div>
-                  <div class="right-info">
-                    <div class="add-to-cart ">
-                      <button class="decrease" (click)="onDecrease(product)">-</button>
-                      <input class="product-count-input" type="text" [formControl]="product.countControl" numbersOnly>
-                      <button class="increase" (click)="onIncrease(product)">+</button>
-                    </div>
-                    <a class="remove-single" (click)="onRemoveSingleProduct(product)">remove</a>
+                  <div class="details">
+                    <p class="product-name">{{product.title}}</p>
+                    <p class="product-price">${{product.product.price | number}}</p>
                   </div>
                 </div>
+                <div class="right-info">
+                  <div class="add-to-cart ">
+                    <button class="decrease" (click)="onDecrease(product)">-</button>
+                    <input class="product-count-input" type="text" [formControl]="product.countControl" numbersOnly>
+                    <button class="increase" (click)="onIncrease(product)">+</button>
+                  </div>
+                  <a class="remove-single" (click)="onRemoveSingleProduct(product)">remove</a>
+                </div>
               </div>
-              <div class="cart-total-price">
-                <p class="p">total</p>
-                <p class="price">${{totalAddedProductsPrice | number}}</p>
-              </div>
-              <button class="checkout-button see-product-button" (click)="onCheckout()">checkout</button>
             </div>
+            <div class="cart-total-price">
+              <p class="p">total</p>
+              <p class="price">${{totalAddedProductsPrice | number}}</p>
+            </div>
+            <button class="checkout-button see-product-button" (click)="onCheckout()">checkout</button>
           </div>
         </div>
       </header>
@@ -90,7 +90,7 @@
 </div>
 
 <div class="menu-bar-section">
-  <div class="overlay" *ngIf="isMenuBarClicked"></div>
+  <div class="overlay" #overlay></div>
   <div class="menu-bar navigation" #menuBar [class.activated-menu-bar]="isMenuBarClicked">
     <div class="categories container">
       <div class="category-item"

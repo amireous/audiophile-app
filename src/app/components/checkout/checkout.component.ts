@@ -39,13 +39,13 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('emoneyNumber', { static: true }) emoneyNumber!: ElementRef;
   @ViewChild('emoneyPin', { static: true }) emoneyPin!: ElementRef;
   @ViewChild('pin') pin: any;
-  @ViewChild('orderReceipt') orderReceipt !: ElementRef;
+  @ViewChild('orderReceipt') orderReceipt!: ElementRef;
 
   constructor(
     private dataService: DataService,
     private renderer: Renderer2,
     private cdr: ChangeDetectorRef
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -70,7 +70,9 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterViewInit {
       address: new FormControl('', Validators.required),
       zipCode: new FormControl('', [
         Validators.required,
+        Validators.minLength(5),
         Validators.maxLength(5),
+        Validators.pattern('^[0-9]*$'),
       ]),
       city: new FormControl('', Validators.required),
       country: new FormControl('', Validators.required),
@@ -97,6 +99,10 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterViewInit {
         this.paymentForm.get('number')?.reset();
       }
     });
+
+    this.shippingForm.controls['zipCode'].valueChanges.subscribe((val) => {
+      console.log(this.shippingForm.controls['zipCode'].errors);
+    });
   }
 
   onContinueAndPay() {
@@ -108,7 +114,7 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
 
-    this.renderer.addClass(this.orderReceipt.nativeElement, 'show-receipt')
+    this.renderer.addClass(this.orderReceipt.nativeElement, 'show-receipt');
   }
 
   getBasketProducts() {
