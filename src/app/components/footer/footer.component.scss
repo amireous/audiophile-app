@@ -184,6 +184,20 @@ footer {
   margin-top: 9rem;
 }
 
+
+.developer {
+  text-align: center;
+  font-size: 11px;
+
+  a {
+    color: $primary;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
 @media screen and (max-width: 1129px) {
   .about-us {
     flex-direction: column-reverse;
@@ -258,6 +272,10 @@ footer {
         }
       }
     }
+  }
+
+  .categories {
+    margin-top: 9rem;
   }
 }
 
