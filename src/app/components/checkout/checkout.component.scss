@@ -601,7 +601,7 @@ p.empty-basket {
       flex-direction: column;
 
       &>div {
-        width: 100%;
+        width: 100% !important;
       }
 
       &>div:first-child {
