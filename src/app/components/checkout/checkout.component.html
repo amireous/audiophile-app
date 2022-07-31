@@ -210,7 +210,7 @@
           <p class="order-total-price">${{grandTotalAmount | number}}</p>
         </div>
       </div>
-      <button class="see-product-button button-hover" [routerLink]="['/', 'home']">back to home</button>
+      <button class="see-product-button button-hover" (click)="onBackToHome()">back to home</button>
     </div>
   </div>
   <div class="receipt-overlay"></div>

@@ -12,15 +12,15 @@ import { DataService } from 'src/app/services/data/data.service';
 })
 export class ProductDetailComponent implements OnInit {
   productDetail!: Product;
+
   productCount!: number;
+  innerWidth!: number;
   productCountControl = new FormControl('', [
     Validators.required,
     Validators.pattern('^[0-9]*$'),
     Validators.max(99),
     Validators.min(1),
   ]);
-
-  innerWidth!: number;
 
   constructor(
     private route: ActivatedRoute,
@@ -37,7 +37,6 @@ export class ProductDetailComponent implements OnInit {
 
   @HostListener('window:resize', ['$event']) onResize(event: any) {
     this.innerWidth = event.target.innerWidth;
-    console.log(this.innerWidth);
   }
 
   getProduct(productSlug: string) {
@@ -45,7 +44,6 @@ export class ProductDetailComponent implements OnInit {
       this.productDetail = data.find(
         (product: any) => product.slug == productSlug
       );
-      console.log(this.productDetail);
     });
   }
 

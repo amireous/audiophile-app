@@ -21,32 +21,26 @@ import { DataService } from 'src/app/services/data/data.service';
 export class HeaderComponent implements OnInit, OnDestroy {
   title: any = '';
   mainProduct!: Product;
-  isMenuBarClicked: boolean = false;
+  currentPath: string = '';
 
+  totalAddedProductsPrice: number = 0;
+  addedProductsCount: number = 0;
+  innerWidth!: number;
+
+  addedProducts: any[] = [];
+  subscriptions: Subscription[] = [];
+
+  isMenuBarClicked: boolean = false;
   isHomeRoute: boolean = true;
   isProductDetail: boolean = false;
   isCartClicked: boolean = false;
   isCheckout: boolean = false;
-  addedProducts: any[] = [];
-  totalAddedProductsPrice: number = 0;
-  addedProductsCount: number = 0;
-  innerWidth!: number;
-  currentPath: string = '';
-  subscriptions: Subscription[] = [];
-
-  addedProductCountValidators = [
-    Validators.required,
-    Validators.pattern('^[0-9]*$'),
-    Validators.max(99),
-    Validators.min(1),
-  ];
 
   @ViewChild('cartDialogELement', { static: true })
   cartDialogELement!: ElementRef;
   @ViewChild('cartDialogOverlay', { static: true })
   cartDialogOverlay!: ElementRef;
   @ViewChild('overlay', { static: true }) overlay!: ElementRef;
-
   @ViewChild('menuBar', { static: true }) menuBar!: ElementRef;
 
   productCountControl = new FormControl('', [
@@ -55,61 +49,28 @@ export class HeaderComponent implements OnInit, OnDestroy {
     Validators.max(99),
     Validators.min(1),
   ]);
+  addedProductCountValidators = [
+    Validators.required,
+    Validators.pattern('^[0-9]*$'),
+    Validators.max(99),
+    Validators.min(1),
+  ];
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute,
     private renderer: Renderer2,
     private dataService: DataService
   ) {}
 
   ngOnInit(): void {
     this.innerWidth = window.innerWidth;
-
-    this.router.events.subscribe((val) => {
-      if (val instanceof NavigationEnd) {
-        console.log(val);
-        this.currentPath = val.url === '/' ? val.urlAfterRedirects : val.url;
-        if (
-          val.url.includes('checkout') ||
-          val.urlAfterRedirects.includes('checkout')
-        ) {
-          this.isCheckout = true;
-        } else this.isCheckout = false;
-        if (
-          val.url.includes('product-detail') ||
-          val.urlAfterRedirects.includes('product-detail')
-        )
-          this.isProductDetail = true;
-        else this.isProductDetail = false;
-        if (
-          val.url.includes('home') ||
-          val.urlAfterRedirects.includes('home')
-        ) {
-          this.isHomeRoute = true;
-        } else {
-          this.isHomeRoute = false;
-          this.isMenuBarClicked = false;
-          this.renderer.removeClass(
-            this.overlay.nativeElement,
-            'activated-overlay'
-          );
-        }
-
-        if (val.url.includes('headphones')) this.title = 'headphones';
-        if (val.url.includes('speakers')) this.title = 'speakers';
-        if (val.url.includes('earphones')) this.title = 'earphones';
-
-        console.log(this.currentPath.includes('home'), this.currentPath);
-      }
-    });
+    this.routeListener();
 
     this.setCartProducts();
   }
 
   @HostListener('window:resize', ['$event']) onResize(event: any) {
     this.innerWidth = event.target.innerWidth;
-    console.log(this.innerWidth);
   }
 
   onRouterLink(navigatedRoute: string) {
@@ -207,13 +168,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   productCountListener(product: any) {
-    const subscription = product.countControl.valueChanges.subscribe(
-      (va: any) => {
-        // product.countControl.patchValue(count);
-        product.count = product.countControl.value;
-        this.calculateTotalPrice();
-      }
-    );
+    const subscription = product.countControl.valueChanges.subscribe(() => {
+      product.count = product.countControl.value;
+      this.calculateTotalPrice();
+    });
 
     this.subscriptions.push(subscription);
   }
@@ -232,7 +190,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   onRemoveSingleProduct(product: any) {
-    console.log(product);
     this.dataService.removeProductFromBasket(product);
   }
 
@@ -246,6 +203,43 @@ export class HeaderComponent implements OnInit, OnDestroy {
         'activated-overlay'
       );
     }
+  }
+
+  routeListener() {
+    this.router.events.subscribe((val) => {
+      if (val instanceof NavigationEnd) {
+        this.currentPath = val.url === '/' ? val.urlAfterRedirects : val.url;
+        if (
+          val.url.includes('checkout') ||
+          val.urlAfterRedirects.includes('checkout')
+        ) {
+          this.isCheckout = true;
+        } else this.isCheckout = false;
+        if (
+          val.url.includes('product-detail') ||
+          val.urlAfterRedirects.includes('product-detail')
+        )
+          this.isProductDetail = true;
+        else this.isProductDetail = false;
+        if (
+          val.url.includes('home') ||
+          val.urlAfterRedirects.includes('home')
+        ) {
+          this.isHomeRoute = true;
+        } else {
+          this.isHomeRoute = false;
+          this.isMenuBarClicked = false;
+          this.renderer.removeClass(
+            this.overlay.nativeElement,
+            'activated-overlay'
+          );
+        }
+
+        if (val.url.includes('headphones')) this.title = 'headphones';
+        if (val.url.includes('speakers')) this.title = 'speakers';
+        if (val.url.includes('earphones')) this.title = 'earphones';
+      }
+    });
   }
 
   ngOnDestroy(): void {

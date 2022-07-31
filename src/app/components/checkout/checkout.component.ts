@@ -1,15 +1,14 @@
 import {
-  AfterViewInit,
   ChangeDetectorRef,
   Component,
   ElementRef,
   OnDestroy,
   OnInit,
   Renderer2,
-  TemplateRef,
   ViewChild,
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/services/data/data.service';
 
@@ -18,7 +17,7 @@ import { DataService } from 'src/app/services/data/data.service';
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.scss'],
 })
-export class CheckoutComponent implements OnInit, OnDestroy, AfterViewInit {
+export class CheckoutComponent implements OnInit, OnDestroy {
   billingForm = new FormGroup({});
   shippingForm = new FormGroup({});
   paymentForm = new FormGroup({});
@@ -43,6 +42,7 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     private dataService: DataService,
+    private router: Router,
     private renderer: Renderer2,
     private cdr: ChangeDetectorRef
   ) {}
@@ -50,10 +50,6 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit(): void {
     this.initForm();
     this.getBasketProducts();
-  }
-
-  ngAfterViewInit(): void {
-    // console.log(this.emoneyNumber.nativeElement);
   }
 
   initForm() {
@@ -85,7 +81,6 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterViewInit {
     });
 
     this.paymentForm.get('method')?.valueChanges.subscribe((value) => {
-      console.log(value);
       if (value == 1) {
         this.isCashOnDeliverySelected = false;
         this.paymentForm.get('pin')?.setValidators(Validators.required);
@@ -98,10 +93,6 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterViewInit {
         this.paymentForm.get('pin')?.reset();
         this.paymentForm.get('number')?.reset();
       }
-    });
-
-    this.shippingForm.controls['zipCode'].valueChanges.subscribe((val) => {
-      console.log(this.shippingForm.controls['zipCode'].errors);
     });
   }
 
@@ -124,9 +115,7 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe((data) => {
         this.basketProducts = data;
         this.basketProducts.forEach((product) => {
-          console.log(product);
           totalPay += product.count * product.product.price;
-          console.log(this.totalPrice);
         });
         this.totalPrice = totalPay;
         this.vatAmount = 0.2 * this.totalPrice;
@@ -143,6 +132,10 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterViewInit {
     this.showOtherText = this.isShowOther
       ? 'View less'
       : `And ${this.basketProducts.length - 1} other item`;
+  }
+  onBackToHome() {
+    this.router.navigate(['/', 'home']);
+    this.dataService.removeAllAddedProducts();
   }
 
   ngOnDestroy(): void {

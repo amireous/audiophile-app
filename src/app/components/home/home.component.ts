@@ -16,23 +16,20 @@ export class HomeComponent implements OnInit {
   ) {}
   productList: Product[] = [];
   title: any;
-  currentPath!: string;
 
+  currentPath!: string;
   innerWidth!: number;
-  arr = [1, 4, 5, 6, 7, 8];
 
   earphonesData: any;
   speakersData: any;
 
   ngOnInit(): void {
     this.innerWidth = window.innerWidth;
-    console.log(this.innerWidth);
     this.setCurrentRoute();
   }
 
   @HostListener('window:resize', ['$event']) onResize(event: any) {
     this.innerWidth = event.target.innerWidth;
-    console.log(this.innerWidth);
   }
 
   getHomeData() {
@@ -50,7 +47,6 @@ export class HomeComponent implements OnInit {
   }
 
   getCurrentPathData(path: string = 'speaker') {
-    console.log(path);
     if (path === 'speakers') path = 'speaker';
     this.speakersData = this.productList.filter((product: any) =>
       product?.category?.includes('speakers')

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Route, Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
   selector: 'app-footer',
@@ -8,7 +8,9 @@ import { ActivatedRoute, NavigationEnd, Route, Router } from '@angular/router';
 })
 export class FooterComponent implements OnInit {
   constructor(private router: Router) {}
+
   currentPath: string = 'home';
+
   ngOnInit(): void {
     this.getCurrentPath();
   }
