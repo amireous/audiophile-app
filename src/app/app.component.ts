@@ -13,7 +13,7 @@ export class AppComponent {
   constructor(public router: Router) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        gtag('config', 'MEASUREMENT-ID', {
+        gtag('config', 'G-MQYYDZQH6C', {
           page_path: event.urlAfterRedirects,
         });
       }
