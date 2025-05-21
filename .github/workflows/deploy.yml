@@ -16,8 +16,8 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_PRIVATE_KEY }}
-          script: |
-            cd /path/to/your/project
+          script: 
+            cd /home/ubuntu/project/audiophile-app
             git pull origin main
             npm install
             npm run build
