@@ -16,6 +16,7 @@ import { CheckoutComponent } from './components/checkout/checkout.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatBadgeModule } from '@angular/material/badge';
+import { WrapperComponent } from './components/wrapper/wrapper.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { MatBadgeModule } from '@angular/material/badge';
     ProductDetailComponent,
     OnlyNumberDirective,
     CheckoutComponent,
+    WrapperComponent,
   ],
   imports: [
     BrowserModule,

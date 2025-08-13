@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev/svgjs" viewBox="0 0 325 100"><defs><linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="ssspill-grad"><stop stop-color="hsl(30, 100%, 50%)" stop-opacity="1" offset="45%"></stop><stop stop-color="hsl(30, 100%, 70%)" stop-opacity="1" offset="100%"></stop></linearGradient></defs><rect width="100%" height="100%" fill="#17181e"></rect><g fill="url(#ssspill-grad)">
+    <rect width="100%" height="40" fill="hsl(30, 100%, 50%)"></rect>
+
+    <rect x="0" width="5.26%" height="67.16810067430887" rx="12"></rect>
+      <rect x="10.5263157894%" width="5.26%" height="77.70172447680197" rx="12"></rect>
+      <rect x="21.0526315788%" width="5.26%" height="94.70612333897057" rx="12"></rect>
+      <rect x="31.578947368199998%" width="5.26%" height="72.75501263712925" rx="12"></rect>
+      <rect x="42.1052631576%" width="5.26%" height="94.73512848358062" rx="12"></rect>
+      <rect x="52.631578947%" width="5.26%" height="72.0135770283691" rx="12"></rect>
+      <rect x="63.157894736399996%" width="5.26%" height="84.78844005139169" rx="12"></rect>
+      <rect x="73.6842105258%" width="5.26%" height="88.30801295297394" rx="12"></rect>
+      <rect x="84.2105263152%" width="5.26%" height="60.75250487800148" rx="12"></rect>
+      <rect x="94.7368421046%" width="5.26%" height="84.45641986775388" rx="12"></rect>
+  </g><g fill="#17181e">
+    <rect x="5.26%" y="9.192124686513951" width="5.26%" height="60" rx="12"></rect>
+      <rect x="15.789473684099999%" y="3.215802819236184" width="5.26%" height="60" rx="12"></rect>
+      <rect x="26.3157894735%" y="17.828950072368112" width="5.26%" height="60" rx="12"></rect>
+      <rect x="36.8421052629%" y="9.905528917875879" width="5.26%" height="60" rx="12"></rect>
+      <rect x="47.3684210523%" y="4.928560343941487" width="5.26%" height="60" rx="12"></rect>
+      <rect x="57.8947368417%" y="4.209479298115077" width="5.26%" height="60" rx="12"></rect>
+      <rect x="68.4210526311%" y="13.905982890298755" width="5.26%" height="60" rx="12"></rect>
+      <rect x="78.9473684205%" y="2.9030390429542274" width="5.26%" height="60" rx="12"></rect>
+      <rect x="89.4736842099%" y="18.420455426123297" width="5.26%" height="60" rx="12"></rect>
+  </g></svg>

@@ -12,6 +12,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Product } from 'src/app/models/data.model';
 import { DataService } from 'src/app/services/data/data.service';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-header',
@@ -35,6 +36,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isProductDetail: boolean = false;
   isCartClicked: boolean = false;
   isCheckout: boolean = false;
+  isLoggedIn: boolean = false;
 
   @ViewChild('cartDialogELement', { static: true })
   cartDialogELement!: ElementRef;
@@ -59,14 +61,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private renderer: Renderer2,
-    private dataService: DataService
+    private dataService: DataService,
+    private localStorage: StorageService,
   ) {}
 
   ngOnInit(): void {
     this.innerWidth = window.innerWidth;
     this.routeListener();
-
     this.setCartProducts();
+    this.isLoggedIn = this.localStorage.isLoggedIn;
   }
 
   @HostListener('window:resize', ['$event']) onResize(event: any) {

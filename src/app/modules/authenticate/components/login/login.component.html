@@ -1,0 +1,17 @@
+<div class="login-wrapper">
+  <img src="assets/authenticate/chaos.svg" alt="" class="chaos-icon"/>
+  <h1>Sign In.</h1>
+  <form [formGroup]="loginForm" (ngSubmit)="submitForm()">
+    <div class="email-field">
+      <input type="text" required formControlName="email" placeholder="Email" />
+    </div>
+    <div class="password-field">
+      <input
+        type="password"
+        formControlName="password"
+        placeholder="Password"
+      />
+    </div>
+    <button type="submit" class="login-button button-hover" [class.disabled-button]="loginForm.invalid">Sign in.</button>
+  </form>
+</div>
