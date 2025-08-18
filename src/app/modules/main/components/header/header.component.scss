@@ -56,7 +56,7 @@ nav {
 .header-banner {
   width: 100%;
   height: 800px;
-  background: url(../../../assets/home/desktop/image-hero.jpg);
+  background: url(../../../../../assets/home/desktop/image-hero.jpg);
 
   .banner-description {
     align-self: center;
@@ -193,9 +193,10 @@ nav {
 }
 
 .dialog-overlay {
-  top: 100px;
+  top: 0;
   left: 0;
   width: 100vw;
+  height: 100vh;
   visibility: hidden;
   position: fixed;
   background-color: #10101080;
@@ -253,7 +254,6 @@ nav {
 .show-dialog-overlay {
   opacity: 1;
   z-index: 20;
-  height: 100vh;
   visibility: unset;
 }
 
@@ -424,7 +424,7 @@ nav {
   }
 
   .header-banner {
-    background: url(../../../assets/home/tablet/image-header.jpg);
+    background: url(../../../../../assets/home/tablet/image-header.jpg);
     background-position-y: -140px;
     background-size: cover;
     height: 785px;
@@ -468,7 +468,7 @@ nav {
 
 @media screen and (max-width: 712px) {
   .header-banner {
-    background: url(../../../assets/home/tablet/image-header.jpg);
+    background: url(../../../../../assets/home/tablet/image-header.jpg);
     background-size: contain;
     background-repeat-y: no-repeat;
   }
@@ -530,16 +530,29 @@ nav {
 
 @media screen and (max-width: 496px) {
   .header-banner {
-    background: url(../../../assets/home/mobile/image-header.jpg);
+    background: url(../../../../../assets/home/mobile/image-header.jpg);
     background-size: contain;
     background-repeat: no-repeat;
   }
 }
 
-.login-icon {
+.login-icon,
+.profile-icon,
+.logout-icon {
   img {
     width: 23px;
   }
+  
+  svg {
+    width: 23px;
+    height: 23px;
+    color: $secondary-white-2;
+  }
+}
+
+.profile-icon,
+.logout-icon {
+  cursor: pointer;
 }
 
 .header-actions {

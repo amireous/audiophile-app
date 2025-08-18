@@ -8,7 +8,7 @@
           <p class="bar"></p>
         </div>
         <div>
-          <div class="logo icon-hover" [routerLink]="['/', 'home']">
+          <div class="logo icon-hover" [routerLink]="['/']">
             <img src="assets/shared/desktop/logo.svg" />
           </div>
         </div>
@@ -18,8 +18,8 @@
             <li>
               <a
                 class="nav-link-hover"
-                [routerLink]="['/', 'home']"
-                (click)="onRouterLink('home')"
+                [routerLink]="['/']"
+                (click)="onRouterLink('/')"
                 >home</a
               >
             </li>
@@ -65,20 +65,23 @@
               />
             </p>
           </div>
-          <div class="login-icon" [routerLink]="['/auth', 'login']">
-            <p>
-              <span
-                [matBadge]="addedProductsCount"
-                matBadgeOverlap="false"
-                matBadgeSize="medium"
-                *ngIf="addedProductsCount"
-              >
-              </span>
-              <img class="icon-hover" src="assets/shared/desktop/login.png" />
-            </p>
+          <!-- Show profile and logout icons when logged in -->
+          <div class="profile-icon" *ngIf="isLoggedIn" (click)="onProfileClick()">
+            <svg class="icon-hover" width="23" height="23" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+          </div>
+          <div class="logout-icon" *ngIf="isLoggedIn" (click)="onLogoutClick()">
+            <svg class="icon-hover" width="23" height="23" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+            </svg>
+          </div>
+          <!-- Show login icon when not logged in -->
+          <div class="login-icon" *ngIf="!isLoggedIn" [routerLink]="['/auth', 'login']">
+            <img class="icon-hover" src="assets/shared/desktop/login.png" alt="Login" />
           </div>
         </div>
-        <div class="dialog-overlay" #cartDialogOverlay></div>
+        <div class="dialog-overlay" #cartDialogOverlay (click)="onOverlayClick($event)"></div>
         <div class="cart-dialog" #cartDialogELement>
           <p class="empty-cart" *ngIf="!addedProducts.length">
             Your cart is empty!

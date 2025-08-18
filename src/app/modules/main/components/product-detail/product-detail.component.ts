@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Product } from 'src/app/models/data.model';
 import { DataService } from 'src/app/services/data/data.service';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -25,7 +26,8 @@ export class ProductDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private dataService: DataService,
-    private _snackbar: MatSnackBar
+    private _snackbar: MatSnackBar,
+    private localStorage: StorageService
   ) {}
 
   ngOnInit(): void {
@@ -69,6 +71,13 @@ export class ProductDetailComponent implements OnInit {
   }
 
   onAddToCart() {
+    if (!this.localStorage.isLoggedIn) {
+      this._snackbar.open('Please login to add items to cart', 'Close', {
+        duration: 3000,
+      });
+      return;
+    }
+
     this.dataService.addProductToBasket({
       count: Number(this.productCountControl.value),
       title: this.productDetail.name.split(' ')[0],

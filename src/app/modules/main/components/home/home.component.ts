@@ -25,7 +25,9 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.innerWidth = window.innerWidth;
-    this.setCurrentRoute();
+    // this.setCurrentRoute();
+    console.log('Home ', this.router.url.split('/')[1]);
+   this.getHomeData();
   }
 
   @HostListener('window:resize', ['$event']) onResize(event: any) {
@@ -34,19 +36,21 @@ export class HomeComponent implements OnInit {
 
   getHomeData() {
     this.dataService.getHomeData().subscribe((data) => {
+      console.log('Home Data:', data);
       this.productList = data.reverse();
       this.getCurrentPathData(this.currentPath);
     });
   }
 
-  setCurrentRoute() {
-    this.route.params.subscribe((params) => {
-      this.currentPath = params.id;
-      this.getHomeData();
-    });
-  }
+  // setCurrentRoute() {
+  //   this.route.params.subscribe((params) => {
+  //     this.currentPath = params.id;
+  //     this.getHomeData();
+  //   });
+  // }
 
-  getCurrentPathData(path: string = 'speaker') {
+  getCurrentPathData(path: string = '') {
+    console.log('Current Path:', path);
     if (path === 'speakers') path = 'speaker';
     this.speakersData = this.productList.filter((product: any) =>
       product?.category?.includes('speakers')
