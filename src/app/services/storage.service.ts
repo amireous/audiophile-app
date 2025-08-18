@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { UserProfile } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -30,5 +31,14 @@ export class StorageService {
   logOutUser() {
     localStorage.clear();
     this._router.navigate(['/auth/login']);
+  }
+
+  getUserProfile(): UserProfile | null {
+    const raw = this.getItem('user_profile');
+    return raw ?? null;
+  }
+
+  saveUserProfile(profile: UserProfile): void {
+    this.setItem('user_profile', profile);
   }
 }

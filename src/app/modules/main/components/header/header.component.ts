@@ -143,9 +143,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   onProfileClick(): void {
-    // Handle profile click - you can add navigation to profile page or show profile menu
-    console.log('Profile clicked');
-    // Example: this.router.navigate(['/profile']);
+    this.router.navigate(['/', 'profile']);
   }
 
   onLogoutClick(): void {

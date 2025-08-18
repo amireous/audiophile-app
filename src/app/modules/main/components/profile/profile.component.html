@@ -1,0 +1,42 @@
+<div class="wrapper">
+  <div class="container profile-container">
+    <div class="profile-card">
+      <div class="avatar-section">
+        <div class="avatar" [ngStyle]="{ 'background-image': avatarUrl ? 'url(' + avatarUrl + ')' : 'url(assets/shared/desktop/icon-user-placeholder.svg)' }"></div>
+        <label class="upload-button see-product-button">
+          Change avatar
+          <input type="file" accept="image/*" (change)="onAvatarFileSelected($event)" />
+        </label>
+      </div>
+
+      <div class="profile-form">
+        <h1>Profile</h1>
+        <form [formGroup]="profileForm" (ngSubmit)="onSave()">
+          <div>
+            <label class="custom-label" for="firstName">First name</label>
+            <input id="firstName" type="text" formControlName="firstName" [class.input-error]="profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched" />
+          </div>
+          <div>
+            <label class="custom-label" for="lastName">Last name</label>
+            <input id="lastName" type="text" formControlName="lastName" [class.input-error]="profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched" />
+          </div>
+          <div>
+            <label class="custom-label" for="phone">Phone</label>
+            <input id="phone" type="tel" formControlName="phone" [class.input-error]="profileForm.get('phone')?.invalid && profileForm.get('phone')?.touched" />
+          </div>
+          <div class="shipping-adress">
+            <label class="custom-label" for="address">Address</label>
+            <input id="address" type="text" formControlName="address" [class.input-error]="profileForm.get('address')?.invalid && profileForm.get('address')?.touched" />
+          </div>
+          <div class="actions">
+            <button class="see-product-button" type="submit">save changes</button>
+            <button class="secondary-button" type="button" (click)="onOrders()">orders</button>
+            <button class="danger-button" type="button" (click)="onLogout()">logout</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+

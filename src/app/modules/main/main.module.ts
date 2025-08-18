@@ -14,6 +14,9 @@ import { ProductDetailComponent } from './components/product-detail/product-deta
 import { WrapperComponent } from './components/wrapper/wrapper.component';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { OrdersComponent } from './components/orders/orders.component';
+import { AuthGuardService } from 'src/app/services/guards/auth-guard.service';
 
 // Directives
 const routes: Routes = [
@@ -27,8 +30,10 @@ const routes: Routes = [
       { path: 'speakers', component: HomeComponent },
       { path: 'earphones', component: HomeComponent },
       { path: 'product-detail/:slug', component: ProductDetailComponent },
+      { path: 'orders', component: OrdersComponent, canActivate: [AuthGuardService] },
     ],
   },
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService] },
   // {
   //   path: '**',
   //   pathMatch: 'full',
@@ -44,6 +49,8 @@ const routes: Routes = [
     WrapperComponent,
     HeaderComponent,
     FooterComponent,
+    ProfileComponent,
+    OrdersComponent,
   ],
   imports: [
     CommonModule,
