@@ -1,0 +1,80 @@
+<div class="order-management">
+  <div class="header">
+    <h2>Order Management</h2>
+  </div>
+
+  <div class="content">
+    <mat-card>
+      <mat-card-content>
+        <div *ngIf="loading" class="loading">
+          <mat-spinner></mat-spinner>
+          <p>Loading orders...</p>
+        </div>
+
+        <div *ngIf="!loading && orders.length === 0" class="empty-state">
+          <mat-icon>shopping_cart</mat-icon>
+          <h3>No orders found</h3>
+          <p>Orders will appear here when customers make purchases</p>
+        </div>
+
+        <div *ngIf="!loading && orders.length > 0" class="orders-grid">
+          <mat-card *ngFor="let order of orders" class="order-card">
+            <mat-card-header>
+              <div mat-card-avatar class="order-avatar">
+                <mat-icon>receipt</mat-icon>
+              </div>
+              <mat-card-title>Order #{{ order.id }}</mat-card-title>
+              <mat-card-subtitle>{{ order.created_at | date:'medium' }}</mat-card-subtitle>
+            </mat-card-header>
+            
+            <mat-card-content>
+              <div class="order-details">
+                <div class="order-info">
+                  <div class="order-meta">
+                    <div class="meta-item">
+                      <strong>Total:</strong> ${{ order.total_amount }}
+                    </div>
+                    <div class="meta-item">
+                      <strong>Status:</strong>
+                      <mat-chip [color]="getStatusColor(order.status)" selected>
+                        {{ order.status | titlecase }}
+                      </mat-chip>
+                    </div>
+                    <div class="meta-item">
+                      <strong>Payment:</strong> {{ order.payment_method || 'Not specified' }}
+                    </div>
+                  </div>
+                  
+                  <div class="shipping-info" *ngIf="order.shipping_address">
+                    <strong>Shipping Address:</strong>
+                    <p>{{ order.shipping_address }}</p>
+                  </div>
+                  
+                  <div class="order-items" *ngIf="order.items && order.items.length > 0">
+                    <strong>Items:</strong>
+                    <div class="item" *ngFor="let item of order.items">
+                      <span>{{ item.quantity }}x {{ item.product?.name || 'Unknown Product' }}</span>
+                      <span>${{ item.price_at_purchase }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-card-content>
+            
+            <mat-card-actions>
+              <mat-form-field appearance="outline" class="status-select">
+                <mat-label>Update Status</mat-label>
+                <mat-select [value]="order.status" (selectionChange)="updateOrderStatus(order, $event.value)">
+                  <mat-option value="pending">Pending</mat-option>
+                  <mat-option value="shipped">Shipped</mat-option>
+                  <mat-option value="delivered">Delivered</mat-option>
+                  <mat-option value="cancelled">Cancelled</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </mat-card-actions>
+          </mat-card>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

@@ -1,0 +1,35 @@
+<div class="admin-dashboard">
+  <header class="admin-header">
+    <div class="header-content">
+      <h1>Audiophile Admin Dashboard</h1>
+      <div class="user-info">
+        <span>Welcome, {{ currentUser?.first_name || currentUser?.username || 'Admin' }}</span>
+        <button mat-button (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          Logout
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="admin-content">
+    <nav class="admin-nav">
+      <a routerLink="products" routerLinkActive="active" class="nav-item">
+        <mat-icon>inventory</mat-icon>
+        Products
+      </a>
+      <a routerLink="categories" routerLinkActive="active" class="nav-item">
+        <mat-icon>category</mat-icon>
+        Categories
+      </a>
+      <a routerLink="orders" routerLinkActive="active" class="nav-item">
+        <mat-icon>shopping_cart</mat-icon>
+        Orders
+      </a>
+    </nav>
+
+    <main class="admin-main">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

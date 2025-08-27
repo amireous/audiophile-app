@@ -10,11 +10,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatBadgeModule } from '@angular/material/badge';
 import { CommonModule } from '@angular/common';
+import { LoadingComponent } from './components/loading/loading.component';
+import { LoadingInterceptor } from './interceptors/loading.interceptor';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 @NgModule({
   declarations: [
     AppComponent,
     OnlyNumberDirective,
+    LoadingComponent,
   ],
   imports: [
     CommonModule,
@@ -25,7 +29,13 @@ import { CommonModule } from '@angular/common';
     MatSnackBarModule,
     MatBadgeModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LoadingInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent],
   exports: [
     OnlyNumberDirective

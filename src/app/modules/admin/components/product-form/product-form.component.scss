@@ -1,0 +1,187 @@
+@import 'src/assets/scss/variables';
+
+.product-form {
+  min-width: 500px;
+  max-width: 600px;
+
+  h2 {
+    margin-bottom: 1.5rem;
+    color: #333;
+  }
+
+  .form-row {
+    margin-bottom: 1.5rem;
+
+    &.two-columns {
+      display: flex;
+      gap: 1rem;
+
+      .form-group {
+        flex: 1;
+      }
+    }
+  }
+
+  .custom-label {
+    display: block;
+    font-size: 12px;
+    line-height: 12px;
+    letter-spacing: -.21px;
+    font-weight: 500;
+    margin-bottom: 5px;
+    text-transform: capitalize;
+    color: $secondary-black;
+  }
+
+  .checkout-input {
+    padding: 12px;
+    border-radius: 8px;
+    outline: none;
+    color: $secondary-black;
+    font-size: 14px;
+    height: 56px;
+    font-weight: 400;
+    letter-spacing: -.25px;
+    border: 1px solid #cfcfcf;
+    cursor: pointer;
+    transition: 0.3s border-color;
+    width: 100%;
+    box-sizing: border-box;
+
+    &:hover {
+      border-color: $primary !important;
+    }
+
+    &:focus {
+      border-color: $primary !important;
+    }
+
+    &.input-error {
+      border-color: #ff0000 !important;
+    }
+  }
+
+  textarea.checkout-input {
+    height: auto;
+    min-height: 56px;
+    resize: vertical;
+  }
+
+  .input-with-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    .checkout-input {
+      padding-right: 50px;
+    }
+
+    .generate-slug-btn {
+      position: absolute;
+      right: 8px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: $primary;
+      padding: 8px;
+      border-radius: 4px;
+      transition: background-color 0.2s;
+
+      &:hover {
+        background-color: rgba($primary, 0.1);
+      }
+    }
+  }
+
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: $secondary-black;
+
+    .checkout-checkbox {
+      margin-right: 8px;
+      width: 18px;
+      height: 18px;
+      accent-color: $primary;
+    }
+  }
+
+  .error-message {
+    color: #ff0000;
+    font-size: 11px;
+    margin-top: 4px;
+    font-weight: 400;
+  }
+
+  mat-dialog-content {
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+
+  .centered-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding: 0;
+
+    .cancel-btn {
+      padding: 12px 24px;
+      border: 1px solid #cfcfcf;
+      background: white;
+      color: $secondary-black;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s;
+
+      &:hover:not(:disabled) {
+        border-color: $primary;
+        color: $primary;
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+
+    .submit-btn {
+      padding: 12px 24px;
+      border: none;
+      background-color: $primary;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      &:hover:not(:disabled) {
+        background-color: darken($primary, 10%);
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .product-form {
+    min-width: 90vw;
+    max-width: 90vw;
+
+    .form-row.two-columns {
+      flex-direction: column;
+    }
+  }
+}

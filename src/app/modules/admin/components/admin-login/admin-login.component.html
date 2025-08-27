@@ -1,0 +1,48 @@
+<div class="login-container">
+  <div class="wave-background">
+    <div class="wave wave1"></div>
+    <div class="wave wave2"></div>
+    <div class="wave wave3"></div>
+  </div>
+  
+  <div class="login-card">
+    <div class="login-header">
+      <div class="logo">
+        <mat-icon>admin_panel_settings</mat-icon>
+      </div>
+      <h2>Admin Dashboard</h2>
+      <p>Sign in to manage your store</p>
+    </div>
+    
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label class="custom-label">Username</label>
+        <input type="text" formControlName="username" placeholder="Enter username" class="login-input">
+      </div>
+
+      <div class="form-group">
+        <label class="custom-label">Password</label>
+        <input type="password" formControlName="password" placeholder="Enter password" class="login-input">
+      </div>
+
+      <button type="submit" class="login-btn" [disabled]="!loginForm.valid || loading">
+        <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
+        <span *ngIf="!loading">Sign In</span>
+      </button>
+    </form>
+
+    <div class="login-info">
+      <div class="info-card">
+        <h4>Default Credentials</h4>
+        <div class="credential-item">
+          <span class="label">Username:</span>
+          <code>admin</code>
+        </div>
+        <div class="credential-item">
+          <span class="label">Password:</span>
+          <code>admin1234</code>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
