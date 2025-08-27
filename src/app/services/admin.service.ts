@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { environment } from 'src/environments/environment';
 
 export interface Product {
   id?: number;
@@ -51,7 +51,7 @@ export interface OrderItem {
   providedIn: 'root'
 })
 export class AdminService {
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = environment.baseUrl;
 
   constructor(private http: HttpClient) { }
 
