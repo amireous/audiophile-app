@@ -1,6 +1,25 @@
 <div class="wrapper">
   <div class="container">
-    <div class="product">
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-container">
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Loading product details...</p>
+      </div>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error && !loading" class="error-container">
+      <div class="error-message">
+        <mat-icon>error_outline</mat-icon>
+        <h3>Error Loading Product</h3>
+        <p>{{ error }}</p>
+        <button mat-raised-button color="primary" routerLink="/">Go Back Home</button>
+      </div>
+    </div>
+
+    <!-- Product Content -->
+    <div class="product" *ngIf="productDetail && !loading">
       <div>
         <div class="product-image">
           <img [src]="productDetail?.image?.desktop" alt="" *ngIf="innerWidth >= 1120">

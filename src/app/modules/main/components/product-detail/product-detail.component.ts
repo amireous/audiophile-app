@@ -3,7 +3,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Product } from 'src/app/models/data.model';
-import { DataService } from 'src/app/services/data/data.service';
+import { ProductDetailService, ProductDetailResponse, AddToCartRequest } from 'src/app/services/product-detail.service';
 import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
@@ -12,7 +12,9 @@ import { StorageService } from 'src/app/services/storage.service';
   styleUrls: ['./product-detail.component.scss'],
 })
 export class ProductDetailComponent implements OnInit {
-  productDetail!: Product;
+  productDetail!: ProductDetailResponse;
+  loading = false;
+  error: string | null = null;
 
   productCount!: number;
   innerWidth!: number;
@@ -25,15 +27,15 @@ export class ProductDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private dataService: DataService,
+    private productDetailService: ProductDetailService,
     private _snackbar: MatSnackBar,
     private localStorage: StorageService
   ) {}
 
   ngOnInit(): void {
     this.innerWidth = window.innerWidth;
-    this.route.params.subscribe((data) => {
-      this.getProduct(data.slug);
+    this.route.params.subscribe((params) => {
+      this.getProduct(params.slug);
     });
   }
 
@@ -42,10 +44,27 @@ export class ProductDetailComponent implements OnInit {
   }
 
   getProduct(productSlug: string) {
-    this.dataService.getHomeData().subscribe((data) => {
-      this.productDetail = data.find(
-        (product: any) => product.slug == productSlug
-      );
+    this.loading = true;
+    this.error = null;
+    
+    this.productDetailService.getProductBySlug(productSlug).subscribe({
+      next: (product) => {
+        this.productDetail = product;
+        this.loading = false;
+        
+        // Mark product as recently viewed if user is logged in
+        if (this.localStorage.isLoggedIn) {
+          this.productDetailService.markAsRecentlyViewed(product.id).subscribe();
+        }
+      },
+      error: (error) => {
+        this.error = 'Product not found or error loading product details';
+        this.loading = false;
+        console.error('Error loading product:', error);
+        this._snackbar.open('Error loading product details', 'Close', {
+          duration: 3000,
+        });
+      }
     });
   }
 
@@ -78,19 +97,34 @@ export class ProductDetailComponent implements OnInit {
       return;
     }
 
-    this.dataService.addProductToBasket({
-      count: Number(this.productCountControl.value),
-      title: this.productDetail.name.split(' ')[0],
-      product: this.productDetail,
-    });
+    if (!this.productDetail || !this.productCountControl.value) {
+      this._snackbar.open('Please select a quantity', 'Close', {
+        duration: 3000,
+      });
+      return;
+    }
 
-    this._snackbar.open(`item ${this.productDetail.name} added to cart`, '', {
-      duration: 1000,
-      horizontalPosition: 'center',
-      verticalPosition: 'top',
-      panelClass: ['snackbar'],
-    });
+    const request: AddToCartRequest = {
+      product_id: this.productDetail.id,
+      quantity: Number(this.productCountControl.value)
+    };
 
-    this.productCountControl.reset();
+    this.productDetailService.addToCart(request).subscribe({
+      next: (response) => {
+        this._snackbar.open(response.message || `Item ${this.productDetail.name} added to cart`, 'Close', {
+          duration: 2000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['snackbar'],
+        });
+        this.productCountControl.reset();
+      },
+      error: (error) => {
+        console.error('Error adding to cart:', error);
+        this._snackbar.open('Error adding item to cart. Please try again.', 'Close', {
+          duration: 3000,
+        });
+      }
+    });
   }
 }

@@ -6,6 +6,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 // Components
 import { CheckoutComponent } from './components/checkout/checkout.component';
@@ -58,6 +60,8 @@ const routes: Routes = [
     HttpClientModule,
     MatSnackBarModule,
     MatBadgeModule,
+    MatIconModule,
+    MatButtonModule,
     RouterModule.forChild(routes),
   ],
 })
