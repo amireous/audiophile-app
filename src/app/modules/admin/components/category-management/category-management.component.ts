@@ -31,7 +31,6 @@ export class CategoryManagementComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error loading categories:', error);
         this.snackBar.open('Error loading categories', 'Close', { duration: 3000 });
         this.loading = false;
       }
@@ -59,7 +58,6 @@ export class CategoryManagementComponent implements OnInit {
           this.loadCategories();
         },
         error: (error) => {
-          console.error('Error deleting category:', error);
           this.snackBar.open('Error deleting category', 'Close', { duration: 3000 });
         }
       });

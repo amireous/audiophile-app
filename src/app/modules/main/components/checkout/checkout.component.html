@@ -101,17 +101,17 @@
           <div class="cart-product" *ngFor="let product of basketProducts">
             <div class="left-info">
               <div class="product-image">
-                <img [src]="product.product.image.desktop" alt=""
+                <img [src]="product.product.image_url || './assets/shared/placeholder.jpg'" alt=""
                   [routerLink]="['/', 'product-detail', product.product.slug]">
               </div>
               <div class="details">
-                <p class="product-name" [routerLink]="['/', 'product-detail', product.product.slug]">{{product.title}}
+                <p class="product-name" [routerLink]="['/', 'product-detail', product.product.slug]">{{product.product.name}}
                 </p>
                 <p class="product-price">$ {{product.product.price | number}}</p>
               </div>
             </div>
             <div class="right-info">
-              <p class="product-count">x{{product.count}}</p>
+              <p class="product-count">x{{product.quantity}}</p>
             </div>
           </div>
         </div>
@@ -163,18 +163,18 @@
             <div class="cart-product">
               <div class="left-info">
                 <div class="product-image">
-                  <img [src]="basketProducts[0].product.image.desktop" alt=""
+                  <img [src]="basketProducts[0].product.image_url || './assets/shared/placeholder.jpg'" alt=""
                     [routerLink]="['/', 'product-detail', basketProducts[0].product.slug]">
                 </div>
                 <div class="details">
                   <p class="product-name" [routerLink]="['/', 'product-detail', basketProducts[0].product.slug]">
-                    {{basketProducts[0].title}}
+                    {{basketProducts[0].product.name}}
                   </p>
                   <p class="product-price">$ {{basketProducts[0].product.price | number}}</p>
                 </div>
               </div>
               <div class="right-info">
-                <p class="product-count">x{{basketProducts[0].count}}</p>
+                <p class="product-count">x{{basketProducts[0].quantity}}</p>
               </div>
             </div>
             <ng-container *ngIf="isShowOther">
@@ -182,18 +182,18 @@
                 <div class="cart-product" *ngIf="i !== 0">
                   <div class="left-info">
                     <div class="product-image">
-                      <img [src]="product.product.image.desktop" alt=""
+                      <img [src]="product.product.image_url || './assets/shared/placeholder.jpg'" alt=""
                         [routerLink]="['/', 'product-detail', product.product.slug]">
                     </div>
                     <div class="details">
                       <p class="product-name" [routerLink]="['/', 'product-detail', product.product.slug]">
-                        {{product.title}}
+                        {{product.product.name}}
                       </p>
                       <p class="product-price">$ {{product.product.price | number}}</p>
                     </div>
                   </div>
                   <div class="right-info">
-                    <p class="product-count">x{{product.count}}</p>
+                    <p class="product-count">x{{product.quantity}}</p>
                   </div>
                 </div>
               </ng-container>

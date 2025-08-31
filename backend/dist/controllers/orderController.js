@@ -49,6 +49,16 @@ class OrderController {
             res.status(500).json({ message: 'Internal server error' });
         }
     }
+    static async clearCart(req, res) {
+        try {
+            const userId = req.user.userId;
+            await orderService_1.OrderService.clearCart(userId);
+            res.json({ message: 'Cart cleared successfully' });
+        }
+        catch (error) {
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    }
     // Order endpoints (authenticated customers)
     static async checkout(req, res) {
         try {
@@ -57,8 +67,8 @@ class OrderController {
                 return res.status(400).json({ errors: errors.array() });
             }
             const userId = req.user.userId;
-            const { shipping_address, payment_method } = req.body;
-            const order = await orderService_1.OrderService.createOrder(userId, shipping_address, payment_method);
+            const { shipping_address, payment_method, total_amount, items, billing_details } = req.body;
+            const order = await orderService_1.OrderService.createOrderFromPayload(userId, shipping_address, payment_method, total_amount, items, billing_details);
             res.status(201).json(order);
         }
         catch (error) {
@@ -147,7 +157,16 @@ exports.addToCartValidation = [
 ];
 exports.checkoutValidation = [
     (0, express_validator_1.body)('shipping_address').notEmpty().withMessage('Shipping address is required'),
-    (0, express_validator_1.body)('payment_method').notEmpty().withMessage('Payment method is required')
+    (0, express_validator_1.body)('payment_method').notEmpty().withMessage('Payment method is required'),
+    (0, express_validator_1.body)('total_amount').isFloat({ min: 0 }).withMessage('Valid total amount is required'),
+    (0, express_validator_1.body)('items').isArray({ min: 1 }).withMessage('At least one item is required'),
+    (0, express_validator_1.body)('items.*.product_id').isInt({ min: 1 }).withMessage('Valid product ID is required'),
+    (0, express_validator_1.body)('items.*.quantity').isInt({ min: 1 }).withMessage('Valid quantity is required'),
+    (0, express_validator_1.body)('items.*.price').isFloat({ min: 0 }).withMessage('Valid price is required'),
+    (0, express_validator_1.body)('billing_details').optional().isObject().withMessage('Billing details must be an object'),
+    (0, express_validator_1.body)('billing_details.name').optional().notEmpty().withMessage('Billing name is required if provided'),
+    (0, express_validator_1.body)('billing_details.email').optional().isEmail().withMessage('Valid billing email is required if provided'),
+    (0, express_validator_1.body)('billing_details.phone').optional().notEmpty().withMessage('Billing phone is required if provided')
 ];
 exports.updateOrderStatusValidation = [
     (0, express_validator_1.body)('status').isIn(['pending', 'shipped', 'delivered', 'cancelled']).withMessage('Valid status is required')

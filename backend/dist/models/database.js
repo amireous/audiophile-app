@@ -20,6 +20,8 @@ const initDatabase = () => {
           first_name TEXT,
           last_name TEXT,
           profile_pic_url TEXT,
+          phone TEXT,
+          address TEXT,
           role TEXT DEFAULT 'customer' CHECK (role IN ('admin', 'customer')),
           created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         )

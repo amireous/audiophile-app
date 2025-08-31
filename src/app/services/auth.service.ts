@@ -9,6 +9,14 @@ export interface LoginRequest {
   password: string;
 }
 
+export interface RegisterRequest {
+  username: string;
+  password: string;
+  email: string;
+  first_name?: string;
+  last_name?: string;
+}
+
 export interface LoginResponse {
   access_token: string;
   refresh_token: string;
@@ -28,6 +36,9 @@ export interface User {
   email: string;
   first_name: string;
   last_name: string;
+  phone?: string;
+  address?: string;
+  profile_pic_url?: string;
   role: string;
 }
 
@@ -59,6 +70,10 @@ export class AuthService {
         this.currentUserSubject.next(response.user);
         return response;
       }));
+  }
+
+  register(registerRequest: RegisterRequest): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/auth/register`, registerRequest);
   }
 
   logout(): void {
@@ -94,5 +109,25 @@ export class AuthService {
       localStorage.setItem('access_token', response.access_token);
       return response;
     }));
+  }
+
+  private getHeaders(): { [key: string]: string } {
+    const token = this.getToken();
+    return {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    };
+  }
+
+  getProfile(): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/auth/profile`, { 
+      headers: this.getHeaders() 
+    });
+  }
+
+  updateProfile(profileData: Partial<User>): Observable<User> {
+    return this.http.put<User>(`${this.apiUrl}/auth/profile`, profileData, { 
+      headers: this.getHeaders() 
+    });
   }
 }

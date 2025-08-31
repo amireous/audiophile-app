@@ -1,7 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Product } from 'src/app/models/data.model';
-import { DataService } from 'src/app/services/data/data.service';
+
 import { CategoryProductsService } from 'src/app/services/category-products.service';
 
 @Component({
@@ -11,7 +11,6 @@ import { CategoryProductsService } from 'src/app/services/category-products.serv
 })
 export class HomeComponent implements OnInit {
   constructor(
-    private dataService: DataService,
     private categoryProductsService: CategoryProductsService,
     private router: Router,
   ) {}
@@ -39,13 +38,13 @@ export class HomeComponent implements OnInit {
 
   loadHomeData() {
     this.isLoading = true;
-    console.log('Current Path:', this.currentPath);
+
     
     if (this.currentPath === 'home') {
       // For home page: get all categories with products
       this.categoryProductsService.getCategories().subscribe({
         next: (categories) => {
-          console.log('Categories with products for home:', categories);
+  
           
           // Extract products for each category
           categories.forEach(category => {
@@ -62,7 +61,7 @@ export class HomeComponent implements OnInit {
           this.isLoading = false;
         },
         error: (error) => {
-          console.error('Error loading categories:', error);
+  
           this.isLoading = false;
           this.loadFallbackData();
         }
@@ -71,7 +70,7 @@ export class HomeComponent implements OnInit {
       // For category pages: get products for specific category using category ID
       this.categoryProductsService.getProductsByCategory(this.currentPath).subscribe({
         next: (products) => {
-          console.log(`Products for ${this.currentPath}:`, products);
+  
           
           // Set products based on category
           if (this.currentPath === 'speakers') {
@@ -88,7 +87,7 @@ export class HomeComponent implements OnInit {
           this.isLoading = false;
         },
         error: (error) => {
-          console.error(`Error loading ${this.currentPath} products:`, error);
+  
           this.isLoading = false;
           this.loadFallbackData();
         }
@@ -98,15 +97,13 @@ export class HomeComponent implements OnInit {
 
   loadFallbackData() {
     // Fallback to local JSON data if API is not available
-    this.dataService.getHomeData().subscribe((data) => {
-      console.log('Fallback Home Data:', data);
-      this.productList = data.reverse();
-      this.getCurrentPathData(this.currentPath);
-    });
+    // For now, we'll just log an error since we're removing DataService
+    
+    this.isLoading = false;
   }
 
   getCurrentPathData(path: string = '') {
-    console.log('Current Path:', path);
+
     if (path === 'speakers') path = 'speaker';
     
     // Filter products by category for fallback

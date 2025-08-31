@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -27,15 +27,15 @@ const routes: Routes = [
     component: WrapperComponent,
     children: [
       { path: '', component: HomeComponent },
-      { path: 'checkout', component: CheckoutComponent },
+      { path: 'checkout', component: CheckoutComponent, canActivate: [AuthGuardService] },
       { path: 'headphones', component: HomeComponent },
       { path: 'speakers', component: HomeComponent },
       { path: 'earphones', component: HomeComponent },
       { path: 'product-detail/:slug', component: ProductDetailComponent },
-      { path: 'orders', component: OrdersComponent, canActivate: [AuthGuardService] },
     ],
   },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService] },
+  { path: 'orders', component: OrdersComponent, canActivate: [AuthGuardService] },
   // {
   //   path: '**',
   //   pathMatch: 'full',
@@ -57,6 +57,7 @@ const routes: Routes = [
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     HttpClientModule,
     MatSnackBarModule,
     MatBadgeModule,

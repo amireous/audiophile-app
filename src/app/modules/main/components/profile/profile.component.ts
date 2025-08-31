@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UserProfile } from 'src/app/models/user.model';
-import { StorageService } from 'src/app/services/storage.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService, User } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -12,10 +12,17 @@ import { StorageService } from 'src/app/services/storage.service';
 export class ProfileComponent implements OnInit {
   profileForm: FormGroup = new FormGroup({});
   avatarUrl: string | null = null;
+  currentUser: User | null = null;
+  isLoading = false;
 
-  constructor(private storageService: StorageService, private router: Router) {}
+  constructor(
+    private router: Router, 
+    private authService: AuthService,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
+    this.currentUser = this.authService.currentUserValue;
     this.initForm();
     this.loadProfile();
   }
@@ -30,22 +37,26 @@ export class ProfileComponent implements OnInit {
   }
 
   loadProfile(): void {
-    const profile: UserProfile | null = this.storageService.getUserProfile();
-    if (profile) {
-      this.profileForm.patchValue({
-        firstName: profile.firstName ?? '',
-        lastName: profile.lastName ?? '',
-        phone: profile.phone ?? '',
-        address: profile.address ?? '',
-      });
-      this.avatarUrl = profile.avatarUrl ?? null;
-    } else {
-      // if user logged in via login form, try to infer a name from email
-      const access = this.storageService.getItem('access');
-      const email: string | undefined = access?.email;
-      const inferredFirstName = email ? String(email).split('@')[0] : '';
-      this.profileForm.patchValue({ firstName: inferredFirstName });
-    }
+    this.isLoading = true;
+    this.authService.getProfile().subscribe({
+      next: (user) => {
+        this.currentUser = user;
+        this.profileForm.patchValue({
+          firstName: user.first_name ?? '',
+          lastName: user.last_name ?? '',
+          phone: user.phone ?? '',
+          address: user.address ?? '',
+        });
+        this.avatarUrl = user.profile_pic_url ?? null;
+        this.isLoading = false;
+      },
+      error: (error) => {
+        this.snackBar.open('Error loading profile data', 'Close', {
+          duration: 3000,
+        });
+        this.isLoading = false;
+      }
+    });
   }
 
   onSave(): void {
@@ -53,15 +64,36 @@ export class ProfileComponent implements OnInit {
       this.profileForm.markAllAsTouched();
       return;
     }
-    const profile: UserProfile = {
-      ...this.profileForm.value,
-      avatarUrl: this.avatarUrl ?? null,
-    } as UserProfile;
-    this.storageService.saveUserProfile(profile);
+
+    this.isLoading = true;
+    const profileData = {
+      first_name: this.profileForm.value.firstName,
+      last_name: this.profileForm.value.lastName,
+      phone: this.profileForm.value.phone,
+      address: this.profileForm.value.address,
+      profile_pic_url: this.avatarUrl || undefined
+    };
+
+    this.authService.updateProfile(profileData).subscribe({
+      next: (updatedUser) => {
+        this.currentUser = updatedUser;
+        this.snackBar.open('Profile updated successfully!', 'Close', {
+          duration: 2000,
+        });
+        this.isLoading = false;
+      },
+      error: (error) => {
+        this.snackBar.open('Error updating profile', 'Close', {
+          duration: 3000,
+        });
+        this.isLoading = false;
+      }
+    });
   }
 
   onLogout(): void {
-    this.storageService.logOutUser();
+    this.authService.logout();
+    this.router.navigate(['/auth/login']);
   }
 
   onOrders(): void {

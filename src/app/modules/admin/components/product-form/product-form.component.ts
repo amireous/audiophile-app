@@ -51,7 +51,6 @@ export class ProductFormComponent implements OnInit {
         this.categories = categories;
       },
       error: (error) => {
-        console.error('Error loading categories:', error);
         this.snackBar.open('Error loading categories', 'Close', { duration: 3000 });
       }
     });
@@ -76,7 +75,6 @@ export class ProductFormComponent implements OnInit {
           this.dialogRef.close(true);
         },
         error: (error) => {
-          console.error('Error saving product:', error);
           this.snackBar.open('Error saving product', 'Close', { duration: 3000 });
           this.loading = false;
         }

@@ -4,6 +4,7 @@ export declare class OrderController {
     static addToCart(req: AuthRequest, res: Response): Promise<Response<any, Record<string, any>> | undefined>;
     static getCart(req: AuthRequest, res: Response): Promise<void>;
     static removeFromCart(req: AuthRequest, res: Response): Promise<Response<any, Record<string, any>> | undefined>;
+    static clearCart(req: AuthRequest, res: Response): Promise<void>;
     static checkout(req: AuthRequest, res: Response): Promise<Response<any, Record<string, any>> | undefined>;
     static getUserOrders(req: AuthRequest, res: Response): Promise<void>;
     static getOrderById(req: AuthRequest, res: Response): Promise<Response<any, Record<string, any>> | undefined>;

@@ -31,7 +31,6 @@ export class ProductManagementComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error loading products:', error);
         this.snackBar.open('Error loading products', 'Close', { duration: 3000 });
         this.loading = false;
       }
@@ -59,7 +58,6 @@ export class ProductManagementComponent implements OnInit {
           this.loadProducts();
         },
         error: (error) => {
-          console.error('Error deleting product:', error);
           this.snackBar.open('Error deleting product', 'Close', { duration: 3000 });
         }
       });

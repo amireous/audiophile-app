@@ -51,21 +51,7 @@ export interface ProductDetailResponse {
   }>;
 }
 
-export interface AddToCartRequest {
-  product_id: number;
-  quantity: number;
-}
 
-export interface AddToCartResponse {
-  success: boolean;
-  message: string;
-  cart_item?: {
-    id: number;
-    product_id: number;
-    quantity: number;
-    product: Product;
-  };
-}
 
 @Injectable({
   providedIn: 'root'
@@ -125,16 +111,7 @@ export class ProductDetailService {
     return this.http.get<Product[]>(`${this.apiUrl}/categories/${category}/products`);
   }
 
-  /**
-   * Add product to cart (authenticated users only)
-   * @param request Add to cart request
-   * @returns Observable of add to cart response
-   */
-  addToCart(request: AddToCartRequest): Observable<AddToCartResponse> {
-    return this.http.post<AddToCartResponse>(`${this.apiUrl}/basket/add`, request, { 
-      headers: this.getHeaders() 
-    });
-  }
+
 
   /**
    * Get product reviews
@@ -256,7 +233,7 @@ export class ProductDetailService {
       try {
         includes = JSON.parse(backendProduct.includes);
       } catch (error) {
-        console.warn('Failed to parse includes for product:', backendProduct.id);
+
       }
     }
 
@@ -275,7 +252,7 @@ export class ProductDetailService {
           third: galleryData.third || image
         };
       } catch (error) {
-        console.warn('Failed to parse gallery for product:', backendProduct.id);
+
       }
     }
 
@@ -285,7 +262,7 @@ export class ProductDetailService {
       try {
         others = JSON.parse(backendProduct.others);
       } catch (error) {
-        console.warn('Failed to parse others for product:', backendProduct.id);
+
       }
     }
 

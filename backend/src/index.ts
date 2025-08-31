@@ -5,7 +5,7 @@ import morgan from 'morgan';
 import path from 'path';
 import { config } from './config';
 import { initDatabase } from './models/database';
-import { migrateProductsTable } from './models/migration';
+import { migrateProductsTable, migrateUsersTable } from './models/migration';
 import { AuthService } from './services/authService';
 
 // Import routes
@@ -60,7 +60,10 @@ const startServer = async () => {
     console.log('Database initialized successfully');
     
     await migrateProductsTable();
-    console.log('Database migration completed');
+    console.log('Products table migration completed');
+    
+    await migrateUsersTable();
+    console.log('Users table migration completed');
     
     await AuthService.createDefaultAdmin();
     console.log('Default admin user created (username: admin, password: admin1234)');

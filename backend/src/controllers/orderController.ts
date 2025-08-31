@@ -52,6 +52,17 @@ export class OrderController {
     }
   }
 
+  static async clearCart(req: AuthRequest, res: Response) {
+    try {
+      const userId = req.user!.userId;
+
+      await OrderService.clearCart(userId);
+      res.json({ message: 'Cart cleared successfully' });
+    } catch (error) {
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  }
+
   // Order endpoints (authenticated customers)
   static async checkout(req: AuthRequest, res: Response) {
     try {
@@ -61,9 +72,22 @@ export class OrderController {
       }
 
       const userId = req.user!.userId;
-      const { shipping_address, payment_method } = req.body;
+      const { 
+        shipping_address, 
+        payment_method, 
+        total_amount, 
+        items, 
+        billing_details 
+      } = req.body;
 
-      const order = await OrderService.createOrder(userId, shipping_address, payment_method);
+      const order = await OrderService.createOrderFromPayload(
+        userId, 
+        shipping_address, 
+        payment_method, 
+        total_amount, 
+        items, 
+        billing_details
+      );
       res.status(201).json(order);
     } catch (error) {
       if (error instanceof Error) {
@@ -158,7 +182,16 @@ export const addToCartValidation = [
 
 export const checkoutValidation = [
   body('shipping_address').notEmpty().withMessage('Shipping address is required'),
-  body('payment_method').notEmpty().withMessage('Payment method is required')
+  body('payment_method').notEmpty().withMessage('Payment method is required'),
+  body('total_amount').isFloat({ min: 0 }).withMessage('Valid total amount is required'),
+  body('items').isArray({ min: 1 }).withMessage('At least one item is required'),
+  body('items.*.product_id').isInt({ min: 1 }).withMessage('Valid product ID is required'),
+  body('items.*.quantity').isInt({ min: 1 }).withMessage('Valid quantity is required'),
+  body('items.*.price').isFloat({ min: 0 }).withMessage('Valid price is required'),
+  body('billing_details').optional().isObject().withMessage('Billing details must be an object'),
+  body('billing_details.name').optional().notEmpty().withMessage('Billing name is required if provided'),
+  body('billing_details.email').optional().isEmail().withMessage('Valid billing email is required if provided'),
+  body('billing_details.phone').optional().notEmpty().withMessage('Billing phone is required if provided')
 ];
 
 export const updateOrderStatusValidation = [

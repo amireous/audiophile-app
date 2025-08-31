@@ -6,6 +6,8 @@ export interface User {
     first_name?: string;
     last_name?: string;
     profile_pic_url?: string;
+    phone?: string;
+    address?: string;
     role: 'admin' | 'customer';
     created_at?: string;
 }

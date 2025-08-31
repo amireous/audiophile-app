@@ -7,6 +7,7 @@ const router = Router();
 // Customer routes (authenticated)
 router.post('/basket/add', authenticateToken, requireCustomer, addToCartValidation, OrderController.addToCart);
 router.get('/basket', authenticateToken, requireCustomer, OrderController.getCart);
+router.delete('/basket', authenticateToken, requireCustomer, OrderController.clearCart);
 router.delete('/basket/:product_id', authenticateToken, requireCustomer, OrderController.removeFromCart);
 router.post('/checkout', authenticateToken, requireCustomer, checkoutValidation, OrderController.checkout);
 router.get('/orders', authenticateToken, requireCustomer, OrderController.getUserOrders);

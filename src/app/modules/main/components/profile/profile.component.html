@@ -10,7 +10,10 @@
       </div>
 
       <div class="profile-form">
-        <h1>Profile</h1>
+        <div class="profile-header">
+          <h1>Profile</h1>
+          <button class="back-button" routerLink="/">← Back to Home</button>
+        </div>
         <form [formGroup]="profileForm" (ngSubmit)="onSave()">
           <div>
             <label class="custom-label" for="firstName">First name</label>

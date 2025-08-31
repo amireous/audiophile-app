@@ -100,6 +100,62 @@ export class OrderService {
   }
 
   // Order operations
+  static async createOrderFromPayload(
+    userId: number, 
+    shippingAddress: string, 
+    paymentMethod: string, 
+    totalAmount: number, 
+    items: Array<{product_id: number, quantity: number, price: number}>,
+    billingDetails?: {name?: string, email?: string, phone?: string}
+  ): Promise<Order> {
+    return new Promise((resolve, reject) => {
+      db.serialize(() => {
+        // Create order with provided data
+        db.run(
+          'INSERT INTO orders (user_id, total_amount, shipping_address, payment_method) VALUES (?, ?, ?, ?)',
+          [userId, totalAmount, shippingAddress, paymentMethod],
+          function(err) {
+            if (err) {
+              reject(err);
+            } else {
+              const orderId = this.lastID;
+              
+              // Create order items from provided data
+              let completed = 0;
+              items.forEach(item => {
+                db.run(
+                  'INSERT INTO order_items (order_id, product_id, quantity, price_at_purchase) VALUES (?, ?, ?, ?)',
+                  [orderId, item.product_id, item.quantity, item.price],
+                  (err) => {
+                    if (err) {
+                      reject(err);
+                    } else {
+                      completed++;
+                      if (completed === items.length) {
+                        // Clear cart after successful order creation
+                        OrderService.clearCart(userId).then(() => {
+                          resolve({
+                            id: orderId,
+                            user_id: userId,
+                            total_amount: totalAmount,
+                            status: 'pending',
+                            shipping_address: shippingAddress,
+                            payment_method: paymentMethod,
+                            created_at: new Date().toISOString()
+                          });
+                        }).catch(reject);
+                      }
+                    }
+                  }
+                );
+              });
+            }
+          }
+        );
+      });
+    });
+  }
+
   static async createOrder(userId: number, shippingAddress: string, paymentMethod: string): Promise<Order> {
     return new Promise((resolve, reject) => {
       db.serialize(() => {
@@ -195,7 +251,49 @@ export class OrderService {
         if (err) {
           reject(err);
         } else {
-          resolve(orders as Order[]);
+          // For each order, get its items
+          const ordersWithItems = orders.map((order: any) => {
+            return new Promise((resolveOrder, rejectOrder) => {
+              const itemsQuery = `
+                SELECT oi.*, p.name, p.image_url, p.slug, p.price
+                FROM order_items oi
+                JOIN products p ON oi.product_id = p.id
+                WHERE oi.order_id = ?
+                ORDER BY oi.id
+              `;
+              
+              db.all(itemsQuery, [order.id], (itemsErr, items: any[]) => {
+                if (itemsErr) {
+                  rejectOrder(itemsErr);
+                } else {
+                  const orderWithItems = {
+                    ...order,
+                    items: items.map((item: any) => ({
+                      id: item.id,
+                      order_id: item.order_id,
+                      product_id: item.product_id,
+                      quantity: item.quantity,
+                      price_at_purchase: item.price_at_purchase,
+                      product: {
+                        id: item.product_id,
+                        name: item.name,
+                        image_url: item.image_url,
+                        slug: item.slug,
+                        price: item.price
+                      }
+                    }))
+                  };
+                  resolveOrder(orderWithItems);
+                }
+              });
+            });
+          });
+
+          Promise.all(ordersWithItems)
+            .then((ordersWithItemsData) => {
+              resolve(ordersWithItemsData as Order[]);
+            })
+            .catch(reject);
         }
       });
     });

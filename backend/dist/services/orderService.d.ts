@@ -4,6 +4,15 @@ export declare class OrderService {
     static getCart(userId: number): Promise<CartItem[]>;
     static removeFromCart(userId: number, productId: number): Promise<boolean>;
     static clearCart(userId: number): Promise<void>;
+    static createOrderFromPayload(userId: number, shippingAddress: string, paymentMethod: string, totalAmount: number, items: Array<{
+        product_id: number;
+        quantity: number;
+        price: number;
+    }>, billingDetails?: {
+        name?: string;
+        email?: string;
+        phone?: string;
+    }): Promise<Order>;
     static createOrder(userId: number, shippingAddress: string, paymentMethod: string): Promise<Order>;
     static getUserOrders(userId: number): Promise<Order[]>;
     static getAllOrders(): Promise<Order[]>;

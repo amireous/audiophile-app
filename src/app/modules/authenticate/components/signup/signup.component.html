@@ -1,0 +1,97 @@
+<div class="signup-wrapper">
+  <img src="assets/authenticate/chaos.svg" alt="" class="chaos-icon"/>
+  <h1>Sign Up.</h1>
+  <form [formGroup]="signupForm" (ngSubmit)="submitForm()">
+    <div class="form-row">
+      <div class="form-field">
+        <input 
+          type="text" 
+          required 
+          formControlName="firstName" 
+          placeholder="First Name"
+          [class.error]="signupForm.get('firstName')?.invalid && signupForm.get('firstName')?.touched"
+        />
+        <div class="error-message" *ngIf="signupForm.get('firstName')?.invalid && signupForm.get('firstName')?.touched">
+          {{ getErrorMessage('firstName') }}
+        </div>
+      </div>
+      <div class="form-field">
+        <input 
+          type="text" 
+          required 
+          formControlName="lastName" 
+          placeholder="Last Name"
+          [class.error]="signupForm.get('lastName')?.invalid && signupForm.get('lastName')?.touched"
+        />
+        <div class="error-message" *ngIf="signupForm.get('lastName')?.invalid && signupForm.get('lastName')?.touched">
+          {{ getErrorMessage('lastName') }}
+        </div>
+      </div>
+    </div>
+
+    <div class="form-field">
+      <input 
+        type="text" 
+        required 
+        formControlName="username" 
+        placeholder="Username"
+        [class.error]="signupForm.get('username')?.invalid && signupForm.get('username')?.touched"
+      />
+      <div class="error-message" *ngIf="signupForm.get('username')?.invalid && signupForm.get('username')?.touched">
+        {{ getErrorMessage('username') }}
+      </div>
+    </div>
+
+    <div class="form-field">
+      <input 
+        type="email" 
+        required 
+        formControlName="email" 
+        placeholder="Email"
+        [class.error]="signupForm.get('email')?.invalid && signupForm.get('email')?.touched"
+      />
+      <div class="error-message" *ngIf="signupForm.get('email')?.invalid && signupForm.get('email')?.touched">
+        {{ getErrorMessage('email') }}
+      </div>
+    </div>
+
+    <div class="form-field">
+      <input 
+        type="password" 
+        required 
+        formControlName="password" 
+        placeholder="Password"
+        [class.error]="signupForm.get('password')?.invalid && signupForm.get('password')?.touched"
+      />
+      <div class="error-message" *ngIf="signupForm.get('password')?.invalid && signupForm.get('password')?.touched">
+        {{ getErrorMessage('password') }}
+      </div>
+    </div>
+
+    <div class="form-field">
+      <input 
+        type="password" 
+        required 
+        formControlName="confirmPassword" 
+        placeholder="Confirm Password"
+        [class.error]="signupForm.get('confirmPassword')?.invalid && signupForm.get('confirmPassword')?.touched"
+      />
+      <div class="error-message" *ngIf="signupForm.get('confirmPassword')?.invalid && signupForm.get('confirmPassword')?.touched">
+        {{ getErrorMessage('confirmPassword') }}
+      </div>
+    </div>
+
+    <button 
+      type="submit" 
+      class="signup-button button-hover" 
+      [class.disabled-button]="signupForm.invalid || isLoading"
+      [disabled]="signupForm.invalid || isLoading"
+    >
+      {{ isLoading ? 'Creating Account...' : 'Sign Up' }}
+    </button>
+  </form>
+
+  <div class="login-link">
+    <p>Already have an account? <a (click)="goToLogin()">Sign In</a></p>
+  </div>
+</div>

@@ -83,22 +83,22 @@
         </div>
         <div class="dialog-overlay" #cartDialogOverlay (click)="onOverlayClick($event)"></div>
         <div class="cart-dialog" #cartDialogELement>
-          <p class="empty-cart" *ngIf="!addedProducts.length">
+          <p class="empty-cart" *ngIf="!basketData.length">
             Your cart is empty!
           </p>
-          <div *ngIf="addedProducts.length">
+          <div *ngIf="basketData.length">
             <div class="cart-header">
-              <p class="cart-count">cart ({{ addedProducts.length }})</p>
+              <p class="cart-count">cart ({{ basketData.length }})</p>
               <p class="p remove-all" (click)="onRemoveAll()">Remove all</p>
             </div>
             <div class="cart-products-list">
-              <div class="cart-product" *ngFor="let product of addedProducts">
+              <div class="cart-product" *ngFor="let product of basketData">
                 <div class="left-info">
                   <div class="product-image">
-                    <img [src]="product.product.image.desktop" alt="" />
+                    <img [src]="product.product.image_url || './assets/shared/placeholder.jpg'" alt="" />
                   </div>
                   <div class="details">
-                    <p class="product-name">{{ product.title }}</p>
+                    <p class="product-name">{{ product.product.name }}</p>
                     <p class="product-price">
                       ${{ product.product.price | number }}
                     </p>
@@ -112,7 +112,8 @@
                     <input
                       class="product-count-input"
                       type="text"
-                      [formControl]="product.countControl"
+                      [ngModel]="product.quantity"
+                      (ngModelChange)="onCountChange(product, $event)"
                       numbersOnly
                     />
                     <button class="increase" (click)="onIncrease(product)">
@@ -148,7 +149,7 @@
         </div>
       </header>
     </div>
-    <div class="header-banner wrapper" *ngIf="currentPath.includes('home')">
+    <div class="header-banner wrapper" *ngIf="isHomeRoute">
       <!-- <p>Earphone</p> -->
       <div class="banner-description container">
         <p class="title new-product-title">new product</p>

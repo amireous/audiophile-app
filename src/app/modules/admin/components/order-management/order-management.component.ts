@@ -28,7 +28,6 @@ export class OrderManagementComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error loading orders:', error);
         this.snackBar.open('Error loading orders', 'Close', { duration: 3000 });
         this.loading = false;
       }
@@ -42,7 +41,6 @@ export class OrderManagementComponent implements OnInit {
         this.loadOrders();
       },
       error: (error) => {
-        console.error('Error updating order status:', error);
         this.snackBar.open('Error updating order status', 'Close', { duration: 3000 });
       }
     });

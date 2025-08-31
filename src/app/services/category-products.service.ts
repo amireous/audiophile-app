@@ -30,7 +30,7 @@ export class CategoryProductsService {
         );
         
         if (!category) {
-          console.warn(`Category '${categoryName}' not found`);
+  
           return [];
         }
 
@@ -40,10 +40,10 @@ export class CategoryProductsService {
             if (response && response.products) {
               // Limit to 4 products and transform
               const limitedProducts = response.products.slice(0, 4);
-              console.log(`Found ${limitedProducts.length} products for category '${categoryName}'`);
+      
               return this.transformProducts(limitedProducts);
             }
-            console.warn(`No products found for category '${categoryName}'`);
+    
             return [];
           })
         );

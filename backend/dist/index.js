@@ -55,7 +55,9 @@ const startServer = async () => {
         await (0, database_1.initDatabase)();
         console.log('Database initialized successfully');
         await (0, migration_1.migrateProductsTable)();
-        console.log('Database migration completed');
+        console.log('Products table migration completed');
+        await (0, migration_1.migrateUsersTable)();
+        console.log('Users table migration completed');
         await authService_1.AuthService.createDefaultAdmin();
         console.log('Default admin user created (username: admin, password: admin1234)');
         app.listen(config_1.config.port, () => {
