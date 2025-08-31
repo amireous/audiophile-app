@@ -4,6 +4,19 @@
   padding: 7rem 1rem;
 }
 
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  
+  .loading-spinner {
+    font-size: 18px;
+    color: $primary;
+    font-weight: 500;
+  }
+}
+
 .premium-product {
   margin-top: 7rem;
   position: relative;

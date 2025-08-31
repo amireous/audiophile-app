@@ -12,8 +12,6 @@ router.post('/checkout', authenticateToken, requireCustomer, checkoutValidation,
 router.get('/orders', authenticateToken, requireCustomer, OrderController.getUserOrders);
 router.get('/orders/:id', authenticateToken, requireCustomer, OrderController.getOrderById);
 
-// Admin routes (protected)
-router.get('/admin/orders', authenticateToken, requireAdmin, OrderController.getAllOrders);
-router.put('/admin/orders/:id/status', authenticateToken, requireAdmin, updateOrderStatusValidation, OrderController.updateOrderStatus);
+// Note: Admin routes are now handled in /api/admin/orders
 
 export default router;

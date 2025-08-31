@@ -145,7 +145,7 @@ export class ProductService {
         } else if (this.changes === 0) {
           resolve(null);
         } else {
-          this.getProductById(id).then(resolve).catch(reject);
+          ProductService.getProductById(id).then(resolve).catch(reject);
         }
       });
     });
@@ -187,6 +187,47 @@ export class ProductService {
             } : undefined
           }));
           resolve(products);
+        }
+      });
+    });
+  }
+
+  static async markAsViewed(productId: number, userId: number): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      // First check if product exists
+      db.get('SELECT id FROM products WHERE id = ?', [productId], (err, product) => {
+        if (err) {
+          reject(err);
+        } else if (!product) {
+          resolve(false);
+        } else {
+          // Check if view record already exists
+          db.get('SELECT id FROM product_views WHERE product_id = ? AND user_id = ?', 
+            [productId, userId], (err, existingView) => {
+            if (err) {
+              reject(err);
+            } else if (existingView) {
+              // Update existing view timestamp
+              db.run('UPDATE product_views SET viewed_at = ? WHERE product_id = ? AND user_id = ?',
+                [new Date().toISOString(), productId, userId], (err) => {
+                if (err) {
+                  reject(err);
+                } else {
+                  resolve(true);
+                }
+              });
+            } else {
+              // Create new view record
+              db.run('INSERT INTO product_views (product_id, user_id, viewed_at) VALUES (?, ?, ?)',
+                [productId, userId, new Date().toISOString()], (err) => {
+                if (err) {
+                  reject(err);
+                } else {
+                  resolve(true);
+                }
+              });
+            }
+          });
         }
       });
     });

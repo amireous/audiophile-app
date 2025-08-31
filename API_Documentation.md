@@ -1,55 +1,22 @@
-# Audiophile E-commerce API Documentation
+# Audiophile API Documentation
 
-## Base URL
-```
-http://localhost:3000
-```
+## Overview
+The Audiophile API is a RESTful API for the Audiophile E-commerce application. It provides endpoints for authentication, product management, category management, order processing, and admin functionality.
+
+**Base URL**: `http://localhost:3000`
 
 ## Authentication
-The API uses JWT (JSON Web Token) for authentication. Most endpoints require a Bearer token in the Authorization header.
+The API uses JWT (JSON Web Tokens) for authentication. Most endpoints require a valid access token in the Authorization header.
 
-**Default Admin Credentials:**
-- Username: `admin`
-- Password: `admin1234`
+### Default Admin Credentials
+- **Username**: `admin`
+- **Password**: `admin1234`
 
 ## API Endpoints
 
-### 1. Health Check
-**GET** `/api/health`
+### Authentication
 
-Check if the API server is running.
-
-**Response:**
-```json
-{
-  "status": "OK",
-  "timestamp": "2025-08-27T10:14:20.951Z"
-}
-```
-
-### 2. API Information
-**GET** `/api`
-
-Get API information and available endpoints.
-
-**Response:**
-```json
-{
-  "message": "Audiophile API",
-  "version": "1.0.0",
-  "endpoints": {
-    "auth": "/api/auth",
-    "products": "/api/products",
-    "categories": "/api/categories",
-    "orders": "/api/orders",
-    "admin": "/api/admin"
-  }
-}
-```
-
-## Authentication Endpoints
-
-### 3. Login
+#### Login
 **POST** `/api/auth/login`
 
 Authenticate user and get access/refresh tokens.
@@ -78,28 +45,50 @@ Authenticate user and get access/refresh tokens.
 }
 ```
 
-### 4. Refresh Token
-**POST** `/api/auth/refresh`
+#### Register
+**POST** `/api/auth/register`
 
-Get new access token using refresh token.
+Register a new user account.
 
 **Request Body:**
 ```json
 {
-  "refresh_token": "your_refresh_token_here"
+  "username": "newuser",
+  "password": "password123",
+  "email": "user@example.com",
+  "first_name": "John",
+  "last_name": "Doe"
 }
 ```
+
+#### Refresh Token
+**POST** `/api/auth/refresh`
+
+Get a new access token using refresh token.
+
+**Request Body:**
+```json
+{
+  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
+
+### Public Routes
+
+#### Health Check
+**GET** `/api/health`
+
+Check if the API server is running.
 
 **Response:**
 ```json
 {
-  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  "status": "OK",
+  "timestamp": "2025-08-31T08:22:53.060Z"
 }
 ```
 
-## Public Endpoints (No Authentication Required)
-
-### 5. Get All Products
+#### Get All Products
 **GET** `/api/products`
 
 Get list of all available products.
@@ -116,9 +105,6 @@ Get list of all available products.
     "price": 599,
     "currency": "USD",
     "is_new": true,
-    "features": "Experience unrivalled stereo sound...",
-    "box_details": "2x Earphone units\n6x Multi-size earplugs...",
-    "category_id": 3,
     "category": {
       "id": 3,
       "name": "earphones",
@@ -128,34 +114,17 @@ Get list of all available products.
 ]
 ```
 
-### 6. Get Product by ID
-**GET** `/api/products/{id}`
+#### Get Product by ID
+**GET** `/api/products/:id`
 
 Get detailed information about a specific product.
 
-**Response:**
-```json
-{
-  "id": 1,
-  "name": "YX1 Wireless Earphones",
-  "slug": "yx1-earphones",
-  "description": "Tailor your listening experience...",
-  "image_url": "./assets/product-yx1-earphones/desktop/image-product.jpg",
-  "price": 599,
-  "currency": "USD",
-  "is_new": true,
-  "features": "Experience unrivalled stereo sound...",
-  "box_details": "2x Earphone units\n6x Multi-size earplugs...",
-  "category_id": 3,
-  "category": {
-    "id": 3,
-    "name": "earphones",
-    "description": "Wireless earphones for on-the-go listening"
-  }
-}
-```
+#### Get Product by Slug
+**GET** `/api/products/slug/:slug`
 
-### 7. Get All Categories
+Get product by its slug identifier.
+
+#### Get All Categories
 **GET** `/api/categories`
 
 Get list of all product categories.
@@ -166,65 +135,45 @@ Get list of all product categories.
   {
     "id": 1,
     "name": "headphones",
-    "description": "High-quality headphones for immersive audio experience"
-  },
-  {
-    "id": 2,
-    "name": "speakers",
-    "description": "Premium speakers for home and studio use"
-  },
-  {
-    "id": 3,
-    "name": "earphones",
-    "description": "Wireless earphones for on-the-go listening"
+    "description": "High-quality headphones for immersive audio experience",
+    "created_at": "2025-08-27 09:08:00"
   }
 ]
 ```
 
-### 8. Get Category by ID with Products
-**GET** `/api/categories/{id}`
+#### Get Category by ID
+**GET** `/api/categories/:id`
 
 Get category details with all products in that category.
+
+### User Routes (Authenticated)
+
+#### Mark Product as Viewed
+**GET** `/api/products/:id/view`
+
+Mark a product as viewed by the authenticated user.
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
+```
 
 **Response:**
 ```json
 {
-  "id": 1,
-  "name": "headphones",
-  "description": "High-quality headphones for immersive audio experience",
-  "products": [
-    {
-      "id": 2,
-      "name": "XX59 Headphones",
-      "slug": "xx59-headphones",
-      "description": "Enjoy your audio almost anywhere...",
-      "image_url": "./assets/product-xx59-headphones/desktop/image-product.jpg",
-      "price": 899,
-      "currency": "USD",
-      "is_new": false,
-      "features": "These headphones have been created...",
-      "box_details": "1x Headphone unit\n1x User manual...",
-      "category_id": 1,
-      "category": {
-        "id": 1,
-        "name": "headphones",
-        "description": "High-quality headphones for immersive audio experience"
-      }
-    }
-  ]
+  "success": true,
+  "message": "Product marked as viewed"
 }
 ```
 
-## Customer Endpoints (Authentication Required)
-
-### 9. Add to Cart
+#### Add to Cart
 **POST** `/api/basket/add`
 
 Add product to user's shopping cart.
 
 **Headers:**
 ```
-Authorization: Bearer your_access_token_here
+Authorization: Bearer <access_token>
 Content-Type: application/json
 ```
 
@@ -236,60 +185,34 @@ Content-Type: application/json
 }
 ```
 
-**Response:**
-```json
-{
-  "message": "Item added to cart"
-}
-```
-
-### 10. Get Cart
+#### Get Cart
 **GET** `/api/basket`
 
 Get current user's shopping cart.
 
 **Headers:**
 ```
-Authorization: Bearer your_access_token_here
+Authorization: Bearer <access_token>
 ```
 
-**Response:**
-```json
-[
-  {
-    "user_id": 1,
-    "product_id": 1,
-    "quantity": 2,
-    "product": {
-      "id": 1,
-      "name": "YX1 Wireless Earphones",
-      "slug": "yx1-earphones",
-      "description": "Tailor your listening experience...",
-      "image_url": "./assets/product-yx1-earphones/desktop/image-product.jpg",
-      "price": 599,
-      "currency": "USD",
-      "is_new": true,
-      "features": "Experience unrivalled stereo sound...",
-      "box_details": "2x Earphone units\n6x Multi-size earplugs...",
-      "category_id": 3,
-      "category": {
-        "id": 3,
-        "name": "earphones",
-        "description": "Wireless earphones for on-the-go listening"
-      }
-    }
-  }
-]
+#### Remove from Cart
+**DELETE** `/api/basket/:product_id`
+
+Remove product from user's cart.
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
 ```
 
-### 11. Checkout
+#### Checkout
 **POST** `/api/checkout`
 
 Create order from cart items.
 
 **Headers:**
 ```
-Authorization: Bearer your_access_token_here
+Authorization: Bearer <access_token>
 Content-Type: application/json
 ```
 
@@ -301,141 +224,82 @@ Content-Type: application/json
 }
 ```
 
-**Response:**
-```json
-{
-  "id": 1,
-  "user_id": 1,
-  "total_amount": 1198,
-  "status": "pending",
-  "shipping_address": "123 Main St, City, Country",
-  "payment_method": "credit_card",
-  "created_at": "2025-08-27T10:14:20.951Z",
-  "items": [
-    {
-      "product_id": 1,
-      "quantity": 2,
-      "price_at_purchase": 599,
-      "product": {
-        "id": 1,
-        "name": "YX1 Wireless Earphones",
-        "image_url": "./assets/product-yx1-earphones/desktop/image-product.jpg",
-        "slug": "yx1-earphones"
-      }
-    }
-  ]
-}
-```
-
-### 12. Get User Orders
+#### Get User Orders
 **GET** `/api/orders`
 
 Get current user's order history.
 
 **Headers:**
 ```
-Authorization: Bearer your_access_token_here
+Authorization: Bearer <access_token>
 ```
 
-**Response:**
-```json
-[
-  {
-    "id": 1,
-    "user_id": 1,
-    "total_amount": 1198,
-    "status": "pending",
-    "shipping_address": "123 Main St, City, Country",
-    "payment_method": "credit_card",
-    "created_at": "2025-08-27T10:14:20.951Z",
-    "items": [
-      {
-        "product_id": 1,
-        "quantity": 2,
-        "price_at_purchase": 599,
-        "product": {
-          "id": 1,
-          "name": "YX1 Wireless Earphones",
-          "image_url": "./assets/product-yx1-earphones/desktop/image-product.jpg",
-          "slug": "yx1-earphones"
-        }
-      }
-    ]
-  }
-]
+#### Get Order by ID
+**GET** `/api/orders/:id`
+
+Get specific order details for the authenticated user.
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
 ```
 
-## Admin Endpoints (Admin Role Required)
+### Admin Routes
 
-### 13. Get All Products (Admin)
+All admin routes require admin authentication and are prefixed with `/api/admin`.
+
+#### Products (Admin)
+
+##### Get All Products
 **GET** `/api/admin/products`
 
 Get all products for admin management.
 
 **Headers:**
 ```
-Authorization: Bearer your_access_token_here
+Authorization: Bearer <access_token>
 ```
 
-**Response:** Same as public products endpoint but requires admin role.
+##### Get Product by ID
+**GET** `/api/admin/products/:id`
 
-### 14. Create Product
+Get specific product details.
+
+##### Create Product
 **POST** `/api/admin/products`
 
 Create a new product.
 
 **Headers:**
 ```
-Authorization: Bearer your_access_token_here
+Authorization: Bearer <access_token>
 Content-Type: application/json
 ```
 
 **Request Body:**
 ```json
 {
-  "name": "New Test Product",
-  "slug": "new-test-product",
-  "description": "A new test product for demonstration",
-  "image_url": "./assets/product-test/desktop/image-product.jpg",
+  "name": "New Product",
+  "slug": "new-product",
+  "description": "A new product description",
   "price": 999,
   "currency": "USD",
   "is_new": true,
-  "features": "This is a test product with amazing features",
-  "box_details": "1x Product unit\n1x User manual\n1x Cable",
-  "category_id": 1
-}
-```
-
-**Response:**
-```json
-{
-  "id": 7,
-  "name": "New Test Product",
-  "slug": "new-test-product",
-  "description": "A new test product for demonstration",
-  "image_url": "./assets/product-test/desktop/image-product.jpg",
-  "price": 999,
-  "currency": "USD",
-  "is_new": true,
-  "features": "This is a test product with amazing features",
-  "box_details": "1x Product unit\n1x User manual\n1x Cable",
   "category_id": 1,
-  "category": {
-    "id": 1,
-    "name": "headphones",
-    "description": "High-quality headphones for immersive audio experience"
-  }
+  "image_url": "./assets/new-product.jpg",
+  "features": "Product features",
+  "box_details": "Box contents"
 }
 ```
 
-### 15. Update Product
-**PUT** `/api/admin/products/{id}`
+##### Update Product
+**PUT** `/api/admin/products/:id`
 
 Update an existing product.
 
 **Headers:**
 ```
-Authorization: Bearer your_access_token_here
+Authorization: Bearer <access_token>
 Content-Type: application/json
 ```
 
@@ -444,153 +308,110 @@ Content-Type: application/json
 {
   "name": "Updated Product Name",
   "price": 1299,
-  "description": "Updated product description"
+  "description": "Updated description"
 }
 ```
 
-**Response:** Updated product object.
-
-### 16. Delete Product
-**DELETE** `/api/admin/products/{id}`
+##### Delete Product
+**DELETE** `/api/admin/products/:id`
 
 Delete a product.
 
 **Headers:**
 ```
-Authorization: Bearer your_access_token_here
+Authorization: Bearer <access_token>
 ```
 
-**Response:**
-```json
-{
-  "message": "Product deleted successfully"
-}
-```
+#### Categories (Admin)
 
-### 17. Get All Categories (Admin)
+##### Get All Categories
 **GET** `/api/admin/categories`
 
 Get all categories for admin management.
 
-**Headers:**
-```
-Authorization: Bearer your_access_token_here
-```
+##### Get Category by ID
+**GET** `/api/admin/categories/:id`
 
-**Response:** Same as public categories endpoint but requires admin role.
+Get specific category details.
 
-### 18. Create Category
+##### Create Category
 **POST** `/api/admin/categories`
 
 Create a new category.
 
 **Headers:**
 ```
-Authorization: Bearer your_access_token_here
+Authorization: Bearer <access_token>
 Content-Type: application/json
 ```
 
 **Request Body:**
 ```json
 {
-  "name": "new-category",
-  "description": "A new category for testing"
+  "name": "New Category",
+  "description": "Description for new category"
 }
 ```
 
-**Response:**
-```json
-{
-  "id": 4,
-  "name": "new-category",
-  "description": "A new category for testing"
-}
-```
-
-### 19. Update Category
-**PUT** `/api/admin/categories/{id}`
+##### Update Category
+**PUT** `/api/admin/categories/:id`
 
 Update an existing category.
 
 **Headers:**
 ```
-Authorization: Bearer your_access_token_here
+Authorization: Bearer <access_token>
 Content-Type: application/json
 ```
 
 **Request Body:**
 ```json
 {
-  "name": "updated-category",
-  "description": "Updated category description"
+  "name": "Updated Category Name",
+  "description": "Updated description"
 }
 ```
 
-**Response:** Updated category object.
+##### Delete Category
+**DELETE** `/api/admin/categories/:id`
 
-### 20. Delete Category
-**DELETE** `/api/admin/categories/{id}`
-
-Delete a category (only if no products in category).
+Delete a category (only if no products are in the category).
 
 **Headers:**
 ```
-Authorization: Bearer your_access_token_here
+Authorization: Bearer <access_token>
 ```
 
-**Response:**
-```json
-{
-  "message": "Category deleted successfully"
-}
-```
+#### Orders (Admin)
 
-### 21. Get All Orders (Admin)
+##### Get All Orders
 **GET** `/api/admin/orders`
 
 Get all orders from all users.
 
 **Headers:**
 ```
-Authorization: Bearer your_access_token_here
+Authorization: Bearer <access_token>
 ```
 
-**Response:**
-```json
-[
-  {
-    "id": 1,
-    "user_id": 1,
-    "total_amount": 1198,
-    "status": "pending",
-    "shipping_address": "123 Main St, City, Country",
-    "payment_method": "credit_card",
-    "created_at": "2025-08-27T10:14:20.951Z",
-    "items": [
-      {
-        "product_id": 1,
-        "quantity": 2,
-        "price_at_purchase": 599,
-        "product": {
-          "id": 1,
-          "name": "YX1 Wireless Earphones",
-          "image_url": "./assets/product-yx1-earphones/desktop/image-product.jpg",
-          "slug": "yx1-earphones"
-        }
-      }
-    ]
-  }
-]
+##### Get Order by ID
+**GET** `/api/admin/orders/:id`
+
+Get specific order details.
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
 ```
 
-### 22. Update Order Status
-**PUT** `/api/admin/orders/{id}/status`
+##### Update Order Status
+**PUT** `/api/admin/orders/:id/status`
 
 Update order status.
 
 **Headers:**
 ```
-Authorization: Bearer your_access_token_here
+Authorization: Bearer <access_token>
 Content-Type: application/json
 ```
 
@@ -601,77 +422,198 @@ Content-Type: application/json
 }
 ```
 
-**Valid Status Values:**
+**Available Status Values:**
 - `pending`
 - `shipped`
 - `delivered`
 - `cancelled`
 
-**Response:** Updated order object.
-
 ## Error Responses
 
-### 401 Unauthorized
+### Authentication Errors
 ```json
 {
-  "error": "Access token required"
+  "message": "Access token required"
 }
 ```
 
-### 403 Forbidden
 ```json
 {
-  "error": "Admin access required"
+  "message": "Invalid or expired token"
 }
 ```
 
-### 404 Not Found
+### Validation Errors
 ```json
 {
-  "error": "Product not found"
+  "errors": [
+    {
+      "msg": "Product name is required",
+      "param": "name",
+      "location": "body"
+    }
+  ]
 }
 ```
 
-### 400 Bad Request
+### Not Found Errors
 ```json
 {
-  "error": "Cart is empty"
+  "message": "Product not found"
 }
 ```
 
-## How to Use with Postman
+### Server Errors
+```json
+{
+  "message": "Internal server error"
+}
+```
 
-1. **Import the Collection**: Import the `Audiophile_API_Postman_Collection.json` file into Postman.
+## Data Models
 
-2. **Set Variables**: The collection uses these variables:
-   - `base_url`: http://localhost:3000
-   - `access_token`: Will be automatically set after login
-   - `refresh_token`: Will be automatically set after login
+### Product
+```json
+{
+  "id": 1,
+  "name": "Product Name",
+  "slug": "product-slug",
+  "description": "Product description",
+  "image_url": "./assets/product.jpg",
+  "price": 999,
+  "currency": "USD",
+  "is_new": true,
+  "features": "Product features",
+  "box_details": "Box contents",
+  "category_id": 1,
+  "created_at": "2025-08-27 09:08:00",
+  "category": {
+    "id": 1,
+    "name": "category-name",
+    "description": "Category description"
+  }
+}
+```
 
-3. **Authentication Flow**:
-   - First, run the "Login" request to get tokens
-   - Tokens will be automatically saved to collection variables
-   - All authenticated requests will use the Bearer token automatically
+### Category
+```json
+{
+  "id": 1,
+  "name": "category-name",
+  "description": "Category description",
+  "created_at": "2025-08-27 09:08:00"
+}
+```
 
-4. **Testing Order**:
-   - Health Check → API Information → Login
-   - Test public endpoints
-   - Test customer endpoints (requires login)
-   - Test admin endpoints (requires admin login)
+### Order
+```json
+{
+  "id": 1,
+  "user_id": 1,
+  "total_amount": 1998,
+  "status": "pending",
+  "shipping_address": "123 Main St, City, Country",
+  "payment_method": "credit_card",
+  "created_at": "2025-08-27 09:08:00",
+  "items": [
+    {
+      "id": 1,
+      "order_id": 1,
+      "product_id": 1,
+      "quantity": 2,
+      "price_at_purchase": 999,
+      "product": {
+        "id": 1,
+        "name": "Product Name",
+        "image_url": "./assets/product.jpg",
+        "slug": "product-slug",
+        "price": 999
+      }
+    }
+  ]
+}
+```
 
-## Available Products
+### Cart Item
+```json
+{
+  "id": 1,
+  "user_id": 1,
+  "product_id": 1,
+  "quantity": 2,
+  "created_at": "2025-08-27 09:08:00",
+  "product": {
+    "id": 1,
+    "name": "Product Name",
+    "price": 999,
+    "image_url": "./assets/product.jpg",
+    "slug": "product-slug"
+  }
+}
+```
 
-The API comes with 6 pre-loaded products:
+## Usage Examples
 
-1. **YX1 Wireless Earphones** - $599 (New)
-2. **XX59 Headphones** - $899
-3. **XX99 Mark I Headphones** - $1,750
-4. **XX99 Mark II Headphones** - $2,999 (New)
-5. **ZX7 Speaker** - $3,500
-6. **ZX9 Speaker** - $4,500 (New)
+### 1. Login and Get Token
+```bash
+curl -X POST http://localhost:3000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username": "admin", "password": "admin1234"}'
+```
 
-## Available Categories
+### 2. Get All Products
+```bash
+curl -X GET http://localhost:3000/api/products
+```
 
-1. **headphones** - High-quality headphones for immersive audio experience
-2. **speakers** - Premium speakers for home and studio use
-3. **earphones** - Wireless earphones for on-the-go listening
+### 3. Add Product to Cart (Authenticated)
+```bash
+curl -X POST http://localhost:3000/api/basket/add \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"product_id": 1, "quantity": 2}'
+```
+
+### 4. Create Product (Admin)
+```bash
+curl -X POST http://localhost:3000/api/admin/products \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "New Product",
+    "slug": "new-product",
+    "description": "A new product",
+    "price": 999,
+    "category_id": 1
+  }'
+```
+
+## Postman Collection
+
+Import the `Audiophile_API_Postman_Collection.json` file into Postman for a complete set of pre-configured requests.
+
+### Postman Variables
+- `base_url`: `http://localhost:3000`
+- `access_token`: Your JWT access token
+- `refresh_token`: Your JWT refresh token
+
+### Setup Instructions
+1. Import the collection into Postman
+2. Set the `base_url` variable to your server URL
+3. Run the "Login" request to get your access token
+4. The token will be automatically saved to the `access_token` variable
+5. All authenticated requests will now work automatically
+
+## Rate Limiting
+Currently, there are no rate limits implemented. Consider implementing rate limiting for production use.
+
+## CORS
+The API is configured to accept requests from `http://localhost:4200` (Angular dev server). Update the CORS configuration for production.
+
+## Security Notes
+- Always use HTTPS in production
+- Implement proper input validation
+- Consider implementing API rate limiting
+- Regularly rotate JWT secrets
+- Implement proper error logging
+- Use environment variables for sensitive configuration

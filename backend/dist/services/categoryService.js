@@ -25,7 +25,7 @@ class CategoryService {
                     reject(err);
                 }
                 else {
-                    resolve(row || null);
+                    resolve(row ? row : null);
                 }
             });
         });
@@ -63,7 +63,7 @@ class CategoryService {
                                 } : undefined
                             }));
                             resolve({
-                                category,
+                                category: category,
                                 products: formattedProducts
                             });
                         }
@@ -109,7 +109,7 @@ class CategoryService {
                     resolve(null);
                 }
                 else {
-                    this.getCategoryById(id).then(resolve).catch(reject);
+                    CategoryService.getCategoryById(id).then(resolve).catch(reject);
                 }
             });
         });

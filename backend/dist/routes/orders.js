@@ -11,8 +11,6 @@ router.delete('/basket/:product_id', auth_1.authenticateToken, auth_1.requireCus
 router.post('/checkout', auth_1.authenticateToken, auth_1.requireCustomer, orderController_1.checkoutValidation, orderController_1.OrderController.checkout);
 router.get('/orders', auth_1.authenticateToken, auth_1.requireCustomer, orderController_1.OrderController.getUserOrders);
 router.get('/orders/:id', auth_1.authenticateToken, auth_1.requireCustomer, orderController_1.OrderController.getOrderById);
-// Admin routes (protected)
-router.get('/admin/orders', auth_1.authenticateToken, auth_1.requireAdmin, orderController_1.OrderController.getAllOrders);
-router.put('/admin/orders/:id/status', auth_1.authenticateToken, auth_1.requireAdmin, orderController_1.updateOrderStatusValidation, orderController_1.OrderController.updateOrderStatus);
+// Note: Admin routes are now handled in /api/admin/orders
 exports.default = router;
 //# sourceMappingURL=orders.js.map

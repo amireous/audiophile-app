@@ -1,7 +1,8 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Product } from 'src/app/models/data.model';
 import { DataService } from 'src/app/services/data/data.service';
+import { CategoryProductsService } from 'src/app/services/category-products.service';
 
 @Component({
   selector: 'app-home',
@@ -11,8 +12,8 @@ import { DataService } from 'src/app/services/data/data.service';
 export class HomeComponent implements OnInit {
   constructor(
     private dataService: DataService,
+    private categoryProductsService: CategoryProductsService,
     private router: Router,
-    private route: ActivatedRoute
   ) {}
   productList: Product[] = [];
   title: any;
@@ -20,44 +21,105 @@ export class HomeComponent implements OnInit {
   currentPath!: string;
   innerWidth!: number;
 
-  earphonesData: any;
-  speakersData: any;
+  earphonesData: Product[] = [];
+  speakersData: Product[] = [];
+  headphonesData: Product[] = [];
+  categories: any[] = [];
+  isLoading: boolean = false;
 
   ngOnInit(): void {
     this.innerWidth = window.innerWidth;
-    // this.setCurrentRoute();
-    console.log('Home ', this.router.url.split('/')[1]);
-   this.getHomeData();
+    this.currentPath = this.router.url.split('/')[1].length > 0 ? this.router.url.split('/')[1] : 'home';
+    this.loadHomeData();
   }
 
   @HostListener('window:resize', ['$event']) onResize(event: any) {
     this.innerWidth = event.target.innerWidth;
   }
 
-  getHomeData() {
+  loadHomeData() {
+    this.isLoading = true;
+    console.log('Current Path:', this.currentPath);
+    
+    if (this.currentPath === 'home') {
+      // For home page: get all categories with products
+      this.categoryProductsService.getCategories().subscribe({
+        next: (categories) => {
+          console.log('Categories with products for home:', categories);
+          
+          // Extract products for each category
+          categories.forEach(category => {
+            if (category.name.toLowerCase() === 'speakers' && category.products) {
+              this.speakersData = category.products;
+            } else if (category.name.toLowerCase() === 'earphones' && category.products) {
+              this.earphonesData = category.products;
+            } else if (category.name.toLowerCase() === 'headphones' && category.products) {
+              this.headphonesData = category.products;
+            }
+          });
+          
+          this.categories = categories;
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Error loading categories:', error);
+          this.isLoading = false;
+          this.loadFallbackData();
+        }
+      });
+    } else {
+      // For category pages: get products for specific category using category ID
+      this.categoryProductsService.getProductsByCategory(this.currentPath).subscribe({
+        next: (products) => {
+          console.log(`Products for ${this.currentPath}:`, products);
+          
+          // Set products based on category
+          if (this.currentPath === 'speakers') {
+            this.speakersData = products;
+          } else if (this.currentPath === 'earphones') {
+            this.earphonesData = products;
+          } else if (this.currentPath === 'headphones') {
+            this.headphonesData = products;
+          }
+          
+          // Set product list for category pages
+          this.productList = products;
+          
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error(`Error loading ${this.currentPath} products:`, error);
+          this.isLoading = false;
+          this.loadFallbackData();
+        }
+      });
+    }
+  }
+
+  loadFallbackData() {
+    // Fallback to local JSON data if API is not available
     this.dataService.getHomeData().subscribe((data) => {
-      console.log('Home Data:', data);
+      console.log('Fallback Home Data:', data);
       this.productList = data.reverse();
       this.getCurrentPathData(this.currentPath);
     });
   }
 
-  // setCurrentRoute() {
-  //   this.route.params.subscribe((params) => {
-  //     this.currentPath = params.id;
-  //     this.getHomeData();
-  //   });
-  // }
-
   getCurrentPathData(path: string = '') {
     console.log('Current Path:', path);
     if (path === 'speakers') path = 'speaker';
+    
+    // Filter products by category for fallback
     this.speakersData = this.productList.filter((product: any) =>
       product?.category?.includes('speakers')
     );
     this.earphonesData = this.productList.filter((product: any) =>
       product?.category?.includes('earphones')
     );
+    this.headphonesData = this.productList.filter((product: any) =>
+      product?.category?.includes('headphones')
+    );
+    
     this.productList = this.productList.filter((product: any) =>
       product?.slug?.includes(path)
     );

@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import path from 'path';
 import { config } from './config';
 import { initDatabase } from './models/database';
+import { migrateProductsTable } from './models/migration';
 import { AuthService } from './services/authService';
 
 // Import routes
@@ -12,6 +13,7 @@ import authRoutes from './routes/auth';
 import productRoutes from './routes/products';
 import categoryRoutes from './routes/categories';
 import orderRoutes from './routes/orders';
+import adminRoutes from './routes/admin';
 
 const app = express();
 
@@ -33,6 +35,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api', orderRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -55,6 +58,9 @@ const startServer = async () => {
   try {
     await initDatabase();
     console.log('Database initialized successfully');
+    
+    await migrateProductsTable();
+    console.log('Database migration completed');
     
     await AuthService.createDefaultAdmin();
     console.log('Default admin user created (username: admin, password: admin1234)');

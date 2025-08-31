@@ -10,12 +10,14 @@ const morgan_1 = __importDefault(require("morgan"));
 const path_1 = __importDefault(require("path"));
 const config_1 = require("./config");
 const database_1 = require("./models/database");
+const migration_1 = require("./models/migration");
 const authService_1 = require("./services/authService");
 // Import routes
 const auth_1 = __importDefault(require("./routes/auth"));
 const products_1 = __importDefault(require("./routes/products"));
 const categories_1 = __importDefault(require("./routes/categories"));
 const orders_1 = __importDefault(require("./routes/orders"));
+const admin_1 = __importDefault(require("./routes/admin"));
 const app = (0, express_1.default)();
 // Middleware
 app.use((0, helmet_1.default)());
@@ -33,6 +35,7 @@ app.use('/api/auth', auth_1.default);
 app.use('/api/products', products_1.default);
 app.use('/api/categories', categories_1.default);
 app.use('/api', orders_1.default);
+app.use('/api/admin', admin_1.default);
 // Health check endpoint
 app.get('/api/health', (req, res) => {
     res.json({ status: 'OK', timestamp: new Date().toISOString() });
@@ -51,6 +54,8 @@ const startServer = async () => {
     try {
         await (0, database_1.initDatabase)();
         console.log('Database initialized successfully');
+        await (0, migration_1.migrateProductsTable)();
+        console.log('Database migration completed');
         await authService_1.AuthService.createDefaultAdmin();
         console.log('Default admin user created (username: admin, password: admin1234)');
         app.listen(config_1.config.port, () => {

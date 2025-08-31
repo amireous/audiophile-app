@@ -105,6 +105,23 @@ class ProductController {
             res.status(500).json({ message: 'Internal server error' });
         }
     }
+    static async markAsViewed(req, res) {
+        try {
+            const productId = parseInt(req.params.id);
+            const userId = req.user.userId;
+            if (isNaN(productId)) {
+                return res.status(400).json({ message: 'Invalid product ID' });
+            }
+            const success = await productService_1.ProductService.markAsViewed(productId, userId);
+            if (!success) {
+                return res.status(404).json({ message: 'Product not found' });
+            }
+            res.json({ success: true, message: 'Product marked as viewed' });
+        }
+        catch (error) {
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    }
 }
 exports.ProductController = ProductController;
 // Validation middleware

@@ -17,12 +17,10 @@ class AuthService {
         return bcryptjs_1.default.compare(password, hash);
     }
     static generateAccessToken(payload) {
-        const options = { expiresIn: config_1.config.accessTokenExpiry };
-        return jsonwebtoken_1.default.sign(payload, config_1.config.jwtSecret, options);
+        return jsonwebtoken_1.default.sign(payload, config_1.config.jwtSecret, { expiresIn: '15m' });
     }
     static generateRefreshToken(payload) {
-        const options = { expiresIn: config_1.config.refreshTokenExpiry };
-        return jsonwebtoken_1.default.sign(payload, config_1.config.jwtRefreshSecret, options);
+        return jsonwebtoken_1.default.sign(payload, config_1.config.jwtRefreshSecret, { expiresIn: '7d' });
     }
     static async register(userData) {
         return new Promise((resolve, reject) => {

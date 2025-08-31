@@ -4,11 +4,11 @@ import { Category, Product } from '../models/types';
 export class CategoryService {
   static async getAllCategories(): Promise<Category[]> {
     return new Promise((resolve, reject) => {
-      db.all('SELECT * FROM categories ORDER BY name', [], (err, rows) => {
+      db.all('SELECT * FROM categories ORDER BY name', [], (err, rows: any[]) => {
         if (err) {
           reject(err);
         } else {
-          resolve(rows);
+          resolve(rows as Category[]);
         }
       });
     });
@@ -16,11 +16,11 @@ export class CategoryService {
 
   static async getCategoryById(id: number): Promise<Category | null> {
     return new Promise((resolve, reject) => {
-      db.get('SELECT * FROM categories WHERE id = ?', [id], (err, row) => {
+      db.get('SELECT * FROM categories WHERE id = ?', [id], (err, row: any) => {
         if (err) {
           reject(err);
         } else {
-          resolve(row || null);
+          resolve(row ? (row as Category) : null);
         }
       });
     });
@@ -58,7 +58,7 @@ export class CategoryService {
               }));
               
               resolve({
-                category,
+                category: category as Category,
                 products: formattedProducts
               });
             }
@@ -111,7 +111,7 @@ export class CategoryService {
         } else if (this.changes === 0) {
           resolve(null);
         } else {
-          this.getCategoryById(id).then(resolve).catch(reject);
+          CategoryService.getCategoryById(id).then(resolve).catch(reject);
         }
       });
     });

@@ -153,7 +153,7 @@ class OrderService {
                                                     completed++;
                                                     if (completed === orderItems.length) {
                                                         // Clear cart
-                                                        this.clearCart(userId).then(() => {
+                                                        OrderService.clearCart(userId).then(() => {
                                                             resolve({
                                                                 id: orderId,
                                                                 user_id: userId,
@@ -252,7 +252,8 @@ class OrderService {
                                     id: item.product_id,
                                     name: item.name,
                                     image_url: item.image_url,
-                                    slug: item.slug
+                                    slug: item.slug,
+                                    price: item.price_at_purchase
                                 }
                             }));
                             resolve({
@@ -275,7 +276,7 @@ class OrderService {
                     resolve(null);
                 }
                 else {
-                    this.getOrderById(orderId).then(resolve).catch(reject);
+                    OrderService.getOrderById(orderId).then(resolve).catch(reject);
                 }
             });
         });

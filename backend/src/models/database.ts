@@ -44,6 +44,9 @@ export const initDatabase = (): Promise<void> => {
           is_new BOOLEAN DEFAULT 0,
           features TEXT,
           box_details TEXT,
+          includes TEXT,
+          gallery TEXT,
+          others TEXT,
           category_id INTEGER,
           created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
           FOREIGN KEY (category_id) REFERENCES categories (id)
@@ -85,6 +88,19 @@ export const initDatabase = (): Promise<void> => {
           product_id INTEGER NOT NULL,
           quantity INTEGER NOT NULL DEFAULT 1,
           created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+          FOREIGN KEY (user_id) REFERENCES users (id),
+          FOREIGN KEY (product_id) REFERENCES products (id),
+          UNIQUE(user_id, product_id)
+        )
+      `);
+
+      // Product views table (for tracking user views)
+      db.run(`
+        CREATE TABLE IF NOT EXISTS product_views (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          user_id INTEGER NOT NULL,
+          product_id INTEGER NOT NULL,
+          viewed_at DATETIME DEFAULT CURRENT_TIMESTAMP,
           FOREIGN KEY (user_id) REFERENCES users (id),
           FOREIGN KEY (product_id) REFERENCES products (id),
           UNIQUE(user_id, product_id)

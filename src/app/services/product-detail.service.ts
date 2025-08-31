@@ -83,22 +83,7 @@ export class ProductDetailService {
     });
   }
 
-  /**
-   * Get product details by slug
-   * @param slug Product slug
-   * @returns Observable of product detail
-   */
-  getProductBySlug(slug: string): Observable<ProductDetailResponse> {
-    return this.http.get<ProductDetailResponse[]>(`${this.apiUrl}/products`).pipe(
-      map((products: ProductDetailResponse[]) => {
-        const product = products.find((p: ProductDetailResponse) => p.slug === slug);
-        if (!product) {
-          throw new Error('Product not found');
-        }
-        return product;
-      })
-    );
-  }
+
 
   /**
    * Get product details by ID
@@ -106,7 +91,20 @@ export class ProductDetailService {
    * @returns Observable of product detail
    */
   getProductById(id: number): Observable<ProductDetailResponse> {
-    return this.http.get<ProductDetailResponse>(`${this.apiUrl}/products/${id}`);
+    return this.http.get<any>(`${this.apiUrl}/products/${id}`).pipe(
+      map(backendProduct => this.transformBackendProductToDetailResponse(backendProduct))
+    );
+  }
+
+  /**
+   * Get product details by slug (recommended for routing)
+   * @param slug Product slug
+   * @returns Observable of product detail
+   */
+  getProductBySlug(slug: string): Observable<ProductDetailResponse> {
+    return this.http.get<any>(`${this.apiUrl}/products/slug/${slug}`).pipe(
+      map(backendProduct => this.transformBackendProductToDetailResponse(backendProduct))
+    );
   }
 
   /**
@@ -233,8 +231,77 @@ export class ProductDetailService {
    * @returns Observable of success response
    */
   markAsRecentlyViewed(productId: number): Observable<{ success: boolean }> {
-    return this.http.post<{ success: boolean }>(`${this.apiUrl}/products/${productId}/view`, {}, { 
+    return this.http.get<any>(`${this.apiUrl}/products/${productId}/view`, { 
       headers: this.getHeaders() 
     });
+  }
+
+  /**
+   * Transform backend product format to frontend ProductDetailResponse format
+   * @param backendProduct Backend product data
+   * @returns Transformed ProductDetailResponse
+   */
+  private transformBackendProductToDetailResponse(backendProduct: any): ProductDetailResponse {
+    // Create image object with different sizes using the existing image_url
+    const imageUrl = backendProduct.image_url || './assets/shared/placeholder.jpg';
+    const image = {
+      mobile: imageUrl,
+      tablet: imageUrl,
+      desktop: imageUrl
+    };
+
+    // Parse includes from JSON string
+    let includes: Array<{ quantity: number; item: string }> = [];
+    if (backendProduct.includes) {
+      try {
+        includes = JSON.parse(backendProduct.includes);
+      } catch (error) {
+        console.warn('Failed to parse includes for product:', backendProduct.id);
+      }
+    }
+
+    // Parse gallery from JSON string
+    let gallery = {
+      first: image,
+      second: image,
+      third: image
+    };
+    if (backendProduct.gallery) {
+      try {
+        const galleryData = JSON.parse(backendProduct.gallery);
+        gallery = {
+          first: galleryData.first || image,
+          second: galleryData.second || image,
+          third: galleryData.third || image
+        };
+      } catch (error) {
+        console.warn('Failed to parse gallery for product:', backendProduct.id);
+      }
+    }
+
+    // Parse others from JSON string
+    let others: Array<{ slug: string; name: string; image: any }> = [];
+    if (backendProduct.others) {
+      try {
+        others = JSON.parse(backendProduct.others);
+      } catch (error) {
+        console.warn('Failed to parse others for product:', backendProduct.id);
+      }
+    }
+
+    return {
+      id: backendProduct.id,
+      slug: backendProduct.slug,
+      name: backendProduct.name,
+      image: image,
+      category: backendProduct.category?.name || backendProduct.category_name || 'uncategorized',
+      new: backendProduct.is_new || false,
+      price: backendProduct.price,
+      description: backendProduct.description || '',
+      features: backendProduct.features || '',
+      includes: includes,
+      gallery: gallery,
+      others: others
+    };
   }
 }

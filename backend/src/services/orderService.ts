@@ -6,7 +6,7 @@ export class OrderService {
   static async addToCart(userId: number, productId: number, quantity: number = 1): Promise<CartItem> {
     return new Promise((resolve, reject) => {
       // Check if item already exists in cart
-      db.get('SELECT * FROM cart WHERE user_id = ? AND product_id = ?', [userId, productId], (err, existingItem) => {
+      db.get('SELECT * FROM cart WHERE user_id = ? AND product_id = ?', [userId, productId], (err, existingItem: any) => {
         if (err) {
           reject(err);
         } else if (existingItem) {
@@ -17,7 +17,7 @@ export class OrderService {
             if (err) {
               reject(err);
             } else {
-              resolve({ ...existingItem, quantity: newQuantity });
+              resolve({ ...existingItem, quantity: newQuantity } as CartItem);
             }
           });
         } else {
@@ -51,7 +51,7 @@ export class OrderService {
         ORDER BY c.created_at DESC
       `;
       
-      db.all(query, [userId], (err, rows) => {
+      db.all(query, [userId], (err, rows: any[]) => {
         if (err) {
           reject(err);
         } else {
@@ -69,7 +69,7 @@ export class OrderService {
               slug: row.slug
             }
           }));
-          resolve(cartItems);
+          resolve(cartItems as CartItem[]);
         }
       });
     });
@@ -104,7 +104,7 @@ export class OrderService {
     return new Promise((resolve, reject) => {
       db.serialize(() => {
         // Get cart items
-        db.all('SELECT * FROM cart WHERE user_id = ?', [userId], (err, cartItems) => {
+        db.all('SELECT * FROM cart WHERE user_id = ?', [userId], (err, cartItems: any[]) => {
           if (err) {
             reject(err);
           } else if (cartItems.length === 0) {
@@ -114,12 +114,12 @@ export class OrderService {
             const productIds = cartItems.map(item => item.product_id);
             const placeholders = productIds.map(() => '?').join(',');
             
-            db.all(`SELECT id, price FROM products WHERE id IN (${placeholders})`, productIds, (err, products) => {
+            db.all(`SELECT id, price FROM products WHERE id IN (${placeholders})`, productIds, (err, products: any[]) => {
               if (err) {
                 reject(err);
               } else {
                 const productMap = new Map(products.map(p => [p.id, p.price]));
-                const totalAmount = cartItems.reduce((total, item) => {
+                const totalAmount = cartItems.reduce((total: number, item: any) => {
                   const price = productMap.get(item.product_id) || 0;
                   return total + (price * item.quantity);
                 }, 0);
@@ -154,7 +154,7 @@ export class OrderService {
                               completed++;
                               if (completed === orderItems.length) {
                                 // Clear cart
-                                this.clearCart(userId).then(() => {
+                                OrderService.clearCart(userId).then(() => {
                                   resolve({
                                     id: orderId,
                                     user_id: userId,
@@ -191,11 +191,11 @@ export class OrderService {
         ORDER BY o.created_at DESC
       `;
       
-      db.all(query, [userId], (err, orders) => {
+      db.all(query, [userId], (err, orders: any[]) => {
         if (err) {
           reject(err);
         } else {
-          resolve(orders);
+          resolve(orders as Order[]);
         }
       });
     });
@@ -210,11 +210,11 @@ export class OrderService {
         ORDER BY o.created_at DESC
       `;
       
-      db.all(query, [], (err, orders) => {
+      db.all(query, [], (err, orders: any[]) => {
         if (err) {
           reject(err);
         } else {
-          resolve(orders);
+          resolve(orders as Order[]);
         }
       });
     });
@@ -243,7 +243,7 @@ export class OrderService {
             WHERE oi.order_id = ?
           `;
           
-          db.all(itemsQuery, [orderId], (err, items) => {
+          db.all(itemsQuery, [orderId], (err, items: any[]) => {
             if (err) {
               reject(err);
             } else {
@@ -257,14 +257,15 @@ export class OrderService {
                   id: item.product_id,
                   name: item.name,
                   image_url: item.image_url,
-                  slug: item.slug
+                  slug: item.slug,
+                  price: item.price_at_purchase
                 }
               }));
               
               resolve({
                 ...order,
                 items: orderItems
-              });
+              } as Order);
             }
           });
         }
@@ -280,7 +281,7 @@ export class OrderService {
         } else if (this.changes === 0) {
           resolve(null);
         } else {
-          this.getOrderById(orderId).then(resolve).catch(reject);
+          OrderService.getOrderById(orderId).then(resolve).catch(reject);
         }
       });
     });

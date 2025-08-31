@@ -8,9 +8,6 @@ const router = Router();
 router.get('/', CategoryController.getAllCategories);
 router.get('/:id', CategoryController.getCategoryById);
 
-// Admin routes (protected)
-router.post('/', authenticateToken, requireAdmin, createCategoryValidation, CategoryController.createCategory);
-router.put('/:id', authenticateToken, requireAdmin, updateCategoryValidation, CategoryController.updateCategory);
-router.delete('/:id', authenticateToken, requireAdmin, CategoryController.deleteCategory);
+// Note: Admin routes are now handled in /api/admin/categories
 
 export default router;

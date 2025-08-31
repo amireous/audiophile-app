@@ -8,9 +8,8 @@ const router = (0, express_1.Router)();
 router.get('/', productController_1.ProductController.getAllProducts);
 router.get('/:id', productController_1.ProductController.getProductById);
 router.get('/slug/:slug', productController_1.ProductController.getProductBySlug);
-// Admin routes (protected)
-router.post('/', auth_1.authenticateToken, auth_1.requireAdmin, productController_1.createProductValidation, productController_1.ProductController.createProduct);
-router.put('/:id', auth_1.authenticateToken, auth_1.requireAdmin, productController_1.updateProductValidation, productController_1.ProductController.updateProduct);
-router.delete('/:id', auth_1.authenticateToken, auth_1.requireAdmin, productController_1.ProductController.deleteProduct);
+// User routes (authenticated)
+router.get('/:id/view', auth_1.authenticateToken, productController_1.ProductController.markAsViewed);
+// Note: Admin routes are now handled in /api/admin/products
 exports.default = router;
 //# sourceMappingURL=products.js.map

@@ -9,9 +9,9 @@ router.get('/', ProductController.getAllProducts);
 router.get('/:id', ProductController.getProductById);
 router.get('/slug/:slug', ProductController.getProductBySlug);
 
-// Admin routes (protected)
-router.post('/', authenticateToken, requireAdmin, createProductValidation, ProductController.createProduct);
-router.put('/:id', authenticateToken, requireAdmin, updateProductValidation, ProductController.updateProduct);
-router.delete('/:id', authenticateToken, requireAdmin, ProductController.deleteProduct);
+// User routes (authenticated)
+router.get('/:id/view', authenticateToken, ProductController.markAsViewed);
+
+// Note: Admin routes are now handled in /api/admin/products
 
 export default router;

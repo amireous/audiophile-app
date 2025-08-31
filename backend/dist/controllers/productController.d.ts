@@ -6,6 +6,7 @@ export declare class ProductController {
     static createProduct(req: Request, res: Response): Promise<Response<any, Record<string, any>> | undefined>;
     static updateProduct(req: Request, res: Response): Promise<Response<any, Record<string, any>> | undefined>;
     static deleteProduct(req: Request, res: Response): Promise<Response<any, Record<string, any>> | undefined>;
+    static markAsViewed(req: Request, res: Response): Promise<Response<any, Record<string, any>> | undefined>;
 }
 export declare const createProductValidation: import("express-validator").ValidationChain[];
 export declare const updateProductValidation: import("express-validator").ValidationChain[];

@@ -8,7 +8,32 @@ class CategoryController {
     static async getAllCategories(req, res) {
         try {
             const categories = await categoryService_1.CategoryService.getAllCategories();
-            res.json(categories);
+            // Get products for each category (up to 2 products per category for home page)
+            const categoriesWithProducts = await Promise.all(categories.map(async (category) => {
+                try {
+                    const categoryWithProducts = await categoryService_1.CategoryService.getCategoryWithProducts(category.id);
+                    if (categoryWithProducts && categoryWithProducts.products) {
+                        // Limit to 2 products per category for home page
+                        const limitedProducts = categoryWithProducts.products.slice(0, 2);
+                        return {
+                            ...category,
+                            products: limitedProducts
+                        };
+                    }
+                    return {
+                        ...category,
+                        products: []
+                    };
+                }
+                catch (error) {
+                    console.error(`Error getting products for category ${category.id}:`, error);
+                    return {
+                        ...category,
+                        products: []
+                    };
+                }
+            }));
+            res.json(categoriesWithProducts);
         }
         catch (error) {
             res.status(500).json({ message: 'Internal server error' });
