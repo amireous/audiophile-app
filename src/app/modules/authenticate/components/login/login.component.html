@@ -1,0 +1,46 @@
+<div class="login-wrapper">
+  <img src="assets/authenticate/chaos.svg" alt="" class="chaos-icon"/>
+  <h1>Sign In.</h1>
+  <form [formGroup]="loginForm" (ngSubmit)="submitForm()">
+    <div class="form-field">
+      <input 
+        type="text" 
+        required 
+        formControlName="username" 
+        placeholder="Username"
+        [class.error]="loginForm.get('username')?.invalid && loginForm.get('username')?.touched"
+      />
+      <div class="error-message" *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
+        {{ getErrorMessage('username') }}
+      </div>
+    </div>
+    <div class="form-field">
+      <input
+        type="password"
+        required
+        formControlName="password"
+        placeholder="Password"
+        [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+      />
+      <div class="error-message" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+        {{ getErrorMessage('password') }}
+      </div>
+    </div>
+    <button 
+      type="submit" 
+      class="login-button button-hover" 
+      [class.disabled-button]="loginForm.invalid || isLoading"
+      [disabled]="loginForm.invalid || isLoading"
+    >
+      {{ isLoading ? 'Signing In...' : 'Sign In' }}
+    </button>
+  </form>
+
+  <div class="signup-link">
+    <p>Don't have an account? <a (click)="goToSignup()">Sign Up</a></p>
+    <br>
+    <hr>
+    <br>
+    <p><a [routerLink]="['/admin', 'login']">Admin Login</a></p>
+  </div>
+</div>

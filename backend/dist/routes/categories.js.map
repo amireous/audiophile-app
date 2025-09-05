@@ -1,0 +1,1 @@
+{"version":3,"file":"categories.js","sourceRoot":"","sources":["../../src/routes/categories.ts"],"names":[],"mappings":";;AAAA,qCAAiC;AACjC,0EAA2H;AAG3H,MAAM,MAAM,GAAG,IAAA,gBAAM,GAAE,CAAC;AAExB,gBAAgB;AAChB,MAAM,CAAC,GAAG,CAAC,GAAG,EAAE,uCAAkB,CAAC,gBAAgB,CAAC,CAAC;AACrD,MAAM,CAAC,GAAG,CAAC,MAAM,EAAE,uCAAkB,CAAC,eAAe,CAAC,CAAC;AAEvD,8DAA8D;AAE9D,kBAAe,MAAM,CAAC"}

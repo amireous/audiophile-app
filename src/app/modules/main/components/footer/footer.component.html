@@ -1,0 +1,89 @@
+<div class="wrapper" *ngIf="!currentPath.includes('checkout')">
+  <div class="categories container">
+    <div class="category-item"
+      [class.category-margin]="!currentPath.includes('home') || currentPath.includes('product-detail')">
+      <div class="category-image">
+        <img src="assets/shared/desktop/image-headphones.png" alt="">
+      </div>
+      <div>
+        <p class="category-title">Headphones</p>
+        <p class="shop" [routerLink]="['/', 'headphones']">shop <span>></span></p>
+      </div>
+    </div>
+    <div class="category-item"
+      [class.category-margin]="!currentPath.includes('home') || currentPath.includes('product-detail')">
+      <div class="category-image">
+        <img src="assets/shared/desktop/image-speakers.png" alt="">
+      </div>
+      <div>
+        <p class="category-title">speakers</p>
+        <p class="shop" [routerLink]="['/', 'speakers']">shop <span>></span></p>
+      </div>
+    </div>
+    <div class="category-item earphone-category"
+      [class.category-margin]="!currentPath.includes('home') || currentPath.includes('product-detail')">
+      <div class="category-image">
+        <img src="assets/shared/desktop/image-earphones.png" alt="">
+      </div>
+      <div>
+        <p class="category-title">earphones</p>
+        <p class="shop" [routerLink]="['/', 'earphones']">shop <span>></span></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="about-us" *ngIf="!currentPath.includes('checkout')">
+  <div class="about-us-description">
+    <p class="title">bringing you the <span>best</span> audio gear</p>
+    <p class="description">Located at the heart of New York City, Audiophile is the premier store for high end
+      headphones, earphones, speakers, and audio accessories. We have a large showroom and luxury demonstration rooms
+      available for you to browse and experience a wide range of our products. Stop by our store to meet some of the
+      fantastic people who make Audiophile the best place to buy your portable audio equipment.</p>
+  </div>
+  <div class="about-us-logo">
+    <picture>
+      <source media="(min-width: 1129px)" srcset="assets/shared/desktop/image-best-gear.jpg">
+      <source media="(max-width: 1129px)" srcset="assets/shared/tablet/image-best-gear.jpg">
+      <img src="assets/shared/desktop/image-best-gear.jpg" alt="IfItDoesntMatchAnyMedia">
+    </picture>
+  </div>
+</div>
+
+<footer>
+  <div class="wrapper">
+    <div class="container">
+      <div>
+        <div class="footer-logo">
+          <img src="assets/shared/desktop/logo.svg">
+        </div>
+        <nav class="footer-nav">
+          <ul>
+            <li><a class="nav-link-hover" [routerLink]="['/']" (click)="onRouterLink()">home</a></li>
+            <li><a class="nav-link-hover" [routerLink]="['/', 'headphones']" (click)="onRouterLink()">headphones</a>
+            </li>
+            <li><a class="nav-link-hover" [routerLink]="['/', 'speakers']" (click)="onRouterLink()">speakers</a></li>
+            <li><a class="nav-link-hover" [routerLink]="['/', 'earphones']" (click)="onRouterLink()">earphones</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="details">
+        <p>Audiophile is an all in one stop to fulfill your audio needs. We're a small team of music lovers and sound
+          specialists who are devoted to helping you get the most out of personal audio. Come and visit our demo
+          facility - we’re open 7 days a week.
+        </p>
+        <div class="social-icons">
+          <a class="nav-link-hover icon-hover" href=""> <img src="assets/shared/desktop/icon-facebook.svg"
+              class="facebook"></a>
+          <a class="nav-link-hover icon-hover" href=""> <img src="assets/shared/desktop/icon-twitter.svg"
+              class="twitter"></a>
+          <a class="nav-link-hover icon-hover" href=""><img src="assets/shared/desktop/icon-instagram.svg"
+              class="instagram"></a>
+        </div>
+      </div>
+      <br><br>
+      <p>Copyright 2022. All Rights Reserved</p>
+      <p class="developer">Implemented by <a href="https://github.com/amireous">Amireous</a></p>
+    </div>
+  </div>
+</footer>

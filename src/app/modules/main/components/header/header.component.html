@@ -1,0 +1,239 @@
+<div class="">
+  <div class="">
+    <div class="wrapper">
+      <header class="header container">
+        <div class="menu-bar icon-hover" (click)="onMenuBar()">
+          <p class="bar"></p>
+          <p class="bar"></p>
+          <p class="bar"></p>
+        </div>
+        <div>
+          <div class="logo icon-hover" [routerLink]="['/']">
+            <img src="assets/shared/desktop/logo.svg" />
+          </div>
+        </div>
+
+        <nav>
+          <ul>
+            <li>
+              <a
+                class="nav-link-hover"
+                [routerLink]="['/']"
+                (click)="onRouterLink('/')"
+                >home</a
+              >
+            </li>
+            <li>
+              <a
+                class="nav-link-hover"
+                [routerLink]="['/', 'headphones']"
+                (click)="onRouterLink('headphones')"
+                >headphones</a
+              >
+            </li>
+            <li>
+              <a
+                class="nav-link-hover"
+                [routerLink]="['/', 'speakers']"
+                (click)="onRouterLink('speakers')"
+                >speakers</a
+              >
+            </li>
+            <li>
+              <a
+                class="nav-link-hover"
+                [routerLink]="['/', 'earphones']"
+                (click)="onRouterLink('earphones')"
+                >earphones</a
+              >
+            </li>
+          </ul>
+        </nav>
+        <div class="header-actions">
+          <div class="cart-basket" (click)="onBasketClick()">
+            <p>
+              <span
+                [matBadge]="addedProductsCount"
+                matBadgeOverlap="false"
+                matBadgeSize="medium"
+                *ngIf="addedProductsCount"
+              >
+              </span>
+              <img
+                class="icon-hover"
+                src="assets/shared/desktop/icon-cart.svg"
+              />
+            </p>
+          </div>
+          <!-- Show profile and logout icons when logged in -->
+          <div class="profile-icon" *ngIf="isLoggedIn" [routerLink]="['/', 'profile']">
+            <svg class="icon-hover" width="23" height="23" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+          </div>
+          <div class="logout-icon" *ngIf="isLoggedIn" (click)="onLogoutClick()">
+            <svg class="icon-hover" width="23" height="23" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+            </svg>
+          </div>
+          <!-- Show login icon when not logged in -->
+          <div class="login-icon" *ngIf="!isLoggedIn" [routerLink]="['/auth', 'login']">
+            <img class="icon-hover" src="assets/shared/desktop/login.png" alt="Login" />
+          </div>
+        </div>
+        <div class="dialog-overlay" #cartDialogOverlay (click)="onOverlayClick($event)"></div>
+        <div class="cart-dialog" #cartDialogELement>
+          <p class="empty-cart" *ngIf="!basketData.length">
+            Your cart is empty!
+          </p>
+          <div *ngIf="basketData.length">
+            <div class="cart-header">
+              <p class="cart-count">cart ({{ basketData.length }})</p>
+              <p class="p remove-all" (click)="onRemoveAll()">Remove all</p>
+            </div>
+            <div class="cart-products-list">
+              <div class="cart-product" *ngFor="let product of basketData">
+                <div class="left-info">
+                  <div class="product-image">
+                    <img [src]="product.product.image_url || './assets/shared/placeholder.jpg'" alt="" />
+                  </div>
+                  <div class="details">
+                    <p class="product-name">{{ product.product.name }}</p>
+                    <p class="product-price">
+                      ${{ product.product.price | number }}
+                    </p>
+                  </div>
+                </div>
+                <div class="right-info">
+                  <div class="add-to-cart">
+                    <button class="decrease" (click)="onDecrease(product)">
+                      -
+                    </button>
+                    <input
+                      class="product-count-input"
+                      type="text"
+                      [ngModel]="product.quantity"
+                      (ngModelChange)="onCountChange(product, $event)"
+                      numbersOnly
+                    />
+                    <button class="increase" (click)="onIncrease(product)">
+                      +
+                    </button>
+                  </div>
+                  <a
+                    class="remove-single"
+                    (click)="onRemoveSingleProduct(product)"
+                    >remove</a
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="cart-total-price">
+              <p class="p">total</p>
+              <p class="price">${{ totalAddedProductsPrice | number }}</p>
+            </div>
+            <button
+              *ngIf="isLoggedIn"
+              class="checkout-button see-product-button"
+              (click)="onCheckout()"
+            >
+              checkout
+            </button>
+            <button
+              *ngIf="!isLoggedIn"
+              [routerLink]="['/auth', 'login']"
+            >
+              Login to checkout
+            </button>
+          </div>
+        </div>
+      </header>
+    </div>
+    <div class="header-banner wrapper" *ngIf="isHomeRoute">
+      <!-- <p>Earphone</p> -->
+      <div class="banner-description container">
+        <p class="title new-product-title">new product</p>
+        <h1>xx99 mark || <br />headphones</h1>
+        <p class="details">
+          Experience natural, lifelike audio and exceptional build quality made
+          for the passionate music enthusiast.
+        </p>
+        <button
+          class="see-product-button"
+          [routerLink]="['/', 'product-detail', 'xx99-mark-two-headphones']"
+        >
+          see product
+        </button>
+      </div>
+    </div>
+    <div
+      class="header-title"
+      *ngIf="!isHomeRoute && !isProductDetail && !isCheckout"
+    >
+      <p>{{ title }}</p>
+    </div>
+  </div>
+</div>
+
+<div class="menu-bar-section">
+  <div class="overlay" #overlay></div>
+  <div
+    class="menu-bar navigation"
+    #menuBar
+    [class.activated-menu-bar]="isMenuBarClicked"
+  >
+    <div class="categories container">
+      <div
+        class="category-item"
+        [class.category-margin]="
+          !currentPath.includes('home') ||
+          currentPath.includes('product-detail')
+        "
+      >
+        <div class="category-image">
+          <img src="assets/shared/desktop/image-headphones.png" alt="" />
+        </div>
+        <div>
+          <p class="category-title">Headphones</p>
+          <p class="shop" [routerLink]="['/', 'headphones']">
+            shop <span>></span>
+          </p>
+        </div>
+      </div>
+      <div
+        class="category-item"
+        [class.category-margin]="
+          !currentPath.includes('home') ||
+          currentPath.includes('product-detail')
+        "
+      >
+        <div class="category-image">
+          <img src="assets/shared/desktop/image-speakers.png" alt="" />
+        </div>
+        <div>
+          <p class="category-title">speakers</p>
+          <p class="shop" [routerLink]="['/', 'speakers']">
+            shop <span>></span>
+          </p>
+        </div>
+      </div>
+      <div
+        class="category-item earphone-category"
+        [class.category-margin]="
+          !currentPath.includes('home') ||
+          currentPath.includes('product-detail')
+        "
+      >
+        <div class="category-image">
+          <img src="assets/shared/desktop/image-earphones.png" alt="" />
+        </div>
+        <div>
+          <p class="category-title">earphones</p>
+          <p class="shop" [routerLink]="['/', 'earphones']">
+            shop <span>></span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

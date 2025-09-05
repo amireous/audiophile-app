@@ -1,0 +1,137 @@
+.login-wrapper {
+  background-color: #17181e;
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  // justify-content: center;
+  align-items: center;
+  position: relative;
+  //   padding: 222px;
+  h1 {
+    font-size: 45px;
+    margin-bottom: 77px;
+  }
+}
+
+form {
+  max-width: 480px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .form-field {
+    max-width: 450px;
+    width: 100%;
+    position: relative;
+    margin-bottom: 15px;
+
+    input {
+      width: 100%;
+      height: 47px;
+      border-radius: 8px;
+      padding: 5px 10px;
+      outline: none;
+      border: none;
+      font-size: 16px;
+      color: #d9d9d9;
+      background-color: #17181e;
+      border: 2px solid #30303d;
+      transition: border-color 0.3s ease;
+
+      &:focus {
+        border-color: #d87d4a;
+      }
+
+      &.error {
+        border-color: #ff4444;
+      }
+
+      &::placeholder {
+        color: #d9d9d9;
+      }
+    }
+
+    .error-message {
+      color: #ff4444;
+      font-size: 12px;
+      margin-top: 5px;
+      position: absolute;
+      top: 100%;
+      left: 0;
+    }
+  }
+
+  .login-button {
+    background-image: linear-gradient(
+      to right top,
+      #d87d4a,
+      #dd763d,
+      #e26e31,
+      #e76623,
+      #eb5d12
+    );
+    width: 100%;
+    height: 48px;
+    border: none;
+    border-radius: 12px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 18px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    &.disabled-button {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.signup-link {
+  margin-top: 20px;
+  text-align: center;
+
+  p {
+    color: #d9d9d9;
+    font-size: 14px;
+
+    a {
+      color: #d87d4a;
+      text-decoration: none;
+      cursor: pointer;
+      font-weight: 600;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.chaos-icon {
+  max-width: 374px;
+  width: 100%;
+}
+
+.circle-black {
+  position: absolute;
+  top: 0;
+  left: 70px;
+}
+
+@media screen and (max-width: 538px) {
+  h1 {
+    font-size: 25px !important;
+  }
+  .login-wrapper {
+    padding: 20px;
+  }
+}

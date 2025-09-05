@@ -1,0 +1,80 @@
+<div class="wrapper">
+  <div class="container">
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-container">
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Loading product details...</p>
+      </div>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error && !loading" class="error-container">
+      <div class="error-message">
+        <mat-icon>error_outline</mat-icon>
+        <h3>Error Loading Product</h3>
+        <p>{{ error }}</p>
+        <button mat-raised-button color="primary" routerLink="/">Go Back Home</button>
+      </div>
+    </div>
+
+    <!-- Product Content -->
+    <div class="product" *ngIf="productDetail && !loading">
+      <div>
+        <div class="product-image">
+          <img [src]="productDetail?.image?.desktop" alt="" *ngIf="innerWidth >= 1120">
+          <img [src]="productDetail?.image?.tablet" alt="" *ngIf="innerWidth < 1120">
+        </div>
+        <div class="product-info">
+          <p class="product-status new-product-title" *ngIf="productDetail?.new">New product</p>
+          <h2 class="h2 product-title">{{productDetail?.name}}</h2>
+          <p class="p product-description">{{productDetail?.description}}</p>
+          <p class=" product-price">${{productDetail?.price}}</p>
+          <div class="action-buttons">
+            <div class="add-to-cart ">
+              <button class="decrease" (click)="onDecrease()">-</button>
+              <input class="product-count-input" type="text" [formControl]="productCountControl" numbersOnly>
+              <button class="increase" (click)="onIncrease()">+</button>
+            </div>
+            <button class="see-product-button" [disabled]="productCountControl.invalid"
+              [class.disabled-button]="productCountControl.invalid" (click)="onAddToCart()">add to
+              cart</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-details">
+        <div class="product-features">
+          <h3 class="h3">Features</h3>
+          <p class="p product-description">{{productDetail?.features}}</p>
+        </div>
+        <div class="product-box">
+          <h3 class="product-box-title">in the box</h3>
+          <div class="product-box-details">
+            <p *ngFor="let box of productDetail?.includes" class="p"><span>{{box?.quantity}}x</span>{{box?.item}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="product-images">
+        <img class="first-image" [src]="productDetail?.gallery?.first?.desktop" alt="" *ngIf="innerWidth >= 1120">
+        <img class="first-image" [src]="productDetail?.gallery?.first?.tablet" alt="" *ngIf=" innerWidth < 1120">
+        <img class="second-image" [src]="productDetail?.gallery?.second?.desktop" alt="" *ngIf="innerWidth >= 1120">
+        <img class="second-image" [src]="productDetail?.gallery?.second?.tablet" alt="" *ngIf=" innerWidth < 1120">
+        <img class="third-image" [src]="productDetail?.gallery?.third?.desktop" alt="" *ngIf="innerWidth >= 1120">
+        <img class="third-image" [src]="productDetail?.gallery?.third?.tablet" alt="" *ngIf=" innerWidth < 1120">
+      </div>
+      <div class="related-products">
+        <p>you may also like</p>
+        <div class="products-list">
+          <div class="related-product" *ngFor="let product of productDetail?.others">
+            <div class="related-product-image">
+              <img [src]="product?.image?.desktop" alt="">
+            </div>
+            <p class="related-product-title">{{product?.name}}</p>
+            <button class="see-product-button button-hover" [routerLink]="['/', 'product-detail', product.slug]">see
+              product</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

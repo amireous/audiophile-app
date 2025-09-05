@@ -1,0 +1,310 @@
+@import 'src/assets/scss/variables';
+
+.about-us {
+  display: flex;
+  justify-content: center;
+  padding: 3rem 9.5rem 9.5rem 9.5rem;
+
+  .about-us-logo {
+    img {
+      border-radius: 10px;
+    }
+  }
+
+  .about-us-description {
+    max-width: 445px;
+    margin-right: 6rem;
+    align-self: center;
+
+    .title {
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 35px;
+      letter-spacing: 4px;
+      line-height: 1.2;
+
+      span {
+        color: $primary
+      }
+    }
+  }
+
+  p.description {
+    color: $primary-grey;
+    margin-top: 1rem;
+    font-weight: 100;
+  }
+}
+
+footer {
+  p {
+    color: $primary-grey;
+  }
+
+  padding: 5rem 9rem;
+  background-color: $secondary-black;
+
+  .container>div:first-child {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-nav {
+    ul {
+      display: flex;
+      justify-content: space-between;
+      text-transform: uppercase;
+
+      li {
+        margin: 1.2rem;
+        list-style: none;
+      }
+
+    }
+  }
+
+  .details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &>p:first-child {
+      flex: 0 0 50%;
+      width: 50%;
+
+      font-size: 15px;
+      line-height: 25px;
+      letter-spacing: 0;
+      font-weight: 500;
+    }
+  }
+
+  a {
+    text-decoration: none;
+    font-size: 13px;
+    line-height: 25px;
+    letter-spacing: 2px;
+    font-weight: 700;
+    color: $secondary-white-2;
+  }
+
+  .social-icons {
+    img {
+      margin: 8px;
+    }
+  }
+}
+
+
+.categories {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6rem;
+  margin: 3rem 0 6rem 0;
+
+  .category-item {
+    position: relative;
+    width: 32%;
+    max-width: 350px;
+    height: 263px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: 0.3s all;
+
+    &:hover {
+      transform: scale(1.03);
+    }
+
+    .category-image {
+      display: flex;
+      align-items: flex-end;
+      position: absolute;
+      width: 250px;
+      height: 250px;
+      bottom: 105px;
+
+      &+div {
+        border-radius: 10px;
+      }
+
+      img {
+        width: 100%;
+      }
+    }
+
+    &>div:last-child {
+      width: 100%;
+      height: 65%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      text-align: center;
+      padding-bottom: 15px;
+
+      background-color: $secondary-white;
+
+      p.category-title {
+        text-transform: uppercase;
+        color: $primary-black;
+        font-weight: 600;
+        letter-spacing: 1px;
+      }
+
+      p.shop {
+        position: relative;
+        z-index: 1;
+        color: $primary-grey;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+
+        &:hover {
+          color: $primary;
+        }
+
+        span {
+          color: $primary;
+          font-weight: 700;
+          font-size: 20px;
+        }
+      }
+    }
+  }
+
+  .earphone-category .category-image {
+    bottom: 90px;
+  }
+}
+
+.category-margin {
+  margin-top: 9rem;
+}
+
+
+.developer {
+  text-align: center;
+  font-size: 11px;
+
+  a {
+    color: $primary;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+@media screen and (max-width: 1129px) {
+  .about-us {
+    flex-direction: column-reverse;
+    padding: 0 1rem;
+
+    &-description {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: unset !important;
+      width: 100%;
+      margin-right: 0;
+      text-align: center;
+      margin: 4rem 0;
+      margin-right: 0 !important;
+
+
+      .title {
+        max-width: 496px;
+        width: 100%;
+        text-align: center;
+      }
+
+      .description {
+        text-align: center;
+
+      }
+    }
+
+    &-logo {
+      img {
+        width: 100%;
+      }
+    }
+  }
+
+  footer {
+    padding: 2rem 1rem;
+
+    .wrapper {
+      padding: 0;
+
+      .container {
+        &>div:first-child {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .footer-nav {
+          ul {
+            flex-wrap: wrap;
+          }
+
+          li {
+            margin-left: 0;
+            margin-right: 3rem;
+          }
+        }
+
+        .details {
+          flex-direction: column;
+
+          &>p:first-child {
+            width: 100%;
+          }
+
+          .social-icons {
+            align-self: flex-end;
+            position: relative;
+            bottom: -78px;
+          }
+        }
+      }
+    }
+  }
+
+  .categories {
+    margin-top: 9rem;
+  }
+}
+
+@media screen and (max-width: 712px) {
+  .categories {
+    flex-direction: column;
+
+    .category-item {
+      max-width: unset;
+      width: 100%;
+      margin-top: 0;
+
+      .category-image {
+        width: 160px;
+        bottom: 140px;
+      }
+    }
+  }
+
+  .social-icons {
+    bottom: -25px !important;
+    align-self: center !important;
+  }
+
+  footer {
+    .container {
+      &>p {
+        text-align: center;
+      }
+    }
+  }
+}
