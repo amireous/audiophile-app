@@ -45,11 +45,11 @@ export class ProductDetailComponent implements OnInit {
     this.innerWidth = event.target.innerWidth;
   }
 
-  getProduct(productSlug: string) {
+  getProduct(productId: number) {
     this.loading = true;
     this.error = null;
     
-    this.productDetailService.getProductBySlug(productSlug).subscribe({
+    this.productDetailService.getProductById(productId).subscribe({
       next: (product) => {
         this.productDetail = product;
         this.loading = false;
