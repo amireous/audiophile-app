@@ -46,9 +46,7 @@ if (-not (Test-Path "backend/node_modules")) {
 
 # Start backend server
 Write-Host "🚀 Starting backend server..." -ForegroundColor Green
-Set-Location backend
 $backendProcess = Start-Process -FilePath "node" -ArgumentList "simple-server.js" -PassThru -WindowStyle Normal
-Set-Location ..
 
 # Wait a moment for backend to start
 Start-Sleep -Seconds 3
