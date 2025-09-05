@@ -206,7 +206,8 @@ export class ProductDetailService {
    * Mark product as recently viewed
    * @param productId Product ID
    * @returns Observable of success response
-   */
+  
+  */
   markAsRecentlyViewed(productId: number): Observable<{ success: boolean }> {
     return this.http.get<any>(`${this.apiUrl}/products/${productId}/view`, { 
       headers: this.getHeaders() 

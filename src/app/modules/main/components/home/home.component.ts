@@ -123,6 +123,6 @@ export class HomeComponent implements OnInit {
   }
 
   onSeeProduct(product: Product) {
-    this.router.navigate(['/', 'product-detail', product?.slug]);
+    this.router.navigate(['/', 'product-detail', product?.id]);
   }
 }

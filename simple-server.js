@@ -26,10 +26,25 @@ db.serialize(() => {
       first_name TEXT,
       last_name TEXT,
       profile_pic_url TEXT,
+      phone TEXT,
+      address TEXT,
       role TEXT DEFAULT 'customer' CHECK (role IN ('admin', 'customer')),
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )
   `);
+
+  // Add new columns if they don't exist (for existing databases)
+  db.run(`ALTER TABLE users ADD COLUMN phone TEXT`, (err) => {
+    if (err && !err.message.includes('duplicate column name')) {
+      console.log('Error adding phone column:', err.message);
+    }
+  });
+  
+  db.run(`ALTER TABLE users ADD COLUMN address TEXT`, (err) => {
+    if (err && !err.message.includes('duplicate column name')) {
+      console.log('Error adding address column:', err.message);
+    }
+  });
 
   // Categories table
   db.run(`
@@ -57,6 +72,50 @@ db.serialize(() => {
       category_id INTEGER,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (category_id) REFERENCES categories (id)
+    )
+  `);
+
+  // Cart items table
+  db.run(`
+    CREATE TABLE IF NOT EXISTS cart_items (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER NOT NULL,
+      product_id INTEGER NOT NULL,
+      quantity INTEGER NOT NULL DEFAULT 1,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+      FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE CASCADE,
+      UNIQUE(user_id, product_id)
+    )
+  `);
+
+  // Orders table
+  db.run(`
+    CREATE TABLE IF NOT EXISTS orders (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER NOT NULL,
+      total_amount DECIMAL(10,2) NOT NULL,
+      status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'shipped', 'delivered', 'cancelled')),
+      shipping_address TEXT,
+      payment_method TEXT,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+    )
+  `);
+
+  // Order items table
+  db.run(`
+    CREATE TABLE IF NOT EXISTS order_items (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      order_id INTEGER NOT NULL,
+      product_id INTEGER NOT NULL,
+      quantity INTEGER NOT NULL,
+      price_at_purchase DECIMAL(10,2) NOT NULL,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (order_id) REFERENCES orders (id) ON DELETE CASCADE,
+      FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE CASCADE
     )
   `);
 
@@ -289,7 +348,7 @@ app.get('/api/auth/profile', authenticateToken, (req, res) => {
   const userId = req.user.userId;
   
   db.get(
-    'SELECT id, username, email, first_name, last_name, profile_pic_url, role, created_at FROM users WHERE id = ?',
+    'SELECT id, username, email, first_name, last_name, profile_pic_url, phone, address, role, created_at FROM users WHERE id = ?',
     [userId],
     (err, user) => {
       if (err) {
@@ -304,6 +363,8 @@ app.get('/api/auth/profile', authenticateToken, (req, res) => {
           first_name: user.first_name,
           last_name: user.last_name,
           profile_pic_url: user.profile_pic_url,
+          phone: user.phone,
+          address: user.address,
           role: user.role,
           created_at: user.created_at
         });
@@ -315,19 +376,51 @@ app.get('/api/auth/profile', authenticateToken, (req, res) => {
 // Update profile endpoint
 app.put('/api/auth/profile', authenticateToken, (req, res) => {
   const userId = req.user.userId;
-  const { first_name, last_name, email, profile_pic_url } = req.body;
+  const { first_name, last_name, email, profile_pic_url, phone, address } = req.body;
   
-  db.run(
-    'UPDATE users SET first_name = ?, last_name = ?, email = ?, profile_pic_url = ? WHERE id = ?',
-    [first_name, last_name, email, profile_pic_url, userId],
-    function(err) {
-      if (err) {
-        res.status(500).json({ error: err.message });
-      } else {
-        res.json({ message: 'Profile updated successfully' });
-      }
+  // Build dynamic update query based on provided fields
+  const updates = [];
+  const values = [];
+  
+  if (first_name !== undefined) {
+    updates.push('first_name = ?');
+    values.push(first_name);
+  }
+  if (last_name !== undefined) {
+    updates.push('last_name = ?');
+    values.push(last_name);
+  }
+  if (email !== undefined) {
+    updates.push('email = ?');
+    values.push(email);
+  }
+  if (profile_pic_url !== undefined) {
+    updates.push('profile_pic_url = ?');
+    values.push(profile_pic_url);
+  }
+  if (phone !== undefined) {
+    updates.push('phone = ?');
+    values.push(phone);
+  }
+  if (address !== undefined) {
+    updates.push('address = ?');
+    values.push(address);
+  }
+  
+  if (updates.length === 0) {
+    return res.status(400).json({ error: 'No fields to update' });
+  }
+  
+  values.push(userId);
+  const query = `UPDATE users SET ${updates.join(', ')} WHERE id = ?`;
+  
+  db.run(query, values, function(err) {
+    if (err) {
+      res.status(500).json({ error: err.message });
+    } else {
+      res.json({ message: 'Profile updated successfully' });
     }
-  );
+  });
 });
 
 // Register endpoint
@@ -458,24 +551,138 @@ app.get('/api/categories/:id', (req, res) => {
 app.get('/api/basket', authenticateToken, (req, res) => {
   const userId = req.user.userId;
   
-  // For now, return empty cart (you could add a cart table later)
-  res.json([]);
+  const query = `
+    SELECT 
+      ci.id,
+      ci.product_id,
+      ci.quantity,
+      ci.created_at,
+      p.name,
+      p.slug,
+      p.description,
+      p.image_url,
+      p.price,
+      p.currency,
+      p.is_new,
+      p.category_id
+    FROM cart_items ci
+    JOIN products p ON ci.product_id = p.id
+    WHERE ci.user_id = ?
+    ORDER BY ci.created_at DESC
+  `;
+  
+  db.all(query, [userId], (err, rows) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+    } else {
+      const cartItems = rows.map(row => ({
+        id: row.id,
+        product_id: row.product_id,
+        quantity: row.quantity,
+        created_at: row.created_at,
+        product: {
+          id: row.product_id,
+          name: row.name,
+          slug: row.slug,
+          description: row.description,
+          image_url: row.image_url,
+          price: row.price,
+          currency: row.currency,
+          is_new: Boolean(row.is_new),
+          category_id: row.category_id
+        }
+      }));
+      res.json(cartItems);
+    }
+  });
 });
 
 app.post('/api/basket/add', authenticateToken, (req, res) => {
   const userId = req.user.userId;
-  const { product_id, quantity } = req.body;
+  const { product_id, quantity = 1 } = req.body;
   
-  // For now, just return success (you could add cart functionality later)
-  res.json({ message: 'Product added to cart', cart_item: { product_id, quantity } });
+  if (!product_id) {
+    return res.status(400).json({ error: 'Product ID is required' });
+  }
+  
+  // Check if product exists
+  db.get('SELECT id FROM products WHERE id = ?', [product_id], (err, product) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    if (!product) {
+      return res.status(404).json({ error: 'Product not found' });
+    }
+    
+    // Check if item already exists in cart
+    db.get('SELECT id, quantity FROM cart_items WHERE user_id = ? AND product_id = ?', [userId, product_id], (err, existingItem) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      
+      if (existingItem) {
+        // Update existing item quantity
+        const newQuantity = existingItem.quantity + quantity;
+        db.run(
+          'UPDATE cart_items SET quantity = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
+          [newQuantity, existingItem.id],
+          function(err) {
+            if (err) {
+              res.status(500).json({ error: err.message });
+            } else {
+              res.json({ 
+                message: 'Product quantity updated in cart', 
+                cart_item: { 
+                  id: existingItem.id,
+                  product_id, 
+                  quantity: newQuantity 
+                } 
+              });
+            }
+          }
+        );
+      } else {
+        // Add new item to cart
+        db.run(
+          'INSERT INTO cart_items (user_id, product_id, quantity) VALUES (?, ?, ?)',
+          [userId, product_id, quantity],
+          function(err) {
+            if (err) {
+              res.status(500).json({ error: err.message });
+            } else {
+              res.json({ 
+                message: 'Product added to cart', 
+                cart_item: { 
+                  id: this.lastID,
+                  product_id, 
+                  quantity 
+                } 
+              });
+            }
+          }
+        );
+      }
+    });
+  });
 });
 
 app.delete('/api/basket/:product_id', authenticateToken, (req, res) => {
   const userId = req.user.userId;
   const productId = req.params.product_id;
   
-  // For now, just return success
-  res.json({ message: 'Product removed from cart' });
+  db.run(
+    'DELETE FROM cart_items WHERE user_id = ? AND product_id = ?',
+    [userId, productId],
+    function(err) {
+      if (err) {
+        res.status(500).json({ error: err.message });
+      } else if (this.changes === 0) {
+        res.status(404).json({ error: 'Product not found in cart' });
+      } else {
+        res.json({ message: 'Product removed from cart' });
+      }
+    }
+  );
 });
 
 app.put('/api/basket/:product_id', authenticateToken, (req, res) => {
@@ -483,15 +690,35 @@ app.put('/api/basket/:product_id', authenticateToken, (req, res) => {
   const productId = req.params.product_id;
   const { quantity } = req.body;
   
-  // For now, just return success
-  res.json({ message: 'Cart item updated' });
+  if (quantity <= 0) {
+    return res.status(400).json({ error: 'Quantity must be greater than 0' });
+  }
+  
+  db.run(
+    'UPDATE cart_items SET quantity = ?, updated_at = CURRENT_TIMESTAMP WHERE user_id = ? AND product_id = ?',
+    [quantity, userId, productId],
+    function(err) {
+      if (err) {
+        res.status(500).json({ error: err.message });
+      } else if (this.changes === 0) {
+        res.status(404).json({ error: 'Product not found in cart' });
+      } else {
+        res.json({ message: 'Cart item updated' });
+      }
+    }
+  );
 });
 
 app.delete('/api/basket', authenticateToken, (req, res) => {
   const userId = req.user.userId;
   
-  // For now, just return success
-  res.json({ message: 'Cart cleared' });
+  db.run('DELETE FROM cart_items WHERE user_id = ?', [userId], function(err) {
+    if (err) {
+      res.status(500).json({ error: err.message });
+    } else {
+      res.json({ message: 'Cart cleared' });
+    }
+  });
 });
 
 // Order endpoints
@@ -499,43 +726,180 @@ app.post('/api/checkout', authenticateToken, (req, res) => {
   const userId = req.user.userId;
   const { shipping_address, payment_method, total_amount, items } = req.body;
   
-  // For now, just return a mock order
-  const order = {
-    id: Date.now(),
-    user_id: userId,
-    total_amount: total_amount || 0,
-    status: 'pending',
-    shipping_address: shipping_address || '',
-    payment_method: payment_method || 'credit_card',
-    created_at: new Date().toISOString(),
-    items: items || []
-  };
+  if (!shipping_address || !payment_method || !total_amount || !items || items.length === 0) {
+    return res.status(400).json({ error: 'Missing required fields: shipping_address, payment_method, total_amount, items' });
+  }
   
-  res.json(order);
+  // Start a transaction
+  db.serialize(() => {
+    db.run('BEGIN TRANSACTION');
+    
+    // Create the order
+    db.run(
+      'INSERT INTO orders (user_id, total_amount, status, shipping_address, payment_method) VALUES (?, ?, ?, ?, ?)',
+      [userId, total_amount, 'pending', shipping_address, payment_method],
+      function(err) {
+        if (err) {
+          db.run('ROLLBACK');
+          return res.status(500).json({ error: err.message });
+        }
+        
+        const orderId = this.lastID;
+        let itemsProcessed = 0;
+        let hasError = false;
+        
+        // Add order items
+        items.forEach((item, index) => {
+          db.run(
+            'INSERT INTO order_items (order_id, product_id, quantity, price_at_purchase) VALUES (?, ?, ?, ?)',
+            [orderId, item.product_id, item.quantity, item.price],
+            function(err) {
+              if (err && !hasError) {
+                hasError = true;
+                db.run('ROLLBACK');
+                return res.status(500).json({ error: err.message });
+              }
+              
+              itemsProcessed++;
+              if (itemsProcessed === items.length && !hasError) {
+                // Clear the user's cart after successful checkout
+                db.run('DELETE FROM cart_items WHERE user_id = ?', [userId], (err) => {
+                  if (err) {
+                    console.log('Warning: Could not clear cart after checkout:', err.message);
+                  }
+                  
+                  // Commit transaction
+                  db.run('COMMIT', (err) => {
+                    if (err) {
+                      return res.status(500).json({ error: err.message });
+                    }
+                    
+                    // Return the created order
+                    res.status(201).json({
+                      id: orderId,
+                      user_id: userId,
+                      total_amount: total_amount,
+                      status: 'pending',
+                      shipping_address: shipping_address,
+                      payment_method: payment_method,
+                      created_at: new Date().toISOString(),
+                      items: items
+                    });
+                  });
+                });
+              }
+            }
+          );
+        });
+      }
+    );
+  });
 });
 
 app.get('/api/orders', authenticateToken, (req, res) => {
   const userId = req.user.userId;
   
-  // For now, return empty orders array
-  res.json([]);
+  const query = `
+    SELECT 
+      o.id,
+      o.user_id,
+      o.total_amount,
+      o.status,
+      o.shipping_address,
+      o.payment_method,
+      o.created_at,
+      o.updated_at
+    FROM orders o
+    WHERE o.user_id = ?
+    ORDER BY o.created_at DESC
+  `;
+  
+  db.all(query, [userId], (err, rows) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+    } else {
+      const orders = rows.map(row => ({
+        id: row.id,
+        user_id: row.user_id,
+        total_amount: row.total_amount,
+        status: row.status,
+        shipping_address: row.shipping_address,
+        payment_method: row.payment_method,
+        created_at: row.created_at,
+        updated_at: row.updated_at
+      }));
+      res.json(orders);
+    }
+  });
 });
 
 app.get('/api/orders/:id', authenticateToken, (req, res) => {
   const userId = req.user.userId;
   const orderId = req.params.id;
   
-  // For now, return a mock order
-  res.json({
-    id: orderId,
-    user_id: userId,
-    total_amount: 0,
-    status: 'pending',
-    shipping_address: '',
-    payment_method: 'credit_card',
-    created_at: new Date().toISOString(),
-    items: []
-  });
+  // First get the order
+  db.get(
+    'SELECT * FROM orders WHERE id = ? AND user_id = ?',
+    [orderId, userId],
+    (err, order) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      if (!order) {
+        return res.status(404).json({ error: 'Order not found' });
+      }
+      
+      // Get order items
+      const itemsQuery = `
+        SELECT 
+          oi.id,
+          oi.order_id,
+          oi.product_id,
+          oi.quantity,
+          oi.price_at_purchase,
+          p.name,
+          p.image_url,
+          p.slug
+        FROM order_items oi
+        JOIN products p ON oi.product_id = p.id
+        WHERE oi.order_id = ?
+        ORDER BY oi.created_at
+      `;
+      
+      db.all(itemsQuery, [orderId], (err, items) => {
+        if (err) {
+          return res.status(500).json({ error: err.message });
+        }
+        
+        const orderItems = items.map(item => ({
+          id: item.id,
+          order_id: item.order_id,
+          product_id: item.product_id,
+          quantity: item.quantity,
+          price_at_purchase: item.price_at_purchase,
+          product: {
+            id: item.product_id,
+            name: item.name,
+            image_url: item.image_url,
+            slug: item.slug,
+            price: item.price_at_purchase
+          }
+        }));
+        
+        res.json({
+          id: order.id,
+          user_id: order.user_id,
+          total_amount: order.total_amount,
+          status: order.status,
+          shipping_address: order.shipping_address,
+          payment_method: order.payment_method,
+          created_at: order.created_at,
+          updated_at: order.updated_at,
+          items: orderItems
+        });
+      });
+    }
+  );
 });
 
 // Admin endpoints
@@ -702,8 +1066,49 @@ app.get('/api/admin/orders', authenticateToken, (req, res) => {
     return res.status(403).json({ error: 'Admin access required' });
   }
   
-  // For now, return empty orders array
-  res.json([]);
+  const query = `
+    SELECT 
+      o.id,
+      o.user_id,
+      o.total_amount,
+      o.status,
+      o.shipping_address,
+      o.payment_method,
+      o.created_at,
+      o.updated_at,
+      u.username,
+      u.email,
+      u.first_name,
+      u.last_name
+    FROM orders o
+    JOIN users u ON o.user_id = u.id
+    ORDER BY o.created_at DESC
+  `;
+  
+  db.all(query, [], (err, rows) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+    } else {
+      const orders = rows.map(row => ({
+        id: row.id,
+        user_id: row.user_id,
+        total_amount: row.total_amount,
+        status: row.status,
+        shipping_address: row.shipping_address,
+        payment_method: row.payment_method,
+        created_at: row.created_at,
+        updated_at: row.updated_at,
+        user: {
+          id: row.user_id,
+          username: row.username,
+          email: row.email,
+          first_name: row.first_name,
+          last_name: row.last_name
+        }
+      }));
+      res.json(orders);
+    }
+  });
 });
 
 app.get('/api/admin/orders/:id', authenticateToken, (req, res) => {
@@ -713,16 +1118,83 @@ app.get('/api/admin/orders/:id', authenticateToken, (req, res) => {
   
   const orderId = req.params.id;
   
-  // For now, return a mock order
-  res.json({
-    id: orderId,
-    user_id: 1,
-    total_amount: 0,
-    status: 'pending',
-    shipping_address: '',
-    payment_method: 'credit_card',
-    created_at: new Date().toISOString(),
-    items: []
+  // First get the order with user info
+  const orderQuery = `
+    SELECT 
+      o.*,
+      u.username,
+      u.email,
+      u.first_name,
+      u.last_name
+    FROM orders o
+    JOIN users u ON o.user_id = u.id
+    WHERE o.id = ?
+  `;
+  
+  db.get(orderQuery, [orderId], (err, order) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    if (!order) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+    
+    // Get order items
+    const itemsQuery = `
+      SELECT 
+        oi.id,
+        oi.order_id,
+        oi.product_id,
+        oi.quantity,
+        oi.price_at_purchase,
+        p.name,
+        p.image_url,
+        p.slug
+      FROM order_items oi
+      JOIN products p ON oi.product_id = p.id
+      WHERE oi.order_id = ?
+      ORDER BY oi.created_at
+    `;
+    
+    db.all(itemsQuery, [orderId], (err, items) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      
+      const orderItems = items.map(item => ({
+        id: item.id,
+        order_id: item.order_id,
+        product_id: item.product_id,
+        quantity: item.quantity,
+        price_at_purchase: item.price_at_purchase,
+        product: {
+          id: item.product_id,
+          name: item.name,
+          image_url: item.image_url,
+          slug: item.slug,
+          price: item.price_at_purchase
+        }
+      }));
+      
+      res.json({
+        id: order.id,
+        user_id: order.user_id,
+        total_amount: order.total_amount,
+        status: order.status,
+        shipping_address: order.shipping_address,
+        payment_method: order.payment_method,
+        created_at: order.created_at,
+        updated_at: order.updated_at,
+        user: {
+          id: order.user_id,
+          username: order.username,
+          email: order.email,
+          first_name: order.first_name,
+          last_name: order.last_name
+        },
+        items: orderItems
+      });
+    });
   });
 });
 
@@ -734,8 +1206,23 @@ app.put('/api/admin/orders/:id/status', authenticateToken, (req, res) => {
   const orderId = req.params.id;
   const { status } = req.body;
   
-  // For now, just return success
-  res.json({ message: 'Order status updated', status });
+  if (!status || !['pending', 'shipped', 'delivered', 'cancelled'].includes(status)) {
+    return res.status(400).json({ error: 'Invalid status. Must be one of: pending, shipped, delivered, cancelled' });
+  }
+  
+  db.run(
+    'UPDATE orders SET status = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
+    [status, orderId],
+    function(err) {
+      if (err) {
+        res.status(500).json({ error: err.message });
+      } else if (this.changes === 0) {
+        res.status(404).json({ error: 'Order not found' });
+      } else {
+        res.json({ message: 'Order status updated successfully', status });
+      }
+    }
+  );
 });
 
 // Start server

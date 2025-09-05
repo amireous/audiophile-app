@@ -1,4 +1,6 @@
-# 🎧 Audiophile App Startup Script for Windows PowerShell
+# 🎧 Audiophile App Startup Script for Windows
+# This script starts both frontend and backend servers
+
 Write-Host "🎧 Starting Audiophile E-commerce Application..." -ForegroundColor Cyan
 Write-Host "================================================" -ForegroundColor Cyan
 
@@ -8,7 +10,6 @@ try {
     Write-Host "✅ Node.js version: $nodeVersion" -ForegroundColor Green
 } catch {
     Write-Host "❌ Node.js is not installed. Please install Node.js first." -ForegroundColor Red
-    Read-Host "Press Enter to exit"
     exit 1
 }
 
@@ -18,15 +19,14 @@ try {
     Write-Host "✅ npm version: $npmVersion" -ForegroundColor Green
 } catch {
     Write-Host "❌ npm is not installed. Please install npm first." -ForegroundColor Red
-    Read-Host "Press Enter to exit"
     exit 1
 }
 
 # Kill any existing processes on ports 3000 and 4200
 Write-Host "🔄 Stopping any existing processes..." -ForegroundColor Yellow
 try {
-    Get-NetTCPConnection -LocalPort 3000 -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue }
-    Get-NetTCPConnection -LocalPort 4200 -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue }
+    Get-Process -Name "node" -ErrorAction SilentlyContinue | Where-Object { $_.CommandLine -like "*server*" } | Stop-Process -Force
+    Get-Process -Name "node" -ErrorAction SilentlyContinue | Where-Object { $_.CommandLine -like "*ng serve*" } | Stop-Process -Force
 } catch {
     # Ignore errors if no processes found
 }
@@ -46,7 +46,12 @@ if (-not (Test-Path "backend/node_modules")) {
 
 # Start backend server
 Write-Host "🚀 Starting backend server..." -ForegroundColor Green
-$backendProcess = Start-Process -FilePath "node" -ArgumentList "simple-server.js" -PassThru -WindowStyle Normal
+Set-Location backend
+$backendJob = Start-Job -ScriptBlock { 
+    Set-Location $using:PWD
+    node server.js 
+}
+Set-Location ..
 
 # Wait a moment for backend to start
 Start-Sleep -Seconds 3
@@ -57,15 +62,28 @@ try {
     Write-Host "✅ Backend server is running on http://localhost:3000" -ForegroundColor Green
 } catch {
     Write-Host "❌ Backend server failed to start or health check failed" -ForegroundColor Red
-    Write-Host "Please check the backend window for error messages." -ForegroundColor Yellow
+    Stop-Job $backendJob
+    Remove-Job $backendJob
+    exit 1
 }
 
 # Start frontend server
 Write-Host "🚀 Starting frontend server..." -ForegroundColor Green
-$frontendProcess = Start-Process -FilePath "ng" -ArgumentList "serve", "--port", "4200" -PassThru -WindowStyle Normal
+$frontendJob = Start-Job -ScriptBlock { 
+    Set-Location $using:PWD
+    ng serve --port 4200 
+}
 
 # Wait a moment for frontend to start
 Start-Sleep -Seconds 5
+
+# Check if frontend is running
+try {
+    $response = Invoke-WebRequest -Uri "http://localhost:4200" -TimeoutSec 10 -ErrorAction Stop
+    Write-Host "✅ Frontend server is running on http://localhost:4200" -ForegroundColor Green
+} catch {
+    Write-Host "⚠️  Frontend server may still be starting..." -ForegroundColor Yellow
+}
 
 Write-Host ""
 Write-Host "🎉 Application is starting up!" -ForegroundColor Cyan
@@ -81,7 +99,33 @@ Write-Host ""
 Write-Host "📚 API Documentation: API_Documentation.md" -ForegroundColor White
 Write-Host "🧪 Postman Collection: Audiophile_API_Postman_Collection.json" -ForegroundColor White
 Write-Host ""
-Write-Host "Both servers are running in separate windows." -ForegroundColor Green
-Write-Host "Close those windows to stop the servers." -ForegroundColor Green
-Write-Host ""
-Read-Host "Press Enter to exit this script (servers will continue running)"
+Write-Host "Press Ctrl+C to stop both servers" -ForegroundColor Yellow
+
+# Function to cleanup on exit
+function Cleanup {
+    Write-Host ""
+    Write-Host "🛑 Stopping servers..." -ForegroundColor Red
+    Stop-Job $backendJob -ErrorAction SilentlyContinue
+    Stop-Job $frontendJob -ErrorAction SilentlyContinue
+    Remove-Job $backendJob -ErrorAction SilentlyContinue
+    Remove-Job $frontendJob -ErrorAction SilentlyContinue
+    Write-Host "✅ Servers stopped" -ForegroundColor Green
+    exit 0
+}
+
+# Set up signal handlers
+$null = Register-EngineEvent -SourceIdentifier PowerShell.Exiting -Action { Cleanup }
+
+# Keep script running and show job status
+try {
+    while ($true) {
+        Start-Sleep -Seconds 1
+        # Check if jobs are still running
+        if ($backendJob.State -eq "Failed" -or $frontendJob.State -eq "Failed") {
+            Write-Host "❌ One or more servers have failed. Stopping..." -ForegroundColor Red
+            Cleanup
+        }
+    }
+} catch {
+    Cleanup
+}
