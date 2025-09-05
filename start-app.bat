@@ -40,16 +40,14 @@ if not exist "backend\node_modules" (
 
 REM Start backend server
 echo 🚀 Starting backend server...
-cd backend
 start "Backend Server" cmd /k "node simple-server.js"
-cd ..
 
 REM Wait a moment for backend to start
 timeout /t 3 /nobreak >nul
 
 REM Start frontend server
 echo 🚀 Starting frontend server...
-start "Frontend Server" cmd /k "ng serve --port 4200 --openssl-legacy-provider"
+start "Frontend Server" cmd /k "ng serve --port 4200"
 
 REM Wait a moment for frontend to start
 timeout /t 5 /nobreak >nul
